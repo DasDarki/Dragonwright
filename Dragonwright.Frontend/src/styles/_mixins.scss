@@ -1,0 +1,13 @@
+﻿@use "variables" as *;
+
+@mixin screen-sm {
+  @media (min-width: $bp-sm) {
+    @content;
+  }
+}
+
+@mixin screen-md {
+  @media (min-width: $bp-md) {
+    @content;
+  }
+}

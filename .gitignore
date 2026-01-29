@@ -1,0 +1,11 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+Logs/
+.claude/
+
+appsettings.local.json
+Dragonwright.sln.Settings.user
+Dragonwright.csproj.DotSettings

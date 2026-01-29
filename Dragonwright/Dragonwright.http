@@ -1,0 +1,6 @@
+@Dragonwright_HostAddress = http://localhost:5078
+
+GET {{Dragonwright_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
