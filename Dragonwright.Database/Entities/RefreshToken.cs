@@ -1,6 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
 namespace Dragonwright.Database.Entities;
 
 public sealed class RefreshToken : IEntity<RefreshToken>
@@ -41,6 +38,6 @@ public sealed class RefreshToken : IEntity<RefreshToken>
         builder.HasOne(rt => rt.User)
             .WithMany()
             .HasForeignKey(rt => rt.UserId)
-            .OnDelete(Microsoft.EntityFrameworkCore.DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

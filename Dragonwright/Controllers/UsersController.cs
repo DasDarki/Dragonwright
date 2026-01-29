@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using Dragonwright.Database;
-using Dragonwright.Database.Entities.Enums;
+using Dragonwright.Database.Enums;
 using Dragonwright.Models.Users;
 using Dragonwright.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -18,7 +18,7 @@ public sealed class UsersController(AppDbContext dbContext, FileStorageService f
 {
     /// <summary>
     /// Retrieves a user by ID. Use <c>@me</c> to get the authenticated user's profile.
-    /// Looking up other users by ID requires the <see cref="Role.Admin"/> role.
+    /// Looking up other users by ID requires the <see cref="UserRole.Admin"/> role.
     /// </summary>
     /// <param name="id">The user ID or <c>@me</c> for the current user.</param>
     /// <returns>The user's profile information.</returns>
@@ -52,7 +52,7 @@ public sealed class UsersController(AppDbContext dbContext, FileStorageService f
         }
 
         var currentUserRole = User.FindFirst(ClaimTypes.Role)?.Value;
-        if (currentUserRole != nameof(Role.Admin))
+        if (currentUserRole != nameof(UserRole.Admin))
         {
             return Forbid();
         }

@@ -239,7 +239,7 @@ public sealed class AuthService(
         {
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new(ClaimTypes.Name, user.Username),
-            new(ClaimTypes.Role, user.Role.ToString()),
+            new(ClaimTypes.Role, user.UserRole.ToString()),
             new(JwtRegisteredClaimNames.Jti, jwtId),
             new(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
         };

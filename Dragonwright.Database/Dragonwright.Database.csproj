@@ -19,4 +19,10 @@
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Using Include="System.ComponentModel.DataAnnotations"/>
+        <Using Include="Microsoft.EntityFrameworkCore"/>
+        <Using Include="Microsoft.EntityFrameworkCore.Metadata.Builders"/>
+        <Using Include="Dragonwright.Database.Enums"/>
+    </ItemGroup>
 </Project>

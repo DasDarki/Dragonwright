@@ -37,6 +37,6 @@ public sealed class UserResponse
         Id = user.Id,
         Username = user.Username,
         AvatarId = user.AvatarId,
-        Role = user.Role.ToString()
+        Role = user.UserRole.ToString()
     };
 }

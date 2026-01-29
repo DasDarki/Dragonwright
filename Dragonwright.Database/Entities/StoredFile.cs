@@ -1,6 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
 namespace Dragonwright.Database.Entities;
 
 public sealed class StoredFile : IEntity<StoredFile>

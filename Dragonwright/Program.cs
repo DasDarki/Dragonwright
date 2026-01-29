@@ -1,6 +1,7 @@
 using System.Text;
 using Dragonwright.Configuration;
 using Dragonwright.Database;
+using Dragonwright.Attributes;
 using Dragonwright.Extensions;
 using Dragonwright.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -49,7 +50,10 @@ builder.Services.AddHostedService(sp => sp.GetRequiredService<AuthService>());
 builder.Services.AddSingleton<FileStorageService>();
 builder.Services.AddHostedService(sp => sp.GetRequiredService<FileStorageService>());
 builder.Services.AddServices();
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<EntityValidationFilter>();
+});
 
 var app = builder.Build();
 
