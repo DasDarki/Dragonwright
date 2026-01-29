@@ -5,6 +5,7 @@ riderModule.iml
 /_ReSharper.Caches/
 Logs/
 .claude/
+.idea/
 
 appsettings.local.json
 Dragonwright.sln.Settings.user
