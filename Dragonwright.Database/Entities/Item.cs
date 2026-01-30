@@ -5,6 +5,15 @@ public sealed class Item : IEntity<Item>
     [Key]
     public Guid Id { get; set; }
     
+    public SourceType Source { get; set; }
+    
+    public Guid? SourceCreatorId { get; set; }
+    
+    /// <summary>
+    /// The user who created this source material.
+    /// </summary>
+    public User? SourceCreator { get; set; }
+    
     [Required]
     [MaxLength(200)]
     public string Name { get; set; } = null!;
@@ -66,8 +75,14 @@ public sealed class Item : IEntity<Item>
     
     public Mastery? Mastery { get; set; }
     
+    public bool IsBackpack { get; set; }
+    
+    public Tool? ToolType { get; set; }
+    
     public void Configure(EntityTypeBuilder<Item> builder)
     {
+        builder.Property(i => i.Source).HasConversion<string>();
+        
         builder.Property(i => i.Type).HasConversion<string>();
         builder.Property(i => i.Rarity).HasConversion<string>();
         
@@ -76,8 +91,14 @@ public sealed class Item : IEntity<Item>
         builder.Property(i => i.RequiredAbilityScore).HasConversion<string?>();
         builder.Property(i => i.DamageBonusAbility).HasConversion<string?>();
         builder.Property(i => i.Mastery).HasConversion<string?>();
+        builder.Property(i => i.ToolType).HasConversion<string?>();
         
         builder.Property(i => i.WeaponProperties).EnumCollection();
         builder.Property(i => i.DamageTypes).EnumCollection();
+        
+        builder.HasOne(i => i.SourceCreator)
+            .WithMany()
+            .HasForeignKey(i => i.SourceCreatorId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

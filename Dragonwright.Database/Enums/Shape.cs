@@ -10,5 +10,6 @@ public enum Shape
     Sphere,
     Square,
     Rectangle,
-    Ring
+    Ring,
+    Emanation
 }

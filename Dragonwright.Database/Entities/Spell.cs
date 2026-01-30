@@ -4,11 +4,23 @@ namespace Dragonwright.Database.Entities;
 
 public sealed class Spell : IEntity<Spell>
 {
+    public const int SpellRangeSelf = 0;
+    public const int SpellRangeTouch = -1;
+    public const int SpellRangeInfinite = -2;
+    
     public Guid Id { get; set; }
     
+    public SourceType Source { get; set; }
+    
+    public Guid? SourceCreatorId { get; set; }
+    
+    /// <summary>
+    /// The user who created this source material.
+    /// </summary>
+    public User? SourceCreator { get; set; }
+    
     [Required]
-    [Range(0, 9)]
-    public int Level { get; set; }
+    public SpellLevel Level { get; set; }
     
     [Required]
     [MaxLength(200)]
@@ -39,8 +51,11 @@ public sealed class Spell : IEntity<Spell>
     public AbilityScore? Save { get; set; }
     
     /// <summary>
-    /// The range in feet the spell can be cast. If 0, the spell has a range of "Self".
+    /// The range in feet the spell can be cast.
     /// </summary>
+    /// <remarks>
+    /// Use <see cref="SpellRangeSelf"/>, <see cref="SpellRangeTouch"/>, or <see cref="SpellRangeInfinite"/> for special ranges.
+    /// </remarks>
     public int Range { get; set; }
     
     public Shape? AreaOfEffect { get; set; }
@@ -63,6 +78,9 @@ public sealed class Spell : IEntity<Spell>
     
     public void Configure(EntityTypeBuilder<Spell> builder)
     {
+        builder.Property(s => s.Source).HasConversion<string>();
+        
+        builder.Property(s => s.Level).HasConversion<int>();
         builder.Property(s => s.School).HasConversion<string>();
         builder.Property(s => s.AttackType).HasConversion<string>();
         
@@ -73,6 +91,11 @@ public sealed class Spell : IEntity<Spell>
         builder.Property(s => s.Tags).JsonCollection();
 
         builder.HasMany(s => s.Classes)
-            .WithMany(c => c.SpellTable);
+            .WithMany(c => c.SpellList);
+        
+        builder.HasOne(s => s.SourceCreator)
+            .WithMany()
+            .HasForeignKey(s => s.SourceCreatorId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

@@ -32,7 +32,7 @@ internal static class Extensions
     /// <param name="property">The PropertyBuilder to configure.</param>
     /// <typeparam name="T">The type of the collection elements.</typeparam>
     /// <returns>The configured PropertyBuilder.</returns>
-    public static PropertyBuilder<ICollection<T>> JsonCollection<T>(this PropertyBuilder<ICollection<T>> property) where T : class
+    public static PropertyBuilder<ICollection<T>> JsonCollection<T>(this PropertyBuilder<ICollection<T>> property)
     {
         property
             .HasConversion(
@@ -45,13 +45,13 @@ internal static class Extensions
     }
     
     /// <summary>
-    /// Configures a PropertyBuilder to store dictionaries with enum keys as JSON.
+    /// Configures a PropertyBuilder to store dictionaries with keys as JSON.
     /// </summary>
     /// <param name="property">The PropertyBuilder to configure.</param>
-    /// <typeparam name="TKey">The enum type of the dictionary keys.</typeparam>
+    /// <typeparam name="TKey">The type of the dictionary keys.</typeparam>
     /// <typeparam name="TValue">The type of the dictionary values.</typeparam>
     /// <returns>The configured PropertyBuilder.</returns>
-    public static PropertyBuilder<Dictionary<TKey, TValue>> JsonEnumDictionary<TKey, TValue>(this PropertyBuilder<Dictionary<TKey, TValue>> property) where TKey : struct, Enum
+    public static PropertyBuilder<IDictionary<TKey, TValue>> JsonDictionary<TKey, TValue>(this PropertyBuilder<IDictionary<TKey, TValue>> property) where TKey : notnull
     {
         property
             .HasConversion(
@@ -59,7 +59,29 @@ internal static class Extensions
                 v => JsonSerializer.Deserialize<Dictionary<TKey, TValue>>(v) ?? new Dictionary<TKey, TValue>()
             )
             .Metadata
-            .SetValueComparer(GetEnumDictionaryComparer<TKey, TValue>());
+            .SetValueComparer(GetDictionaryComparer<TKey, TValue>());
+        return property;
+    }
+
+    /// <summary>
+    /// Configures a PropertyBuilder to store values of type T as JSON.
+    /// </summary>
+    /// <param name="property">The PropertyBuilder to configure.</param>
+    /// <typeparam name="T">The type of the value.</typeparam>
+    /// <returns>The configured PropertyBuilder.</returns>
+    public static PropertyBuilder<T> JsonValue<T>(this PropertyBuilder<T> property)
+    {
+        property
+            .HasConversion(
+                v => JsonSerializer.Serialize(v),
+                v => JsonSerializer.Deserialize<T>(v)!
+            )
+            .Metadata
+            .SetValueComparer(new ValueComparer<T>(
+                (v1, v2) => JsonSerializer.Serialize(v1) == JsonSerializer.Serialize(v2),
+                v => JsonSerializer.Serialize(v).GetHashCode(),
+                v => JsonSerializer.Deserialize<T>(JsonSerializer.Serialize(v))!
+            ));
         return property;
     }
     
@@ -68,7 +90,7 @@ internal static class Extensions
     /// </summary>
     /// <typeparam name="T">The type of the collection elements.</typeparam>
     /// <returns>A ValueComparer for ICollection of T.</returns>
-    public static ValueComparer<ICollection<T>> GetCollectionComparer<T>() where T : class
+    public static ValueComparer<ICollection<T>> GetCollectionComparer<T>()
     {
         return new ValueComparer<ICollection<T>>(
             (c1, c2) => c1 != null && c2 != null && c1.SequenceEqual(c2),
@@ -92,12 +114,12 @@ internal static class Extensions
     }
     
     /// <summary>
-    /// Returns a ValueComparer for dictionaries with enum keys.
+    /// Returns a ValueComparer for dictionaries with keys.
     /// </summary>
-    /// <typeparam name="TKey">The enum type of the dictionary keys.</typeparam>
+    /// <typeparam name="TKey">The type of the dictionary keys.</typeparam>
     /// <typeparam name="TValue">The type of the dictionary values.</typeparam>
     /// <returns>A ValueComparer for IDictionary of TKey and TValue.</returns>
-    public static ValueComparer<IDictionary<TKey, TValue>> GetEnumDictionaryComparer<TKey, TValue>() where TKey : struct, Enum
+    public static ValueComparer<IDictionary<TKey, TValue>> GetDictionaryComparer<TKey, TValue>() where TKey : notnull
     {
         return new ValueComparer<IDictionary<TKey, TValue>>(
             (d1, d2) => d1 != null && d2 != null && d1.Count == d2.Count && !d1.Except(d2).Any(),

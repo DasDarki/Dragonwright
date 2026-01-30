@@ -7,6 +7,13 @@ public sealed class Background : IEntity<Background>
     
     public SourceType Source { get; set; }
     
+    public Guid? SourceCreatorId { get; set; }
+    
+    /// <summary>
+    /// The user who created this source material.
+    /// </summary>
+    public User? SourceCreator { get; set; }
+    
     [Required]
     [MaxLength(100)]
     public string Name { get; set; } = null!;
@@ -15,5 +22,9 @@ public sealed class Background : IEntity<Background>
     {
         builder.Property(f => f.Source).HasConversion<string>();
         
+        builder.HasOne(b => b.SourceCreator)
+            .WithMany()
+            .HasForeignKey(b => b.SourceCreatorId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

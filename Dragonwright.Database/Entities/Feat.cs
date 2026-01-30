@@ -7,6 +7,13 @@ public sealed class Feat : IEntity<Feat>
     
     public SourceType Source { get; set; }
     
+    public Guid? SourceCreatorId { get; set; }
+    
+    /// <summary>
+    /// The user who created this source material.
+    /// </summary>
+    public User? SourceCreator { get; set; }
+    
     [Required]
     [MaxLength(100)]
     public string Name { get; set; } = null!;
@@ -15,5 +22,9 @@ public sealed class Feat : IEntity<Feat>
     {
         builder.Property(f => f.Source).HasConversion<string>();
         
+        builder.HasOne(f => f.SourceCreator)
+            .WithMany()
+            .HasForeignKey(f => f.SourceCreatorId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

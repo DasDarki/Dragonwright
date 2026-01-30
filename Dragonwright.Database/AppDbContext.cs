@@ -1,5 +1,4 @@
 ﻿using Dragonwright.Database.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace Dragonwright.Database;
 
@@ -18,13 +17,35 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 
     public DbSet<Class> Classes => Set<Class>();
     
+    public DbSet<Subclass> Subclasses => Set<Subclass>();
+    
+    public DbSet<ClassFeature> ClassFeatures => Set<ClassFeature>();
+    
     public DbSet<Background> Backgrounds => Set<Background>();
     
     public DbSet<Feat> Feats => Set<Feat>();
     
+    public DbSet<Modifier> Modifiers => Set<Modifier>();
+    
     public DbSet<Race> Races => Set<Race>();
     
+    public DbSet<RaceVariant> RaceVariants => Set<RaceVariant>();
+    
+    public DbSet<RaceTrait> RaceTraits => Set<RaceTrait>();
+    
+    public DbSet<RaceTraitOption> RaceTraitOptions => Set<RaceTraitOption>();
+    
+    public DbSet<RaceTraitAction> RaceTraitActions => Set<RaceTraitAction>();
+    
+    public DbSet<RaceTraitCreature> RaceTraitCreatures => Set<RaceTraitCreature>();
+    
+    public DbSet<RaceTraitSpell> RaceTraitSpells => Set<RaceTraitSpell>();
+    
     public DbSet<Spell> Spells => Set<Spell>();
+    
+    public DbSet<Item> Items => Set<Item>();
+    
+    public DbSet<Creature> Creatures => Set<Creature>();
 
     #endregion
 
@@ -45,6 +66,8 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<CharacterFeat> CharacterFeats => Set<CharacterFeat>();
     
     public DbSet<CharacterSpell> CharacterSpells => Set<CharacterSpell>();
+    
+    public DbSet<CharacterItem> CharacterItems => Set<CharacterItem>();
 
     #endregion
 
@@ -56,11 +79,22 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
         modelBuilder.RegisterEntity<RefreshToken>();
         modelBuilder.RegisterEntity<StoredFile>();
         modelBuilder.RegisterEntity<Class>();
+        modelBuilder.RegisterEntity<Subclass>();
+        modelBuilder.RegisterEntity<ClassFeature>();
         modelBuilder.RegisterEntity<Character>();
         modelBuilder.RegisterEntity<Background>();
         modelBuilder.RegisterEntity<Feat>();
+        modelBuilder.RegisterEntity<Modifier>();
         modelBuilder.RegisterEntity<Race>();
+        modelBuilder.RegisterEntity<RaceVariant>();
+        modelBuilder.RegisterEntity<RaceTrait>();
+        modelBuilder.RegisterEntity<RaceTraitOption>();
+        modelBuilder.RegisterEntity<RaceTraitAction>();
+        modelBuilder.RegisterEntity<RaceTraitCreature>();
+        modelBuilder.RegisterEntity<RaceTraitSpell>();
         modelBuilder.RegisterEntity<Spell>();
+        modelBuilder.RegisterEntity<Item>();
+        modelBuilder.RegisterEntity<Creature>();
         modelBuilder.RegisterEntity<CharacterClass>();
         modelBuilder.RegisterEntity<CharacterAbility>();
         modelBuilder.RegisterEntity<CharacterSkill>();
@@ -68,6 +102,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
         modelBuilder.RegisterEntity<CharacterBackground>();
         modelBuilder.RegisterEntity<CharacterFeat>();
         modelBuilder.RegisterEntity<CharacterSpell>();
+        modelBuilder.RegisterEntity<CharacterItem>();
     }
 }
 

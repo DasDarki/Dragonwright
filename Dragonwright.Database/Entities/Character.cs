@@ -35,7 +35,11 @@ public sealed class Character : IEntity<Character>
     public bool CustomizeOrigin { get; set; }
     
     public bool ExceedLevelCap { get; set; }
-
+    
+    public bool AllowMulticlassing { get; set; } = true;
+    
+    public bool CheckMulticlassingPrerequisites { get; set; } = true;
+    
     #endregion
 
     #region Character Stats
@@ -66,11 +70,21 @@ public sealed class Character : IEntity<Character>
     
     public int InspirationPoints { get; set; }
     
+    public int MaxHitDie { get; set; }
+    
+    public int CurrentHitDie { get; set; }
+    
     public int TemporaryHitPoints { get; set; }
     
     public int CurrentHitPoints { get; set; }
     
-    public int MaximumHitPoints { get; set; }
+    public int RawMaximumHitPoints { get; set; }
+    
+    public int HitPointBonus { get; set; }
+    
+    public int? OverriddenMaximumHitPoints { get; set; }
+    
+    public int MaximumHitPoints => OverriddenMaximumHitPoints ?? RawMaximumHitPoints + HitPointBonus;
     
     public int InitiativeBonus { get; set; }
     
@@ -141,6 +155,18 @@ public sealed class Character : IEntity<Character>
     #region Proficiencies & Training
     
     public ICollection<string> Languages { get; set; } = [];
+    
+    public ICollection<ItemType> ArmorProficiencies { get; set; } = [];
+    
+    public ICollection<Item> SpecificArmorProficiencies { get; set; } = [];
+    
+    public ICollection<WeaponType> WeaponProficiencies { get; set; } = [];
+    
+    public ICollection<Item> SpecificWeaponProficiencies { get; set; } = [];
+    
+    public ICollection<Tool> ToolProficiencies { get; set; } = [];
+    
+    public ICollection<Item> SpecificToolProficiencies { get; set; } = [];
 
     #endregion
 
@@ -257,7 +283,19 @@ public sealed class Character : IEntity<Character>
         
         builder.Property(c => c.SavingThrowAdvantages).JsonCollection();
         builder.Property(c => c.SavingThrowDisadvantages).JsonCollection();
+        
         builder.Property(c => c.Languages).JsonCollection();
+        builder.Property(c => c.ArmorProficiencies).EnumCollection();
+        builder.Property(c => c.WeaponProficiencies).EnumCollection();
+        builder.Property(c => c.ToolProficiencies).EnumCollection();
+        
+        builder.HasMany(c => c.SpecificArmorProficiencies)
+            .WithMany();
+        builder.HasMany(c => c.SpecificWeaponProficiencies)
+            .WithMany();
+        builder.HasMany(c => c.SpecificToolProficiencies)
+            .WithMany();
+        
         builder.Property(c => c.Organizations).JsonCollection();
         builder.Property(c => c.Allies).JsonCollection();
         builder.Property(c => c.Enemies).JsonCollection();
@@ -322,28 +360,6 @@ public sealed class Character : IEntity<Character>
             return 0;
         }
         
-        var highestArmorBonus = 0;
-        var highestShieldBonus = 0;
-        foreach (var item in Items)
-        {
-            if (item.Item.Type.IsArmor())
-            {
-                var armorBonus = item.GetArmorClassBonus();
-                if (armorBonus > highestArmorBonus)
-                {
-                    highestArmorBonus = armorBonus;
-                }
-            }
-            else if (item.Item.Type == ItemType.Shield)
-            {
-                var shieldBonus = item.GetArmorClassBonus();
-                if (shieldBonus > highestShieldBonus)
-                {
-                    highestShieldBonus = shieldBonus;
-                }
-            }
-        }
-        
-        return highestArmorBonus + highestShieldBonus;
+        return Items.Sum(i => i.GetArmorClassBonus());
     }
 }
