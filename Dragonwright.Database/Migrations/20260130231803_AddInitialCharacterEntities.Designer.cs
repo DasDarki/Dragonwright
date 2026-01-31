@@ -3,6 +3,7 @@ using System;
 using Dragonwright.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Dragonwright.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260130231803_AddInitialCharacterEntities")]
+    partial class AddInitialCharacterEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,21 +115,6 @@ namespace Dragonwright.Database.Migrations
                     b.ToTable("CharacterItem2");
                 });
 
-            modelBuilder.Entity("ClassFeatureSpell", b =>
-                {
-                    b.Property<Guid>("ClassFeatureId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("SpellListId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("ClassFeatureId", "SpellListId");
-
-                    b.HasIndex("SpellListId");
-
-                    b.ToTable("ClassFeatureSpell");
-                });
-
             modelBuilder.Entity("ClassItem", b =>
                 {
                     b.Property<Guid>("ClassId")
@@ -155,21 +143,6 @@ namespace Dragonwright.Database.Migrations
                     b.HasIndex("SpellListId");
 
                     b.ToTable("ClassSpell");
-                });
-
-            modelBuilder.Entity("ClassSubclass", b =>
-                {
-                    b.Property<Guid>("AdditionalSpellListsId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("SubclassId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("AdditionalSpellListsId", "SubclassId");
-
-                    b.HasIndex("SubclassId");
-
-                    b.ToTable("ClassSubclass");
                 });
 
             modelBuilder.Entity("Dragonwright.Database.Entities.Background", b =>
@@ -792,9 +765,6 @@ namespace Dragonwright.Database.Migrations
                     b.Property<int?>("HitPointsModifierAbilityScore")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ImageId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -832,8 +802,6 @@ namespace Dragonwright.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ImageId");
-
                     b.HasIndex("SourceCreatorId");
 
                     b.ToTable("Classes");
@@ -848,384 +816,14 @@ namespace Dragonwright.Database.Migrations
                     b.Property<Guid?>("ClassId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("ClassLevelWhereOptionsArePresented")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("DisplayOrder")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("DisplayRequiredLevel")
-                        .HasColumnType("boolean");
-
-                    b.Property<Guid?>("FeatureToReplaceId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("FeatureType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("HasOptions")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("HideInBuilder")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("HideInCharacterSheet")
-                        .HasColumnType("boolean");
-
                     b.Property<bool>("IsOptional")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<int>("RequiredCharacterLevel")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid?>("SubclassId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ClassId");
-
-                    b.HasIndex("FeatureToReplaceId");
-
-                    b.HasIndex("SubclassId");
 
                     b.ToTable("ClassFeatures");
-                });
-
-            modelBuilder.Entity("Dragonwright.Database.Entities.ClassFeatureAction", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("AbilityScore")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ActionType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ActivationTime")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("AreaOfEffect")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("AreaSize")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("AttackType")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("ClassFeatureId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("DamageType")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("DiceCount")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("DiceValue")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("DisplayAsAttack")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("EffectByMartialArts")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("EffectOnMiss")
-                        .IsRequired()
-                        .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)");
-
-                    b.Property<string>("EffectOnSaveFailure")
-                        .IsRequired()
-                        .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)");
-
-                    b.Property<string>("EffectOnSaveSuccess")
-                        .IsRequired()
-                        .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)");
-
-                    b.Property<int>("FixedSaveDC")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("FixedValue")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IsNaturalWeapon")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsProficient")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsUnarmedWeapon")
-                        .HasColumnType("boolean");
-
-                    b.Property<int?>("MaximumRange")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<int?>("Range")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("RequiredCharacterLevel")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ResetType")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Save")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassFeatureId");
-
-                    b.ToTable("ClassFeatureActions");
-                });
-
-            modelBuilder.Entity("Dragonwright.Database.Entities.ClassFeatureCreature", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int?>("ChallengeRatingLevelDivisor")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("ClassFeatureId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("CreatureGroup")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("CreatureSizes")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int?>("CreatureType")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid?>("ExistingCreatureId")
-                        .HasColumnType("uuid");
-
-                    b.Property<float?>("MaxChallengeRating")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("RestrictedMovementTypes")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassFeatureId");
-
-                    b.HasIndex("ExistingCreatureId");
-
-                    b.ToTable("ClassFeatureCreatures");
-                });
-
-            modelBuilder.Entity("Dragonwright.Database.Entities.ClassFeatureLevelScale", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ClassFeatureId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("ClassLevel")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)");
-
-                    b.Property<int>("DiceCount")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("DiceValue")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("FixedValue")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassFeatureId");
-
-                    b.ToTable("ClassFeatureLevelScales");
-                });
-
-            modelBuilder.Entity("Dragonwright.Database.Entities.ClassFeatureOption", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ClassFeatureId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsGranted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<int>("RequiredCharacterLevel")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid?>("RequiredOptionId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("RequirementDescription")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassFeatureId");
-
-                    b.HasIndex("RequiredOptionId");
-
-                    b.ToTable("ClassFeatureOptions");
-                });
-
-            modelBuilder.Entity("Dragonwright.Database.Entities.ClassFeatureSpell", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("AbilityScore")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ActivationTimeUnit")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AdditionalDescription")
-                        .IsRequired()
-                        .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)");
-
-                    b.Property<bool>("AlwaysPrepared")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("AttackTypes")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("AvailableAtCharacterLevel")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("CastAtLevel")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("CastingTime")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("ClassFeatureId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ClassId")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("ConsumesSpellSlot")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("CountsAsKnownSpell")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsInfinite")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("LevelDivisor")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("NumberOfUses")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("NumberOfUsesProficiencyBonusIfProficient")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("NumberOfUsesProficiencyOperation")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("NumberOfUsesStatModifierAbility")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("NumberOfUsesStatModifierOperation")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("OnlyRitualSpells")
-                        .HasColumnType("boolean");
-
-                    b.Property<int?>("Range")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ResetType")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Restrictions")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.Property<Guid?>("SpellId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("SpellLevels")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("SpellSchools")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassFeatureId");
-
-                    b.HasIndex("ClassId");
-
-                    b.HasIndex("SpellId");
-
-                    b.ToTable("ClassFeatureSpells");
                 });
 
             modelBuilder.Entity("Dragonwright.Database.Entities.Creature", b =>
@@ -1233,148 +831,6 @@ namespace Dragonwright.Database.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<string>("Actions")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Alignment")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("ArmorClass")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ArmorClassNotes")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("BlindsightRange")
-                        .HasColumnType("integer");
-
-                    b.Property<float>("ChallengeRating")
-                        .HasColumnType("real");
-
-                    b.Property<int>("CharismaSavingThrowBonus")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("CharismaScore")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ClimbSpeed")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ConstitutionSavingThrowBonus")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ConstitutionScore")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("DarkvisionRange")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("DexteritySavingThrowBonus")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("DexterityScore")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("FlyingSpeed")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("HitPointDiceBonus")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("HitPointDiceCount")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("HitPointDiceValue")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("HitPoints")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("IntelligenceSavingThrowBonus")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("IntelligenceScore")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("LairActions")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Languages")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("LegendaryActions")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<int>("PassiveInsightBonus")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PassiveInvestigationBonus")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PassivePerceptionBonus")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ProficiencyBonus")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Reactions")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Size")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("SkillModifiers")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Speed")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("StrengthSavingThrowBonus")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("StrengthScore")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SwimmingSpeed")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Traits")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("TremorsenseRange")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TruesightRange")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("WisdomSavingThrowBonus")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("WisdomScore")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("XP")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -1424,14 +880,19 @@ namespace Dragonwright.Database.Migrations
                     b.Property<int?>("BaseArmorClass")
                         .HasColumnType("integer");
 
+                    b.Property<int>("DamageBonus")
+                        .HasColumnType("integer");
+
                     b.Property<string>("DamageBonusAbility")
                         .HasColumnType("text");
 
-                    b.Property<string>("DamageTypes")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("DamageDice")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("Damages")
+                    b.Property<int>("DamageDieCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("DamageTypes")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -1522,22 +983,6 @@ namespace Dragonwright.Database.Migrations
                     b.ToTable("Items");
                 });
 
-            modelBuilder.Entity("Dragonwright.Database.Entities.Language", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Languages");
-                });
-
             modelBuilder.Entity("Dragonwright.Database.Entities.Modifier", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1546,9 +991,6 @@ namespace Dragonwright.Database.Migrations
 
                     b.Property<string>("AbilityScore")
                         .HasColumnType("text");
-
-                    b.Property<Guid?>("ClassFeatureId")
-                        .HasColumnType("uuid");
 
                     b.Property<string>("Details")
                         .IsRequired()
@@ -1579,8 +1021,6 @@ namespace Dragonwright.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassFeatureId");
-
                     b.HasIndex("RaceTraitId");
 
                     b.ToTable("Modifiers");
@@ -1590,9 +1030,6 @@ namespace Dragonwright.Database.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ImageId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -1612,8 +1049,6 @@ namespace Dragonwright.Database.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ImageId");
 
                     b.HasIndex("SourceCreatorId");
 
@@ -1847,10 +1282,6 @@ namespace Dragonwright.Database.Migrations
                     b.Property<Guid?>("RequiredOptionId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("RequirementDescription")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("RaceTraitId");
@@ -2047,10 +1478,6 @@ namespace Dragonwright.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Damages")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(4000)
@@ -2208,31 +1635,8 @@ namespace Dragonwright.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<bool>("CanCastSpells")
-                        .HasColumnType("boolean");
-
                     b.Property<Guid>("ClassId")
                         .HasColumnType("uuid");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("ImageId")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("KnowsAllSpells")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("ShortDescription")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
 
                     b.Property<string>("Source")
                         .IsRequired()
@@ -2241,20 +1645,9 @@ namespace Dragonwright.Database.Migrations
                     b.Property<Guid?>("SourceCreatorId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("SpellLearnType")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SpellPrepareType")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SpellcastingAbility")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ClassId");
-
-                    b.HasIndex("ImageId");
 
                     b.HasIndex("SourceCreatorId");
 
@@ -2306,21 +1699,6 @@ namespace Dragonwright.Database.Migrations
                     b.HasIndex("SpellListId");
 
                     b.ToTable("RaceTraitSpell");
-                });
-
-            modelBuilder.Entity("SpellSubclass", b =>
-                {
-                    b.Property<Guid>("AdditionalSpellsId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("SubclassId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("AdditionalSpellsId", "SubclassId");
-
-                    b.HasIndex("SubclassId");
-
-                    b.ToTable("SpellSubclass");
                 });
 
             modelBuilder.Entity("BackgroundFeat", b =>
@@ -2413,21 +1791,6 @@ namespace Dragonwright.Database.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ClassFeatureSpell", b =>
-                {
-                    b.HasOne("Dragonwright.Database.Entities.ClassFeature", null)
-                        .WithMany()
-                        .HasForeignKey("ClassFeatureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Dragonwright.Database.Entities.Spell", null)
-                        .WithMany()
-                        .HasForeignKey("SpellListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ClassItem", b =>
                 {
                     b.HasOne("Dragonwright.Database.Entities.Class", null)
@@ -2454,21 +1817,6 @@ namespace Dragonwright.Database.Migrations
                     b.HasOne("Dragonwright.Database.Entities.Spell", null)
                         .WithMany()
                         .HasForeignKey("SpellListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ClassSubclass", b =>
-                {
-                    b.HasOne("Dragonwright.Database.Entities.Class", null)
-                        .WithMany()
-                        .HasForeignKey("AdditionalSpellListsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Dragonwright.Database.Entities.Subclass", null)
-                        .WithMany()
-                        .HasForeignKey("SubclassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -2654,17 +2002,10 @@ namespace Dragonwright.Database.Migrations
 
             modelBuilder.Entity("Dragonwright.Database.Entities.Class", b =>
                 {
-                    b.HasOne("Dragonwright.Database.Entities.StoredFile", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("Dragonwright.Database.Entities.User", "SourceCreator")
                         .WithMany()
                         .HasForeignKey("SourceCreatorId")
                         .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Image");
 
                     b.Navigation("SourceCreator");
                 });
@@ -2675,100 +2016,6 @@ namespace Dragonwright.Database.Migrations
                         .WithMany("Features")
                         .HasForeignKey("ClassId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Dragonwright.Database.Entities.ClassFeature", "FeatureToReplace")
-                        .WithMany()
-                        .HasForeignKey("FeatureToReplaceId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Dragonwright.Database.Entities.Subclass", null)
-                        .WithMany("ClassFeatures")
-                        .HasForeignKey("SubclassId");
-
-                    b.Navigation("FeatureToReplace");
-                });
-
-            modelBuilder.Entity("Dragonwright.Database.Entities.ClassFeatureAction", b =>
-                {
-                    b.HasOne("Dragonwright.Database.Entities.ClassFeature", "ClassFeature")
-                        .WithMany("Actions")
-                        .HasForeignKey("ClassFeatureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ClassFeature");
-                });
-
-            modelBuilder.Entity("Dragonwright.Database.Entities.ClassFeatureCreature", b =>
-                {
-                    b.HasOne("Dragonwright.Database.Entities.ClassFeature", "ClassFeature")
-                        .WithMany("Creatures")
-                        .HasForeignKey("ClassFeatureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Dragonwright.Database.Entities.Creature", "ExistingCreature")
-                        .WithMany()
-                        .HasForeignKey("ExistingCreatureId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("ClassFeature");
-
-                    b.Navigation("ExistingCreature");
-                });
-
-            modelBuilder.Entity("Dragonwright.Database.Entities.ClassFeatureLevelScale", b =>
-                {
-                    b.HasOne("Dragonwright.Database.Entities.ClassFeature", "ClassFeature")
-                        .WithMany("LevelScales")
-                        .HasForeignKey("ClassFeatureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ClassFeature");
-                });
-
-            modelBuilder.Entity("Dragonwright.Database.Entities.ClassFeatureOption", b =>
-                {
-                    b.HasOne("Dragonwright.Database.Entities.ClassFeature", "ClassFeature")
-                        .WithMany("Options")
-                        .HasForeignKey("ClassFeatureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Dragonwright.Database.Entities.ClassFeatureOption", "RequiredOption")
-                        .WithMany()
-                        .HasForeignKey("RequiredOptionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("ClassFeature");
-
-                    b.Navigation("RequiredOption");
-                });
-
-            modelBuilder.Entity("Dragonwright.Database.Entities.ClassFeatureSpell", b =>
-                {
-                    b.HasOne("Dragonwright.Database.Entities.ClassFeature", "ClassFeature")
-                        .WithMany("Spells")
-                        .HasForeignKey("ClassFeatureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Dragonwright.Database.Entities.Class", "Class")
-                        .WithMany()
-                        .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("Dragonwright.Database.Entities.Spell", "Spell")
-                        .WithMany()
-                        .HasForeignKey("SpellId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Class");
-
-                    b.Navigation("ClassFeature");
-
-                    b.Navigation("Spell");
                 });
 
             modelBuilder.Entity("Dragonwright.Database.Entities.Feat", b =>
@@ -2793,11 +2040,6 @@ namespace Dragonwright.Database.Migrations
 
             modelBuilder.Entity("Dragonwright.Database.Entities.Modifier", b =>
                 {
-                    b.HasOne("Dragonwright.Database.Entities.ClassFeature", null)
-                        .WithMany("Modifiers")
-                        .HasForeignKey("ClassFeatureId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Dragonwright.Database.Entities.RaceTrait", null)
                         .WithMany("Modifiers")
                         .HasForeignKey("RaceTraitId")
@@ -2806,17 +2048,10 @@ namespace Dragonwright.Database.Migrations
 
             modelBuilder.Entity("Dragonwright.Database.Entities.Race", b =>
                 {
-                    b.HasOne("Dragonwright.Database.Entities.StoredFile", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("Dragonwright.Database.Entities.User", "SourceCreator")
                         .WithMany()
                         .HasForeignKey("SourceCreatorId")
                         .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Image");
 
                     b.Navigation("SourceCreator");
                 });
@@ -2961,19 +2196,12 @@ namespace Dragonwright.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Dragonwright.Database.Entities.StoredFile", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("Dragonwright.Database.Entities.User", "SourceCreator")
                         .WithMany()
                         .HasForeignKey("SourceCreatorId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Class");
-
-                    b.Navigation("Image");
 
                     b.Navigation("SourceCreator");
                 });
@@ -2999,21 +2227,6 @@ namespace Dragonwright.Database.Migrations
                     b.HasOne("Dragonwright.Database.Entities.Spell", null)
                         .WithMany()
                         .HasForeignKey("SpellListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("SpellSubclass", b =>
-                {
-                    b.HasOne("Dragonwright.Database.Entities.Spell", null)
-                        .WithMany()
-                        .HasForeignKey("AdditionalSpellsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Dragonwright.Database.Entities.Subclass", null)
-                        .WithMany()
-                        .HasForeignKey("SubclassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -3053,21 +2266,6 @@ namespace Dragonwright.Database.Migrations
                     b.Navigation("Subclasses");
                 });
 
-            modelBuilder.Entity("Dragonwright.Database.Entities.ClassFeature", b =>
-                {
-                    b.Navigation("Actions");
-
-                    b.Navigation("Creatures");
-
-                    b.Navigation("LevelScales");
-
-                    b.Navigation("Modifiers");
-
-                    b.Navigation("Options");
-
-                    b.Navigation("Spells");
-                });
-
             modelBuilder.Entity("Dragonwright.Database.Entities.Race", b =>
                 {
                     b.Navigation("Traits");
@@ -3089,11 +2287,6 @@ namespace Dragonwright.Database.Migrations
             modelBuilder.Entity("Dragonwright.Database.Entities.StartItemChoice", b =>
                 {
                     b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("Dragonwright.Database.Entities.Subclass", b =>
-                {
-                    b.Navigation("ClassFeatures");
                 });
 
             modelBuilder.Entity("Dragonwright.Database.Entities.User", b =>

@@ -64,6 +64,8 @@ public sealed class Spell : IEntity<Spell>
     
     public ICollection<DamageType> DamageTypes { get; set; } = [];
     
+    public ICollection<AttackDamage> Damages { get; set; } = [];
+    
     public ICollection<Condition> Conditions { get; set; } = [];
     
     public ICollection<Time> Durations { get; set; } = [];
@@ -89,6 +91,7 @@ public sealed class Spell : IEntity<Spell>
         builder.Property(s => s.CastingTimes).JsonCollection();
         builder.Property(s => s.Durations).JsonCollection();
         builder.Property(s => s.Tags).JsonCollection();
+        builder.Property(s => s.Damages).JsonCollection();
 
         builder.HasMany(s => s.Classes)
             .WithMany(c => c.SpellList);

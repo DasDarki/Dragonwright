@@ -1,4 +1,6 @@
-﻿namespace Dragonwright.Database.Entities;
+﻿using Dragonwright.Database.Entities.Models;
+
+namespace Dragonwright.Database.Entities;
 
 public sealed class Item : IEntity<Item>
 {
@@ -63,11 +65,7 @@ public sealed class Item : IEntity<Item>
     
     public int AttackBonus { get; set; }
     
-    public int DamageDice { get; set; }
-    
-    public int DamageDieCount { get; set; }
-    
-    public int DamageBonus { get; set; }
+    public ICollection<AttackDamage> Damages { get; set; } = [];
     
     public AbilityScore? DamageBonusAbility { get; set; }
     
@@ -95,6 +93,7 @@ public sealed class Item : IEntity<Item>
         
         builder.Property(i => i.WeaponProperties).EnumCollection();
         builder.Property(i => i.DamageTypes).EnumCollection();
+        builder.Property(i => i.Damages).JsonCollection();
         
         builder.HasOne(i => i.SourceCreator)
             .WithMany()

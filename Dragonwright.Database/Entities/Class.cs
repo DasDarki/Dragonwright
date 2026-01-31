@@ -20,6 +20,12 @@ public sealed class Class : IEntity<Class>
 
     public int HitDie { get; set; }
     
+    public int FixHitPointsPerLevelAfterFirst { get; set; }
+    
+    public int BaseHitPointsAtFirstLevel { get; set; }
+    
+    public AbilityScore? HitPointsModifierAbilityScore { get; set; }
+    
     public ICollection<AbilityScore> PrimaryAbilityScores { get; set; } = [];
     
     public ICollection<AbilityScore> SavingThrowProficiencies { get; set; } = [];
@@ -32,6 +38,24 @@ public sealed class Class : IEntity<Class>
     public ICollection<Spell> SpellList { get; set; } = [];
     
     public ICollection<Subclass> Subclasses { get; set; } = [];
+    
+    public int SkillProficienciesCount { get; set; }
+    
+    public ICollection<Skill> SkillProficienciesOptions { get; set; } = [];
+    
+    public ICollection<Tool> ToolProficiencies { get; set; } = [];
+    
+    public ICollection<ItemType> ArmorProficiencies { get; set; } = [];
+    
+    public ICollection<WeaponType> WeaponProficiencies { get; set; } = [];
+    
+    public ICollection<Item> SpecificWeaponProficiencies { get; set; } = [];
+    
+    public ICollection<StartItemChoice> StartingItems { get; set; } = [];
+    
+    public Guid? ImageId { get; set; }
+    
+    public StoredFile? Image { get; set; }
     
     public void Configure(EntityTypeBuilder<Class> builder)
     {
@@ -47,6 +71,23 @@ public sealed class Class : IEntity<Class>
         builder.HasOne(c => c.SourceCreator)
             .WithMany()
             .HasForeignKey(c => c.SourceCreatorId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Property(c => c.SkillProficienciesOptions).EnumCollection();
+        builder.Property(c => c.ToolProficiencies).EnumCollection();
+        builder.Property(c => c.ArmorProficiencies).EnumCollection();
+        builder.Property(c => c.WeaponProficiencies).EnumCollection();
+        
+        builder.HasMany(c => c.SpecificWeaponProficiencies)
+            .WithMany();
+        
+        builder.HasMany(c => c.StartingItems)
+            .WithOne()
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasOne(u => u.Image)
+            .WithMany()
+            .HasForeignKey(u => u.ImageId)
             .OnDelete(DeleteBehavior.SetNull);
     }
 }

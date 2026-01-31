@@ -13,10 +13,6 @@ public sealed class CharacterRace : IEntity<CharacterRace>
     
     public Race Race { get; set; } = null!;
     
-    public Guid? VariantId { get; set; }
-    
-    public RaceVariant? Variant { get; set; }
-    
     public IDictionary<Guid, int> RaceTraitUsages { get; set; } = new Dictionary<Guid, int>();
     
     public void Configure(EntityTypeBuilder<CharacterRace> builder)
@@ -29,11 +25,6 @@ public sealed class CharacterRace : IEntity<CharacterRace>
         builder.HasOne(cr => cr.Race)
             .WithMany()
             .HasForeignKey(cr => cr.RaceId)
-            .OnDelete(DeleteBehavior.Restrict);
-        
-        builder.HasOne(cr => cr.Variant)
-            .WithMany()
-            .HasForeignKey(cr => cr.VariantId)
             .OnDelete(DeleteBehavior.Restrict);
         
         builder.Property(cr => cr.RaceTraitUsages).JsonDictionary();

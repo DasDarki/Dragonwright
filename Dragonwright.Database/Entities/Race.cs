@@ -22,7 +22,9 @@ public sealed class Race : IEntity<Race>
     
     public ICollection<RaceTrait> Traits { get; set; } = [];
     
-    public ICollection<RaceVariant> Variants { get; set; } = [];
+    public Guid? ImageId { get; set; }
+    
+    public StoredFile? Image { get; set; }
     
     public void Configure(EntityTypeBuilder<Race> builder)
     {
@@ -36,6 +38,11 @@ public sealed class Race : IEntity<Race>
         builder.HasOne(r => r.SourceCreator)
             .WithMany()
             .HasForeignKey(r => r.SourceCreatorId)
+            .OnDelete(DeleteBehavior.SetNull);
+        
+        builder.HasOne(u => u.Image)
+            .WithMany()
+            .HasForeignKey(u => u.ImageId)
             .OnDelete(DeleteBehavior.SetNull);
     }
 }

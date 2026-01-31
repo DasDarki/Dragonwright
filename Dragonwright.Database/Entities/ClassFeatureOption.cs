@@ -1,13 +1,13 @@
 ﻿namespace Dragonwright.Database.Entities;
 
-public sealed class RaceTraitOption : IEntity<RaceTraitOption>
+public sealed class ClassFeatureOption : IEntity<ClassFeatureOption>
 {
     [Key]
     public Guid Id { get; set; }
     
-    public Guid RaceTraitId { get; set; }
+    public Guid ClassFeatureId { get; set; }
     
-    public RaceTrait RaceTrait { get; set; } = null!;
+    public ClassFeature ClassFeature { get; set; } = null!;
     
     [Required]
     [MaxLength(200)]
@@ -20,7 +20,7 @@ public sealed class RaceTraitOption : IEntity<RaceTraitOption>
     /// <summary>
     /// When set, indicates that this option requires another option to be selected first.
     /// </summary>
-    public RaceTraitOption? RequiredOption { get; set; }
+    public ClassFeatureOption? RequiredOption { get; set; }
     
     public string RequirementDescription { get; set; } = string.Empty;
     
@@ -34,11 +34,11 @@ public sealed class RaceTraitOption : IEntity<RaceTraitOption>
     /// </summary>
     public bool IsGranted { get; set; }
     
-    public void Configure(EntityTypeBuilder<RaceTraitOption> builder)
+    public void Configure(EntityTypeBuilder<ClassFeatureOption> builder)
     {
-        builder.HasOne(rto => rto.RaceTrait)
+        builder.HasOne(rto => rto.ClassFeature)
             .WithMany(rt => rt.Options)
-            .HasForeignKey(rto => rto.RaceTraitId)
+            .HasForeignKey(rto => rto.ClassFeatureId)
             .OnDelete(DeleteBehavior.Cascade);
         
         builder.HasOne(rto => rto.RequiredOption)

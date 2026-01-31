@@ -273,12 +273,22 @@ public sealed class Character : IEntity<Character>
         builder.Property(c => c.DamageDefenses)
             .HasConversion(
                 v => JsonSerializer.Serialize(v),
-                v => JsonSerializer.Deserialize<Dictionary<DamageType, List<DefenseState>>>(v) ?? new Dictionary<DamageType, List<DefenseState>>()
+                v => JsonSerializer.Deserialize<IDictionary<DamageType, List<DefenseState>>>(v) ?? new Dictionary<DamageType, List<DefenseState>>()
             )
-            .Metadata.SetValueComparer(new ValueComparer<Dictionary<DamageType, List<DefenseState>>>(
+            .Metadata.SetValueComparer(new ValueComparer<IDictionary<DamageType, List<DefenseState>>>(
                 (c1, c2) => JsonSerializer.Serialize(c1) == JsonSerializer.Serialize(c2),
                 c => c == null ? 0 : JsonSerializer.Serialize(c).GetHashCode(),
-                c => JsonSerializer.Deserialize<Dictionary<DamageType, List<DefenseState>>>(JsonSerializer.Serialize(c)) ?? new Dictionary<DamageType, List<DefenseState>>()
+                c => JsonSerializer.Deserialize<IDictionary<DamageType, List<DefenseState>>>(JsonSerializer.Serialize(c)) ?? new Dictionary<DamageType, List<DefenseState>>()
+            ));
+        builder.Property(c => c.ConditionDefenses)
+            .HasConversion(
+                v => JsonSerializer.Serialize(v),
+                v => JsonSerializer.Deserialize<IDictionary<Condition, List<DefenseState>>>(v) ?? new Dictionary<Condition, List<DefenseState>>()
+            )
+            .Metadata.SetValueComparer(new ValueComparer<IDictionary<Condition, List<DefenseState>>>(
+                (c1, c2) => JsonSerializer.Serialize(c1) == JsonSerializer.Serialize(c2),
+                c => c == null ? 0 : JsonSerializer.Serialize(c).GetHashCode(),
+                c => JsonSerializer.Deserialize<IDictionary<Condition, List<DefenseState>>>(JsonSerializer.Serialize(c)) ?? new Dictionary<Condition, List<DefenseState>>()
             ));
         
         builder.Property(c => c.SavingThrowAdvantages).JsonCollection();
