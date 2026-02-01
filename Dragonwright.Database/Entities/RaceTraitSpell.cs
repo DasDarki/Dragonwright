@@ -149,6 +149,7 @@ public sealed class RaceTraitSpell : IEntity<RaceTraitSpell>
         builder.Property(rto => rto.AttackTypes).EnumCollection();
         
         builder.Property(rto => rto.AbilityScore).HasConversion<string?>();
+        builder.Property(rto => rto.NumberOfUsesStatModifierAbility).HasConversion<string?>();
         builder.Property(rto => rto.NumberOfUsesStatModifierOperation).HasConversion<string?>();
         builder.Property(rto => rto.NumberOfUsesProficiencyOperation).HasConversion<string?>();
         builder.Property(rto => rto.ResetType).HasConversion<string?>();

@@ -112,6 +112,7 @@ public sealed class RaceTraitAction : IEntity<RaceTraitAction>
         builder.Property(rta => rta.AbilityScore).HasConversion<string?>();
         builder.Property(rta => rta.Save).HasConversion<string?>();
         builder.Property(rta => rta.DamageType).HasConversion<string?>();
+        builder.Property(rta => rta.AreaOfEffect).HasConversion<string?>();
         builder.Property(rta => rta.ResetType).HasConversion<string?>();
         builder.Property(rta => rta.ActivationTime).JsonValue();
     }

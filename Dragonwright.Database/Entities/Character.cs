@@ -114,6 +114,10 @@ public sealed class Character : IEntity<Character>
     
     public int XP { get; set; }
     
+    public int DeathSaveSuccesses { get; set; }
+
+    public int DeathSaveFailures { get; set; }
+
     public int ExhaustionLevel { get; set; }
     
     public ICollection<Condition> Conditions { get; set; } = [];
@@ -267,6 +271,8 @@ public sealed class Character : IEntity<Character>
         
         builder.Property(c => c.Lifestyle).HasConversion<string>();
         builder.Property(c => c.Alignment).HasConversion<string>();
+        builder.Property(c => c.Gender).HasConversion<string>();
+        builder.Property(c => c.Size).HasConversion<string>();
         
         builder.Property(c => c.Sources).EnumCollection();
         builder.Property(c => c.Conditions).EnumCollection();
@@ -350,10 +356,10 @@ public sealed class Character : IEntity<Character>
         switch (targetSkill.AdvantageState)
         {
             case AdvantageState.Advantage:
-                bonus = +5;
+                bonus += 5;
                 break;
             case AdvantageState.Disadvantage:
-                bonus = -5;
+                bonus -= 5;
                 break;
             case AdvantageState.None:
             default:

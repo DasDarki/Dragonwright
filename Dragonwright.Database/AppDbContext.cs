@@ -34,6 +34,12 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<Background> Backgrounds => Set<Background>();
     
     public DbSet<Feat> Feats => Set<Feat>();
+
+    public DbSet<FeatOption> FeatOptions => Set<FeatOption>();
+
+    public DbSet<FeatAction> FeatActions => Set<FeatAction>();
+
+    public DbSet<FeatSpell> FeatSpells => Set<FeatSpell>();
     
     public DbSet<Modifier> Modifiers => Set<Modifier>();
     
@@ -105,6 +111,9 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
         modelBuilder.RegisterEntity<Character>();
         modelBuilder.RegisterEntity<Background>();
         modelBuilder.RegisterEntity<Feat>();
+        modelBuilder.RegisterEntity<FeatOption>();
+        modelBuilder.RegisterEntity<FeatAction>();
+        modelBuilder.RegisterEntity<FeatSpell>();
         modelBuilder.RegisterEntity<Modifier>();
         modelBuilder.RegisterEntity<Race>();
         modelBuilder.RegisterEntity<RaceTrait>();
