@@ -1,26 +1,35 @@
-﻿import { defineStore } from "pinia";
-import { loadAuth, saveAuth, type StoredAuth } from "@/auth/storage";
-import { getDeviceId, getDeviceName } from "@/auth/device";
+﻿import {defineStore} from "pinia";
+import {loadAuth, saveAuth, type StoredAuth} from "@/auth/storage";
+import {getDeviceId, getDeviceName} from "@/auth/device";
 import {
+  type AuthResponse,
+  getUsersId,
+  type LoginRequest,
+  type LogoutRequest,
   postAuthLogin,
-  postAuthRegister,
-  postAuthRefresh,
   postAuthLogout,
   postAuthLogoutAll,
-  type LoginRequest,
-  type RegisterRequest,
-  type RefreshRequest,
-  type LogoutRequest,
-  type AuthResponse,
+  postAuthRefresh,
+  postAuthRegister,
   type ProblemDetails,
+  type RefreshRequest,
+  type RegisterRequest,
+  type User,
 } from "@/api";
-import { unwrapOrThrow, isHttpError } from "@/api/result";
-import { setAuthAccessToken, setAuthRefreshHandler, setAuthLogoutHandler } from "@/api/http";
+import {isHttpError, unwrapOrThrow} from "@/api/result";
+import {setAuthAccessToken, setAuthLogoutHandler, setAuthRefreshHandler} from "@/api/http";
 
 function isExpiringSoon(iso: string, skewMs: number) {
   const exp = Date.parse(iso);
   if (Number.isNaN(exp)) return true;
   return exp - Date.now() <= skewMs;
+}
+
+export enum LoginResult {
+  Success = 'Success',
+  InvalidCredentials = 'InvalidCredentials',
+  UserNotFound = 'UserNotFound',
+  Error = 'Error',
 }
 
 export const useAuthStore = defineStore("auth", {
@@ -31,6 +40,7 @@ export const useAuthStore = defineStore("auth", {
       refreshToken: (stored?.refreshToken ?? null) as string | null,
       accessTokenExpiration: (stored?.accessTokenExpiration ?? null) as string | null,
       lastAuthError: null as ProblemDetails | null,
+      loggedInUser: null as User | null,
     };
   },
 
@@ -89,7 +99,7 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    async login(username: string, password: string) {
+    async login(username: string, password: string): Promise<LoginResult> {
       this.clearError();
       const payload: LoginRequest = {
         username,
@@ -102,9 +112,31 @@ export const useAuthStore = defineStore("auth", {
         const res = await postAuthLogin(payload);
         const data = unwrapOrThrow<AuthResponse, ProblemDetails>(res as any);
         this.applyAuth(data);
+        return LoginResult.Success;
       } catch (e) {
-        if (isHttpError<ProblemDetails>(e)) this.lastAuthError = e.data ?? null;
+        if (isHttpError<ProblemDetails>(e)) {
+          if ((e.data as any)?.reason) {
+            return (e.data as any).reason as LoginResult;
+          }
+          this.lastAuthError = e.data ?? null;
+        }
         throw e;
+      }
+    },
+
+    async loadUser(): Promise<boolean> {
+      try {
+        const res = await getUsersId("@me");
+        if (res.status === 200) {
+          this.loggedInUser = unwrapOrThrow<User, ProblemDetails>(res as any);
+          return true;
+        }
+
+        this.loggedInUser = null;
+        return false;
+      } catch {
+        this.loggedInUser = null;
+        return false;
       }
     },
 

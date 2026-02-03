@@ -5,6 +5,8 @@ let accessToken: string | null = null;
 let refreshHandler: RefreshFn | null = null;
 let logoutHandler: LogoutFn | null = null;
 
+const apiUrl = import.meta.env.VITE_API_URL as string ?? window.location.origin;
+
 export function setAuthAccessToken(token: string | null) {
   accessToken = token;
 }
@@ -43,7 +45,7 @@ async function parseData(res: Response) {
 }
 
 export async function customFetch<T>(url: string, options: RequestInit = {}): Promise<T> {
-  const u = new URL(url, window.location.origin);
+  const u = new URL(url, apiUrl);
   const path = u.pathname;
 
   const isAuthLogin = path.includes("/auth/login");
@@ -55,7 +57,7 @@ export async function customFetch<T>(url: string, options: RequestInit = {}): Pr
   if (accessToken) headers.set("Authorization", `Bearer ${accessToken}`);
 
   const requestOnce = async () => {
-    const res = await fetch(url, { ...options, headers });
+    const res = await fetch(u, { ...options, headers });
     const data = await parseData(res);
     return { status: res.status, data, headers: res.headers } as any;
   };

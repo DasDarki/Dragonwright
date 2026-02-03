@@ -5,10 +5,778 @@
  * OpenAPI spec version: 1.0.0
  */
 import { customFetch } from './http';
+export type AbilityScore = number;
+
+export type ActionType = number;
+
+export type Alignment = number;
+
+export type ArithmeticOperation = number;
+
+export type DamageType = number;
+
+export interface AttackDamage {
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  diceCount?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  diceValue?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  bonus?: number | string;
+  damageType?: DamageType;
+}
+
+export type AttackType = number;
+
 export interface AuthResponse {
   accessToken?: string;
   refreshToken?: string;
   accessTokenExpiration?: string;
+}
+
+export type SourceType = number;
+
+export interface StoredFile {
+  id?: string;
+  fileName?: string;
+  contentType?: string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  size?: number | string;
+  storagePath?: string;
+  createdAt?: string;
+}
+
+export type UserRole = number;
+
+export interface User {
+  id?: string;
+  /** @maxLength 50 */
+  username: string;
+  passwordHash: string;
+  /** @nullable */
+  avatarId?: string | null;
+  avatar?: null | StoredFile;
+  userRole?: UserRole;
+}
+
+export type Skill = number;
+
+export type Tool = number;
+
+export type ItemType = number;
+
+export type WeaponType = number;
+
+export type Rarity = number;
+
+export type WeaponProperty = number;
+
+export type Mastery = number;
+
+export interface Item {
+  id?: string;
+  source?: SourceType;
+  /** @nullable */
+  sourceCreatorId?: string | null;
+  sourceCreator?: null | User;
+  /** @maxLength 200 */
+  name: string;
+  /** @maxLength 4000 */
+  description?: string;
+  isMagical?: boolean;
+  requiresAttunement?: boolean;
+  isConsumable?: boolean;
+  type?: ItemType;
+  rarity?: Rarity;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  weightInOunces?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  valueInCopper?: number | string;
+  weaponType?: null | WeaponType;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  baseArmorClass?: number | string | null;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  armorClassBonus?: number | string;
+  armorClassBonusAbility?: null | AbilityScore;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  maximumArmorClassBonusFromAbility?: number | string;
+  givesDisadvantageOnStealth?: boolean;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  donningTimeInSeconds?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  doffingTimeInSeconds?: number | string;
+  requiredAbilityScore?: null | AbilityScore;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  requiredAbilityScoreValue?: number | string;
+  weaponProperties?: WeaponProperty[];
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  rangeInFeet?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  maximumRangeInFeet?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  attackBonus?: number | string;
+  damages?: AttackDamage[];
+  damageBonusAbility?: null | AbilityScore;
+  damageTypes?: DamageType[];
+  mastery?: null | Mastery;
+  isBackpack?: boolean;
+  toolType?: null | Tool;
+}
+
+export type StartItemChoiceOperator = number;
+
+export type StartItemType = number;
+
+export type Currency = number;
+
+export interface StartItem {
+  id?: string;
+  choiceId?: string;
+  type?: StartItemType;
+  currency?: null | Currency;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  currencyAmount?: number | string | null;
+  weaponTypes?: WeaponType[];
+  weaponProperties?: WeaponProperty[];
+}
+
+export interface StartItemChoice {
+  id?: string;
+  operator?: StartItemChoiceOperator;
+  items?: StartItem[];
+}
+
+export interface FeatOption {
+  id?: string;
+  featId?: string;
+  /** @maxLength 200 */
+  name: string;
+  description?: string;
+  /** @nullable */
+  requiredOptionId?: string | null;
+  requiredOption?: null | FeatOption;
+  requirementDescription?: string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  requiredCharacterLevel?: number | string;
+  isGranted?: boolean;
+}
+
+export type Shape = number;
+
+export type TimeUnit = number;
+
+export interface Time {
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  value?: number | string;
+  unit?: TimeUnit;
+}
+
+export type ResetType = number;
+
+export interface FeatAction {
+  id?: string;
+  featId?: string;
+  actionType?: ActionType;
+  /** @maxLength 200 */
+  name?: string;
+  abilityScore?: null | AbilityScore;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  requiredCharacterLevel?: number | string;
+  isProficient?: boolean;
+  attackType?: null | AttackType;
+  save?: null | AbilityScore;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  fixedSaveDC?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  diceCount?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  diceValue?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  fixedValue?: number | string;
+  /** @maxLength 4000 */
+  effectOnMiss?: string;
+  /** @maxLength 4000 */
+  effectOnSaveSuccess?: string;
+  /** @maxLength 4000 */
+  effectOnSaveFailure?: string;
+  isUnarmedWeapon?: boolean;
+  isNaturalWeapon?: boolean;
+  damageType?: null | DamageType;
+  displayAsAttack?: boolean;
+  effectByMartialArts?: boolean;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  range?: number | string | null;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  maximumRange?: number | string | null;
+  areaOfEffect?: null | Shape;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  areaSize?: number | string;
+  activationTime?: null | Time;
+  resetType?: null | ResetType;
+  description?: string;
+}
+
+export type SpellLevel = number;
+
+export type SpellSchool = number;
+
+export type Condition = number;
+
+export type FeatureType = number;
+
+export interface ClassFeatureOption {
+  id?: string;
+  classFeatureId?: string;
+  /** @maxLength 200 */
+  name: string;
+  description?: string;
+  /** @nullable */
+  requiredOptionId?: string | null;
+  requiredOption?: null | ClassFeatureOption;
+  requirementDescription?: string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  requiredCharacterLevel?: number | string;
+  isGranted?: boolean;
+}
+
+export interface ClassFeatureAction {
+  id?: string;
+  classFeatureId?: string;
+  actionType?: ActionType;
+  /** @maxLength 200 */
+  name?: string;
+  abilityScore?: null | AbilityScore;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  requiredCharacterLevel?: number | string;
+  isProficient?: boolean;
+  attackType?: null | AttackType;
+  save?: null | AbilityScore;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  fixedSaveDC?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  diceCount?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  diceValue?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  fixedValue?: number | string;
+  /** @maxLength 4000 */
+  effectOnMiss?: string;
+  /** @maxLength 4000 */
+  effectOnSaveSuccess?: string;
+  /** @maxLength 4000 */
+  effectOnSaveFailure?: string;
+  isUnarmedWeapon?: boolean;
+  isNaturalWeapon?: boolean;
+  damageType?: null | DamageType;
+  displayAsAttack?: boolean;
+  effectByMartialArts?: boolean;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  range?: number | string | null;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  maximumRange?: number | string | null;
+  areaOfEffect?: null | Shape;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  areaSize?: number | string;
+  activationTime?: null | Time;
+  resetType?: null | ResetType;
+  description?: string;
+}
+
+export type Size = number;
+
+export type CreatureType = number;
+
+export interface CreatureAction {
+  name?: string;
+  description?: string;
+  /** @nullable */
+  attackTypes?: AttackType[] | null;
+  /** @nullable */
+  damageTypes?: DamageType[] | null;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  attackRoll?: number | string | null;
+  /** @nullable */
+  damages?: AttackDamage[] | null;
+}
+
+export type CreatureSkillModifiers = {[key: string]: number | string};
+
+export type CreatureTraits = {[key: string]: string};
+
+export type CreatureLegendaryActions = {[key: string]: number | string};
+
+export interface Creature {
+  id?: string;
+  /** @maxLength 500 */
+  name: string;
+  size?: Size;
+  type?: CreatureType;
+  alignment?: Alignment;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  armorClass?: number | string;
+  armorClassNotes?: string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  hitPoints?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  hitPointDiceCount?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  hitPointDiceValue?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  hitPointDiceBonus?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  speed?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  flyingSpeed?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  swimmingSpeed?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  climbSpeed?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$ */
+  challengeRating?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  xp?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  proficiencyBonus?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  strengthScore?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  strengthModifier?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  strengthSavingThrowBonus?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  strengthSavingThrow?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  dexterityScore?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  dexterityModifier?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  dexteritySavingThrowBonus?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  dexteritySavingThrow?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  constitutionScore?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  constitutionModifier?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  constitutionSavingThrowBonus?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  constitutionSavingThrow?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  intelligenceScore?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  intelligenceModifier?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  intelligenceSavingThrowBonus?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  intelligenceSavingThrow?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  wisdomScore?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  wisdomModifier?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  wisdomSavingThrowBonus?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  wisdomSavingThrow?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  charismaScore?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  charismaModifier?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  charismaSavingThrowBonus?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  charismaSavingThrow?: number | string;
+  skillModifiers?: CreatureSkillModifiers;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  passivePerceptionBonus?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  passivePerception?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  passiveInvestigationBonus?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  passiveInvestigation?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  passiveInsightBonus?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  passiveInsight?: number | string;
+  languages?: string[];
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  darkvisionRange?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  truesightRange?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  tremorsenseRange?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  blindsightRange?: number | string;
+  traits?: CreatureTraits;
+  actions?: CreatureAction[];
+  legendaryActions?: CreatureLegendaryActions;
+  lairActions?: CreatureAction[];
+  reactions?: CreatureAction[];
+}
+
+export type MovementType = number;
+
+export interface ClassFeatureCreature {
+  id?: string;
+  classFeatureId?: string;
+  creatureGroup?: string;
+  /** @nullable */
+  existingCreatureId?: string | null;
+  existingCreature?: null | Creature;
+  creatureType?: null | CreatureType;
+  name?: string;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$
+   */
+  maxChallengeRating?: number | string | null;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  challengeRatingLevelDivisor?: number | string | null;
+  restrictedMovementTypes?: MovementType[];
+  creatureSizes?: Size[];
+}
+
+export interface ClassFeatureSpell {
+  id?: string;
+  classFeatureId?: string;
+  /** @nullable */
+  spellId?: string | null;
+  spell?: null | Spell;
+  /** @nullable */
+  classId?: string | null;
+  class?: null | Class;
+  spellLevels?: SpellLevel[];
+  spellSchools?: SpellSchool[];
+  attackTypes?: AttackType[];
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  levelDivisor?: number | string;
+  onlyRitualSpells?: boolean;
+  abilityScore?: null | AbilityScore;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  numberOfUses?: number | string;
+  numberOfUsesStatModifierOperation?: null | ArithmeticOperation;
+  numberOfUsesStatModifierAbility?: null | AbilityScore;
+  numberOfUsesProficiencyBonusIfProficient?: boolean;
+  numberOfUsesProficiencyOperation?: null | ArithmeticOperation;
+  resetType?: null | ResetType;
+  castAtLevel?: null | SpellLevel;
+  castingTime?: null | Time;
+  activationTimeUnit?: null | TimeUnit;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  range?: number | string | null;
+  /** @maxLength 4000 */
+  additionalDescription?: string;
+  /** @maxLength 2000 */
+  restrictions?: string;
+  consumesSpellSlot?: boolean;
+  countsAsKnownSpell?: boolean;
+  alwaysPrepared?: boolean;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  availableAtCharacterLevel?: number | string;
+  isInfinite?: boolean;
+}
+
+export type ModifierType = number;
+
+export interface ModifierSubtype { [key: string]: unknown }
+
+export interface Modifier {
+  id?: string;
+  type?: ModifierType;
+  subtype?: null | ModifierSubtype;
+  abilityScore?: null | AbilityScore;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  diceCount?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  diceValue?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  fixedValue?: number | string;
+  /** @maxLength 4000 */
+  details?: string;
+  duration?: null | Time;
+}
+
+export interface ClassFeatureLevelScale {
+  id?: string;
+  classFeatureId?: string;
+  /** @maxLength 4000 */
+  description: string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  classLevel?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  diceCount?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  diceValue?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  fixedValue?: number | string;
+}
+
+export interface ClassFeature {
+  id?: string;
+  isOptional?: boolean;
+  /** @maxLength 200 */
+  name: string;
+  description?: string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  displayOrder?: number | string;
+  hideInBuilder?: boolean;
+  hideInCharacterSheet?: boolean;
+  hasOptions?: boolean;
+  displayRequiredLevel?: boolean;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  requiredCharacterLevel?: number | string;
+  featureType?: FeatureType;
+  /** @nullable */
+  featureToReplaceId?: string | null;
+  featureToReplace?: null | ClassFeature;
+  classLevelWhereOptionsArePresented?: (number | string)[];
+  options?: ClassFeatureOption[];
+  actions?: ClassFeatureAction[];
+  creatures?: ClassFeatureCreature[];
+  spells?: ClassFeatureSpell[];
+  modifiers?: Modifier[];
+  levelScales?: ClassFeatureLevelScale[];
+  spellList?: Spell[];
+}
+
+export type SpellPrepareType = number;
+
+export type SpellLearnType = number;
+
+export interface Subclass {
+  id?: string;
+  source?: SourceType;
+  /** @nullable */
+  sourceCreatorId?: string | null;
+  sourceCreator?: null | User;
+  classId?: string;
+  /** @maxLength 200 */
+  name: string;
+  /** @maxLength 1000 */
+  shortDescription?: string;
+  description?: string;
+  canCastSpells?: boolean;
+  spellcastingAbility?: null | AbilityScore;
+  knowsAllSpells?: boolean;
+  additionalSpellLists?: Class[];
+  spellPrepareType?: null | SpellPrepareType;
+  spellLearnType?: null | SpellLearnType;
+  additionalSpells?: Spell[];
+  /** @nullable */
+  imageId?: string | null;
+  image?: null | StoredFile;
+  classFeatures?: ClassFeature[];
+}
+
+export interface Class {
+  id?: string;
+  source?: SourceType;
+  /** @nullable */
+  sourceCreatorId?: string | null;
+  sourceCreator?: null | User;
+  /** @maxLength 100 */
+  name: string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  hitDie?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  fixHitPointsPerLevelAfterFirst?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  baseHitPointsAtFirstLevel?: number | string;
+  hitPointsModifierAbilityScore?: null | AbilityScore;
+  primaryAbilityScores?: AbilityScore[];
+  savingThrowProficiencies?: AbilityScore[];
+  features?: ClassFeature[];
+  spellList?: Spell[];
+  subclasses?: Subclass[];
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  skillProficienciesCount?: number | string;
+  skillProficienciesOptions?: Skill[];
+  toolProficiencies?: Tool[];
+  armorProficiencies?: ItemType[];
+  weaponProficiencies?: WeaponType[];
+  specificWeaponProficiencies?: Item[];
+  startingItems?: StartItemChoice[];
+  /** @nullable */
+  imageId?: string | null;
+  image?: null | StoredFile;
+}
+
+export interface Spell {
+  id?: string;
+  source?: SourceType;
+  /** @nullable */
+  sourceCreatorId?: string | null;
+  sourceCreator?: null | User;
+  level: SpellLevel;
+  /** @maxLength 200 */
+  name: string;
+  /** @maxLength 4000 */
+  description?: string;
+  school?: SpellSchool;
+  castingTimes?: Time[];
+  hasVocalComponent?: boolean;
+  hasSomaticComponent?: boolean;
+  hasMaterialComponent?: boolean;
+  /**
+   * @maxLength 500
+   * @nullable
+   */
+  materialComponents?: string | null;
+  concentration?: boolean;
+  ritual?: boolean;
+  attackType?: AttackType;
+  save?: null | AbilityScore;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  range?: number | string;
+  areaOfEffect?: null | Shape;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  areaSize?: number | string;
+  damageTypes?: DamageType[];
+  damages?: AttackDamage[];
+  conditions?: Condition[];
+  durations?: Time[];
+  tags?: string[];
+  classes?: Class[];
+  /** @nullable */
+  classIds?: string[] | null;
+}
+
+export interface FeatSpell {
+  id?: string;
+  featId?: string;
+  /** @nullable */
+  spellId?: string | null;
+  spell?: null | Spell;
+  /** @nullable */
+  classId?: string | null;
+  class?: null | Class;
+  spellLevels?: SpellLevel[];
+  spellSchools?: SpellSchool[];
+  attackTypes?: AttackType[];
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  levelDivisor?: number | string;
+  onlyRitualSpells?: boolean;
+  abilityScore?: null | AbilityScore;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  numberOfUses?: number | string;
+  numberOfUsesStatModifierOperation?: null | ArithmeticOperation;
+  numberOfUsesStatModifierAbility?: null | AbilityScore;
+  numberOfUsesProficiencyBonusIfProficient?: boolean;
+  numberOfUsesProficiencyOperation?: null | ArithmeticOperation;
+  resetType?: null | ResetType;
+  castAtLevel?: null | SpellLevel;
+  castingTime?: null | Time;
+  activationTimeUnit?: null | TimeUnit;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  range?: number | string | null;
+  /** @maxLength 4000 */
+  additionalDescription?: string;
+  /** @maxLength 2000 */
+  restrictions?: string;
+  consumesSpellSlot?: boolean;
+  countsAsKnownSpell?: boolean;
+  alwaysPrepared?: boolean;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  availableAtCharacterLevel?: number | string;
+  isInfinite?: boolean;
+}
+
+export interface Feat {
+  id?: string;
+  source?: SourceType;
+  /** @nullable */
+  sourceCreatorId?: string | null;
+  sourceCreator?: null | User;
+  /** @maxLength 100 */
+  name: string;
+  /** @maxLength 4000 */
+  description?: string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  featLevel?: number | string;
+  isRepeatable?: boolean;
+  /** @maxLength 1000 */
+  prerequisiteDescription?: string;
+  prerequisiteAbilityScore?: null | AbilityScore;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  prerequisiteAbilityScoreMinimum?: number | string;
+  prerequisiteSpellcasting?: boolean;
+  abilityScoreOptions?: AbilityScore[];
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  abilityScoreIncrease?: number | string;
+  options?: FeatOption[];
+  actions?: FeatAction[];
+  spells?: FeatSpell[];
+  modifiers?: Modifier[];
+  spellList?: Spell[];
+}
+
+export type CharacteristicsType = number;
+
+export interface Characteristics {
+  id?: string;
+  type?: CharacteristicsType;
+  /** @maxLength 1000 */
+  text?: string;
+}
+
+export interface Background {
+  id?: string;
+  source?: SourceType;
+  /** @nullable */
+  sourceCreatorId?: string | null;
+  sourceCreator?: null | User;
+  /** @maxLength 100 */
+  name: string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  languageCount?: number | string;
+  abilityScoreIncreases?: AbilityScore[];
+  languageRestrictions?: string[];
+  skillProficiencies?: Skill[];
+  toolProficiencies?: Tool[];
+  armorProficiencies?: ItemType[];
+  weaponProficiencies?: WeaponType[];
+  specificWeaponProficiencies?: Item[];
+  startingItems?: StartItemChoice[];
+  grantedFeats?: Feat[];
+  spellList?: Spell[];
+  characteristics?: Characteristics[];
+}
+
+export type IFormFile = Blob;
+
+export interface Language {
+  id?: string;
+  /** @maxLength 100 */
+  name: string;
 }
 
 export interface LoginRequest {
@@ -39,6 +807,175 @@ export interface ProblemDetails {
   instance?: string | null;
 }
 
+export interface RaceTraitOption {
+  id?: string;
+  raceTraitId?: string;
+  /** @maxLength 200 */
+  name: string;
+  description?: string;
+  /** @nullable */
+  requiredOptionId?: string | null;
+  requiredOption?: null | RaceTraitOption;
+  requirementDescription?: string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  requiredCharacterLevel?: number | string;
+  isGranted?: boolean;
+}
+
+export interface RaceTraitAction {
+  id?: string;
+  raceTraitId?: string;
+  actionType?: ActionType;
+  /** @maxLength 200 */
+  name?: string;
+  abilityScore?: null | AbilityScore;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  requiredCharacterLevel?: number | string;
+  isProficient?: boolean;
+  attackType?: null | AttackType;
+  save?: null | AbilityScore;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  fixedSaveDC?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  diceCount?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  diceValue?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  fixedValue?: number | string;
+  /** @maxLength 4000 */
+  effectOnMiss?: string;
+  /** @maxLength 4000 */
+  effectOnSaveSuccess?: string;
+  /** @maxLength 4000 */
+  effectOnSaveFailure?: string;
+  isUnarmedWeapon?: boolean;
+  isNaturalWeapon?: boolean;
+  damageType?: null | DamageType;
+  displayAsAttack?: boolean;
+  effectByMartialArts?: boolean;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  range?: number | string | null;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  maximumRange?: number | string | null;
+  areaOfEffect?: null | Shape;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  areaSize?: number | string;
+  activationTime?: null | Time;
+  resetType?: null | ResetType;
+  description?: string;
+}
+
+export interface RaceTraitCreature {
+  id?: string;
+  raceTraitId?: string;
+  creatureGroup?: string;
+  /** @nullable */
+  existingCreatureId?: string | null;
+  existingCreature?: null | Creature;
+  creatureType?: null | CreatureType;
+  name?: string;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$
+   */
+  maxChallengeRating?: number | string | null;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  challengeRatingLevelDivisor?: number | string | null;
+  restrictedMovementTypes?: MovementType[];
+  creatureSizes?: Size[];
+}
+
+export interface RaceTraitSpell {
+  id?: string;
+  raceTraitId?: string;
+  /** @nullable */
+  spellId?: string | null;
+  spell?: null | Spell;
+  /** @nullable */
+  classId?: string | null;
+  class?: null | Class;
+  spellLevels?: SpellLevel[];
+  spellSchools?: SpellSchool[];
+  attackTypes?: AttackType[];
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  levelDivisor?: number | string;
+  onlyRitualSpells?: boolean;
+  abilityScore?: null | AbilityScore;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  numberOfUses?: number | string;
+  numberOfUsesStatModifierOperation?: null | ArithmeticOperation;
+  numberOfUsesStatModifierAbility?: null | AbilityScore;
+  numberOfUsesProficiencyBonusIfProficient?: boolean;
+  numberOfUsesProficiencyOperation?: null | ArithmeticOperation;
+  resetType?: null | ResetType;
+  castAtLevel?: null | SpellLevel;
+  castingTime?: null | Time;
+  activationTimeUnit?: null | TimeUnit;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  range?: number | string | null;
+  /** @maxLength 4000 */
+  additionalDescription?: string;
+  /** @maxLength 2000 */
+  restrictions?: string;
+  consumesSpellSlot?: boolean;
+  countsAsKnownSpell?: boolean;
+  alwaysPrepared?: boolean;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  availableAtCharacterLevel?: number | string;
+  isInfinite?: boolean;
+}
+
+export interface RaceTrait {
+  id?: string;
+  /** @maxLength 200 */
+  name: string;
+  description?: string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  displayOrder?: number | string;
+  hideInBuilder?: boolean;
+  hideInCharacterSheet?: boolean;
+  featureType?: FeatureType;
+  /** @nullable */
+  traitToReplaceId?: string | null;
+  traitToReplace?: null | RaceTrait;
+  charactersLevelWhereOptionsArePresented?: (number | string)[];
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  requiredCharacterLevel?: number | string;
+  options?: RaceTraitOption[];
+  actions?: RaceTraitAction[];
+  creatures?: RaceTraitCreature[];
+  spells?: RaceTraitSpell[];
+  modifiers?: Modifier[];
+  spellList?: Spell[];
+}
+
+export interface Race {
+  id?: string;
+  source?: SourceType;
+  /** @nullable */
+  sourceCreatorId?: string | null;
+  sourceCreator?: null | User;
+  /** @maxLength 100 */
+  name: string;
+  type?: CreatureType;
+  traits?: RaceTrait[];
+  /** @nullable */
+  imageId?: string | null;
+  image?: null | StoredFile;
+}
+
 export interface RefreshRequest {
   accessToken: string;
   refreshToken: string;
@@ -56,6 +993,134 @@ export interface RegisterRequest {
   /** @nullable */
   deviceName?: string | null;
 }
+
+export interface UserResponse {
+  id?: string;
+  username?: string;
+  /** @nullable */
+  avatarId?: string | null;
+  role?: string;
+}
+
+export type GetBackgroundsParams = {
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)$
+ */
+page?: number | string;
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)$
+ */
+pageSize?: number | string;
+search?: string;
+source?: SourceType;
+};
+
+export type GetClassesParams = {
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)$
+ */
+page?: number | string;
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)$
+ */
+pageSize?: number | string;
+search?: string;
+source?: SourceType;
+};
+
+export type GetCreaturesParams = {
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)$
+ */
+page?: number | string;
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)$
+ */
+pageSize?: number | string;
+search?: string;
+type?: CreatureType;
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$
+ */
+minCr?: number | string;
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$
+ */
+maxCr?: number | string;
+};
+
+export type GetFeatsParams = {
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)$
+ */
+page?: number | string;
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)$
+ */
+pageSize?: number | string;
+search?: string;
+source?: SourceType;
+};
+
+export type GetItemsParams = {
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)$
+ */
+page?: number | string;
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)$
+ */
+pageSize?: number | string;
+search?: string;
+source?: SourceType;
+type?: ItemType;
+rarity?: Rarity;
+};
+
+export type GetLanguagesParams = {
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)$
+ */
+page?: number | string;
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)$
+ */
+pageSize?: number | string;
+search?: string;
+};
+
+export type GetRacesParams = {
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)$
+ */
+page?: number | string;
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)$
+ */
+pageSize?: number | string;
+search?: string;
+source?: SourceType;
+};
+
+export type GetSpellsParams = {
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)$
+ */
+page?: number | string;
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)$
+ */
+pageSize?: number | string;
+search?: string;
+source?: SourceType;
+level?: SpellLevel;
+school?: SpellSchool;
+classId?: string;
+};
+
+export type PutUsersMeAvatarBody = {
+  file?: IFormFile;
+};
 
 export type postAuthRegisterResponse200 = {
   data: AuthResponse
@@ -274,6 +1339,4144 @@ export const postAuthLogoutAll = async ( options?: RequestInit): Promise<postAut
   {      
     ...options,
     method: 'POST'
+    
+    
+  }
+);}
+
+
+
+export type getBackgroundsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getBackgroundsResponseSuccess = (getBackgroundsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getBackgroundsResponse = (getBackgroundsResponseSuccess)
+
+export const getGetBackgroundsUrl = (params?: GetBackgroundsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/backgrounds?${stringifiedParams}` : `/backgrounds`
+}
+
+export const getBackgrounds = async (params?: GetBackgroundsParams, options?: RequestInit): Promise<getBackgroundsResponse> => {
+  
+  return customFetch<getBackgroundsResponse>(getGetBackgroundsUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type postBackgroundsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postBackgroundsResponseSuccess = (postBackgroundsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postBackgroundsResponse = (postBackgroundsResponseSuccess)
+
+export const getPostBackgroundsUrl = () => {
+
+
+  
+
+  return `/backgrounds`
+}
+
+export const postBackgrounds = async (background: Background, options?: RequestInit): Promise<postBackgroundsResponse> => {
+  
+  return customFetch<postBackgroundsResponse>(getPostBackgroundsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      background,)
+  }
+);}
+
+
+
+export type getBackgroundsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getBackgroundsIdResponseSuccess = (getBackgroundsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getBackgroundsIdResponse = (getBackgroundsIdResponseSuccess)
+
+export const getGetBackgroundsIdUrl = (id: string,) => {
+
+
+  
+
+  return `/backgrounds/${id}`
+}
+
+export const getBackgroundsId = async (id: string, options?: RequestInit): Promise<getBackgroundsIdResponse> => {
+  
+  return customFetch<getBackgroundsIdResponse>(getGetBackgroundsIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type putBackgroundsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putBackgroundsIdResponseSuccess = (putBackgroundsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putBackgroundsIdResponse = (putBackgroundsIdResponseSuccess)
+
+export const getPutBackgroundsIdUrl = (id: string,) => {
+
+
+  
+
+  return `/backgrounds/${id}`
+}
+
+export const putBackgroundsId = async (id: string,
+    background: Background, options?: RequestInit): Promise<putBackgroundsIdResponse> => {
+  
+  return customFetch<putBackgroundsIdResponse>(getPutBackgroundsIdUrl(id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      background,)
+  }
+);}
+
+
+
+export type deleteBackgroundsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteBackgroundsIdResponseSuccess = (deleteBackgroundsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteBackgroundsIdResponse = (deleteBackgroundsIdResponseSuccess)
+
+export const getDeleteBackgroundsIdUrl = (id: string,) => {
+
+
+  
+
+  return `/backgrounds/${id}`
+}
+
+export const deleteBackgroundsId = async (id: string, options?: RequestInit): Promise<deleteBackgroundsIdResponse> => {
+  
+  return customFetch<deleteBackgroundsIdResponse>(getDeleteBackgroundsIdUrl(id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postBackgroundsBackgroundIdCharacteristicsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postBackgroundsBackgroundIdCharacteristicsResponseSuccess = (postBackgroundsBackgroundIdCharacteristicsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postBackgroundsBackgroundIdCharacteristicsResponse = (postBackgroundsBackgroundIdCharacteristicsResponseSuccess)
+
+export const getPostBackgroundsBackgroundIdCharacteristicsUrl = (backgroundId: string,) => {
+
+
+  
+
+  return `/backgrounds/${backgroundId}/characteristics`
+}
+
+export const postBackgroundsBackgroundIdCharacteristics = async (backgroundId: string,
+    characteristics: Characteristics, options?: RequestInit): Promise<postBackgroundsBackgroundIdCharacteristicsResponse> => {
+  
+  return customFetch<postBackgroundsBackgroundIdCharacteristicsResponse>(getPostBackgroundsBackgroundIdCharacteristicsUrl(backgroundId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      characteristics,)
+  }
+);}
+
+
+
+export type putBackgroundsBackgroundIdCharacteristicsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putBackgroundsBackgroundIdCharacteristicsIdResponseSuccess = (putBackgroundsBackgroundIdCharacteristicsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putBackgroundsBackgroundIdCharacteristicsIdResponse = (putBackgroundsBackgroundIdCharacteristicsIdResponseSuccess)
+
+export const getPutBackgroundsBackgroundIdCharacteristicsIdUrl = (backgroundId: string,
+    id: string,) => {
+
+
+  
+
+  return `/backgrounds/${backgroundId}/characteristics/${id}`
+}
+
+export const putBackgroundsBackgroundIdCharacteristicsId = async (backgroundId: string,
+    id: string,
+    characteristics: Characteristics, options?: RequestInit): Promise<putBackgroundsBackgroundIdCharacteristicsIdResponse> => {
+  
+  return customFetch<putBackgroundsBackgroundIdCharacteristicsIdResponse>(getPutBackgroundsBackgroundIdCharacteristicsIdUrl(backgroundId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      characteristics,)
+  }
+);}
+
+
+
+export type deleteBackgroundsBackgroundIdCharacteristicsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteBackgroundsBackgroundIdCharacteristicsIdResponseSuccess = (deleteBackgroundsBackgroundIdCharacteristicsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteBackgroundsBackgroundIdCharacteristicsIdResponse = (deleteBackgroundsBackgroundIdCharacteristicsIdResponseSuccess)
+
+export const getDeleteBackgroundsBackgroundIdCharacteristicsIdUrl = (backgroundId: string,
+    id: string,) => {
+
+
+  
+
+  return `/backgrounds/${backgroundId}/characteristics/${id}`
+}
+
+export const deleteBackgroundsBackgroundIdCharacteristicsId = async (backgroundId: string,
+    id: string, options?: RequestInit): Promise<deleteBackgroundsBackgroundIdCharacteristicsIdResponse> => {
+  
+  return customFetch<deleteBackgroundsBackgroundIdCharacteristicsIdResponse>(getDeleteBackgroundsBackgroundIdCharacteristicsIdUrl(backgroundId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postBackgroundsBackgroundIdStartingItemsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postBackgroundsBackgroundIdStartingItemsResponseSuccess = (postBackgroundsBackgroundIdStartingItemsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postBackgroundsBackgroundIdStartingItemsResponse = (postBackgroundsBackgroundIdStartingItemsResponseSuccess)
+
+export const getPostBackgroundsBackgroundIdStartingItemsUrl = (backgroundId: string,) => {
+
+
+  
+
+  return `/backgrounds/${backgroundId}/starting-items`
+}
+
+export const postBackgroundsBackgroundIdStartingItems = async (backgroundId: string,
+    startItemChoice: StartItemChoice, options?: RequestInit): Promise<postBackgroundsBackgroundIdStartingItemsResponse> => {
+  
+  return customFetch<postBackgroundsBackgroundIdStartingItemsResponse>(getPostBackgroundsBackgroundIdStartingItemsUrl(backgroundId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      startItemChoice,)
+  }
+);}
+
+
+
+export type putBackgroundsBackgroundIdStartingItemsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putBackgroundsBackgroundIdStartingItemsIdResponseSuccess = (putBackgroundsBackgroundIdStartingItemsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putBackgroundsBackgroundIdStartingItemsIdResponse = (putBackgroundsBackgroundIdStartingItemsIdResponseSuccess)
+
+export const getPutBackgroundsBackgroundIdStartingItemsIdUrl = (backgroundId: string,
+    id: string,) => {
+
+
+  
+
+  return `/backgrounds/${backgroundId}/starting-items/${id}`
+}
+
+export const putBackgroundsBackgroundIdStartingItemsId = async (backgroundId: string,
+    id: string,
+    startItemChoice: StartItemChoice, options?: RequestInit): Promise<putBackgroundsBackgroundIdStartingItemsIdResponse> => {
+  
+  return customFetch<putBackgroundsBackgroundIdStartingItemsIdResponse>(getPutBackgroundsBackgroundIdStartingItemsIdUrl(backgroundId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      startItemChoice,)
+  }
+);}
+
+
+
+export type deleteBackgroundsBackgroundIdStartingItemsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteBackgroundsBackgroundIdStartingItemsIdResponseSuccess = (deleteBackgroundsBackgroundIdStartingItemsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteBackgroundsBackgroundIdStartingItemsIdResponse = (deleteBackgroundsBackgroundIdStartingItemsIdResponseSuccess)
+
+export const getDeleteBackgroundsBackgroundIdStartingItemsIdUrl = (backgroundId: string,
+    id: string,) => {
+
+
+  
+
+  return `/backgrounds/${backgroundId}/starting-items/${id}`
+}
+
+export const deleteBackgroundsBackgroundIdStartingItemsId = async (backgroundId: string,
+    id: string, options?: RequestInit): Promise<deleteBackgroundsBackgroundIdStartingItemsIdResponse> => {
+  
+  return customFetch<deleteBackgroundsBackgroundIdStartingItemsIdResponse>(getDeleteBackgroundsBackgroundIdStartingItemsIdUrl(backgroundId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type getClassesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getClassesResponseSuccess = (getClassesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getClassesResponse = (getClassesResponseSuccess)
+
+export const getGetClassesUrl = (params?: GetClassesParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/classes?${stringifiedParams}` : `/classes`
+}
+
+export const getClasses = async (params?: GetClassesParams, options?: RequestInit): Promise<getClassesResponse> => {
+  
+  return customFetch<getClassesResponse>(getGetClassesUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type postClassesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postClassesResponseSuccess = (postClassesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClassesResponse = (postClassesResponseSuccess)
+
+export const getPostClassesUrl = () => {
+
+
+  
+
+  return `/classes`
+}
+
+export const postClasses = async (_class: Class, options?: RequestInit): Promise<postClassesResponse> => {
+  
+  return customFetch<postClassesResponse>(getPostClassesUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      _class,)
+  }
+);}
+
+
+
+export type getClassesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getClassesIdResponseSuccess = (getClassesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getClassesIdResponse = (getClassesIdResponseSuccess)
+
+export const getGetClassesIdUrl = (id: string,) => {
+
+
+  
+
+  return `/classes/${id}`
+}
+
+export const getClassesId = async (id: string, options?: RequestInit): Promise<getClassesIdResponse> => {
+  
+  return customFetch<getClassesIdResponse>(getGetClassesIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type putClassesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putClassesIdResponseSuccess = (putClassesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putClassesIdResponse = (putClassesIdResponseSuccess)
+
+export const getPutClassesIdUrl = (id: string,) => {
+
+
+  
+
+  return `/classes/${id}`
+}
+
+export const putClassesId = async (id: string,
+    _class: Class, options?: RequestInit): Promise<putClassesIdResponse> => {
+  
+  return customFetch<putClassesIdResponse>(getPutClassesIdUrl(id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      _class,)
+  }
+);}
+
+
+
+export type deleteClassesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteClassesIdResponseSuccess = (deleteClassesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteClassesIdResponse = (deleteClassesIdResponseSuccess)
+
+export const getDeleteClassesIdUrl = (id: string,) => {
+
+
+  
+
+  return `/classes/${id}`
+}
+
+export const deleteClassesId = async (id: string, options?: RequestInit): Promise<deleteClassesIdResponse> => {
+  
+  return customFetch<deleteClassesIdResponse>(getDeleteClassesIdUrl(id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type getClassesClassIdFeaturesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getClassesClassIdFeaturesResponseSuccess = (getClassesClassIdFeaturesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getClassesClassIdFeaturesResponse = (getClassesClassIdFeaturesResponseSuccess)
+
+export const getGetClassesClassIdFeaturesUrl = (classId: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features`
+}
+
+export const getClassesClassIdFeatures = async (classId: string, options?: RequestInit): Promise<getClassesClassIdFeaturesResponse> => {
+  
+  return customFetch<getClassesClassIdFeaturesResponse>(getGetClassesClassIdFeaturesUrl(classId),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type postClassesClassIdFeaturesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postClassesClassIdFeaturesResponseSuccess = (postClassesClassIdFeaturesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClassesClassIdFeaturesResponse = (postClassesClassIdFeaturesResponseSuccess)
+
+export const getPostClassesClassIdFeaturesUrl = (classId: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features`
+}
+
+export const postClassesClassIdFeatures = async (classId: string,
+    classFeature: ClassFeature, options?: RequestInit): Promise<postClassesClassIdFeaturesResponse> => {
+  
+  return customFetch<postClassesClassIdFeaturesResponse>(getPostClassesClassIdFeaturesUrl(classId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      classFeature,)
+  }
+);}
+
+
+
+export type getClassesClassIdFeaturesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getClassesClassIdFeaturesIdResponseSuccess = (getClassesClassIdFeaturesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getClassesClassIdFeaturesIdResponse = (getClassesClassIdFeaturesIdResponseSuccess)
+
+export const getGetClassesClassIdFeaturesIdUrl = (classId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${id}`
+}
+
+export const getClassesClassIdFeaturesId = async (classId: string,
+    id: string, options?: RequestInit): Promise<getClassesClassIdFeaturesIdResponse> => {
+  
+  return customFetch<getClassesClassIdFeaturesIdResponse>(getGetClassesClassIdFeaturesIdUrl(classId,id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type putClassesClassIdFeaturesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putClassesClassIdFeaturesIdResponseSuccess = (putClassesClassIdFeaturesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putClassesClassIdFeaturesIdResponse = (putClassesClassIdFeaturesIdResponseSuccess)
+
+export const getPutClassesClassIdFeaturesIdUrl = (classId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${id}`
+}
+
+export const putClassesClassIdFeaturesId = async (classId: string,
+    id: string,
+    classFeature: ClassFeature, options?: RequestInit): Promise<putClassesClassIdFeaturesIdResponse> => {
+  
+  return customFetch<putClassesClassIdFeaturesIdResponse>(getPutClassesClassIdFeaturesIdUrl(classId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      classFeature,)
+  }
+);}
+
+
+
+export type deleteClassesClassIdFeaturesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteClassesClassIdFeaturesIdResponseSuccess = (deleteClassesClassIdFeaturesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteClassesClassIdFeaturesIdResponse = (deleteClassesClassIdFeaturesIdResponseSuccess)
+
+export const getDeleteClassesClassIdFeaturesIdUrl = (classId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${id}`
+}
+
+export const deleteClassesClassIdFeaturesId = async (classId: string,
+    id: string, options?: RequestInit): Promise<deleteClassesClassIdFeaturesIdResponse> => {
+  
+  return customFetch<deleteClassesClassIdFeaturesIdResponse>(getDeleteClassesClassIdFeaturesIdUrl(classId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postClassesClassIdFeaturesFeatureIdOptionsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postClassesClassIdFeaturesFeatureIdOptionsResponseSuccess = (postClassesClassIdFeaturesFeatureIdOptionsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClassesClassIdFeaturesFeatureIdOptionsResponse = (postClassesClassIdFeaturesFeatureIdOptionsResponseSuccess)
+
+export const getPostClassesClassIdFeaturesFeatureIdOptionsUrl = (classId: string,
+    featureId: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${featureId}/options`
+}
+
+export const postClassesClassIdFeaturesFeatureIdOptions = async (classId: string,
+    featureId: string,
+    classFeatureOption: ClassFeatureOption, options?: RequestInit): Promise<postClassesClassIdFeaturesFeatureIdOptionsResponse> => {
+  
+  return customFetch<postClassesClassIdFeaturesFeatureIdOptionsResponse>(getPostClassesClassIdFeaturesFeatureIdOptionsUrl(classId,featureId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      classFeatureOption,)
+  }
+);}
+
+
+
+export type putClassesClassIdFeaturesFeatureIdOptionsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putClassesClassIdFeaturesFeatureIdOptionsIdResponseSuccess = (putClassesClassIdFeaturesFeatureIdOptionsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putClassesClassIdFeaturesFeatureIdOptionsIdResponse = (putClassesClassIdFeaturesFeatureIdOptionsIdResponseSuccess)
+
+export const getPutClassesClassIdFeaturesFeatureIdOptionsIdUrl = (classId: string,
+    featureId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${featureId}/options/${id}`
+}
+
+export const putClassesClassIdFeaturesFeatureIdOptionsId = async (classId: string,
+    featureId: string,
+    id: string,
+    classFeatureOption: ClassFeatureOption, options?: RequestInit): Promise<putClassesClassIdFeaturesFeatureIdOptionsIdResponse> => {
+  
+  return customFetch<putClassesClassIdFeaturesFeatureIdOptionsIdResponse>(getPutClassesClassIdFeaturesFeatureIdOptionsIdUrl(classId,featureId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      classFeatureOption,)
+  }
+);}
+
+
+
+export type deleteClassesClassIdFeaturesFeatureIdOptionsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteClassesClassIdFeaturesFeatureIdOptionsIdResponseSuccess = (deleteClassesClassIdFeaturesFeatureIdOptionsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteClassesClassIdFeaturesFeatureIdOptionsIdResponse = (deleteClassesClassIdFeaturesFeatureIdOptionsIdResponseSuccess)
+
+export const getDeleteClassesClassIdFeaturesFeatureIdOptionsIdUrl = (classId: string,
+    featureId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${featureId}/options/${id}`
+}
+
+export const deleteClassesClassIdFeaturesFeatureIdOptionsId = async (classId: string,
+    featureId: string,
+    id: string, options?: RequestInit): Promise<deleteClassesClassIdFeaturesFeatureIdOptionsIdResponse> => {
+  
+  return customFetch<deleteClassesClassIdFeaturesFeatureIdOptionsIdResponse>(getDeleteClassesClassIdFeaturesFeatureIdOptionsIdUrl(classId,featureId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postClassesClassIdFeaturesFeatureIdActionsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postClassesClassIdFeaturesFeatureIdActionsResponseSuccess = (postClassesClassIdFeaturesFeatureIdActionsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClassesClassIdFeaturesFeatureIdActionsResponse = (postClassesClassIdFeaturesFeatureIdActionsResponseSuccess)
+
+export const getPostClassesClassIdFeaturesFeatureIdActionsUrl = (classId: string,
+    featureId: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${featureId}/actions`
+}
+
+export const postClassesClassIdFeaturesFeatureIdActions = async (classId: string,
+    featureId: string,
+    classFeatureAction: ClassFeatureAction, options?: RequestInit): Promise<postClassesClassIdFeaturesFeatureIdActionsResponse> => {
+  
+  return customFetch<postClassesClassIdFeaturesFeatureIdActionsResponse>(getPostClassesClassIdFeaturesFeatureIdActionsUrl(classId,featureId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      classFeatureAction,)
+  }
+);}
+
+
+
+export type putClassesClassIdFeaturesFeatureIdActionsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putClassesClassIdFeaturesFeatureIdActionsIdResponseSuccess = (putClassesClassIdFeaturesFeatureIdActionsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putClassesClassIdFeaturesFeatureIdActionsIdResponse = (putClassesClassIdFeaturesFeatureIdActionsIdResponseSuccess)
+
+export const getPutClassesClassIdFeaturesFeatureIdActionsIdUrl = (classId: string,
+    featureId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${featureId}/actions/${id}`
+}
+
+export const putClassesClassIdFeaturesFeatureIdActionsId = async (classId: string,
+    featureId: string,
+    id: string,
+    classFeatureAction: ClassFeatureAction, options?: RequestInit): Promise<putClassesClassIdFeaturesFeatureIdActionsIdResponse> => {
+  
+  return customFetch<putClassesClassIdFeaturesFeatureIdActionsIdResponse>(getPutClassesClassIdFeaturesFeatureIdActionsIdUrl(classId,featureId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      classFeatureAction,)
+  }
+);}
+
+
+
+export type deleteClassesClassIdFeaturesFeatureIdActionsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteClassesClassIdFeaturesFeatureIdActionsIdResponseSuccess = (deleteClassesClassIdFeaturesFeatureIdActionsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteClassesClassIdFeaturesFeatureIdActionsIdResponse = (deleteClassesClassIdFeaturesFeatureIdActionsIdResponseSuccess)
+
+export const getDeleteClassesClassIdFeaturesFeatureIdActionsIdUrl = (classId: string,
+    featureId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${featureId}/actions/${id}`
+}
+
+export const deleteClassesClassIdFeaturesFeatureIdActionsId = async (classId: string,
+    featureId: string,
+    id: string, options?: RequestInit): Promise<deleteClassesClassIdFeaturesFeatureIdActionsIdResponse> => {
+  
+  return customFetch<deleteClassesClassIdFeaturesFeatureIdActionsIdResponse>(getDeleteClassesClassIdFeaturesFeatureIdActionsIdUrl(classId,featureId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postClassesClassIdFeaturesFeatureIdSpellsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postClassesClassIdFeaturesFeatureIdSpellsResponseSuccess = (postClassesClassIdFeaturesFeatureIdSpellsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClassesClassIdFeaturesFeatureIdSpellsResponse = (postClassesClassIdFeaturesFeatureIdSpellsResponseSuccess)
+
+export const getPostClassesClassIdFeaturesFeatureIdSpellsUrl = (classId: string,
+    featureId: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${featureId}/spells`
+}
+
+export const postClassesClassIdFeaturesFeatureIdSpells = async (classId: string,
+    featureId: string,
+    classFeatureSpell: ClassFeatureSpell, options?: RequestInit): Promise<postClassesClassIdFeaturesFeatureIdSpellsResponse> => {
+  
+  return customFetch<postClassesClassIdFeaturesFeatureIdSpellsResponse>(getPostClassesClassIdFeaturesFeatureIdSpellsUrl(classId,featureId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      classFeatureSpell,)
+  }
+);}
+
+
+
+export type putClassesClassIdFeaturesFeatureIdSpellsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putClassesClassIdFeaturesFeatureIdSpellsIdResponseSuccess = (putClassesClassIdFeaturesFeatureIdSpellsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putClassesClassIdFeaturesFeatureIdSpellsIdResponse = (putClassesClassIdFeaturesFeatureIdSpellsIdResponseSuccess)
+
+export const getPutClassesClassIdFeaturesFeatureIdSpellsIdUrl = (classId: string,
+    featureId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${featureId}/spells/${id}`
+}
+
+export const putClassesClassIdFeaturesFeatureIdSpellsId = async (classId: string,
+    featureId: string,
+    id: string,
+    classFeatureSpell: ClassFeatureSpell, options?: RequestInit): Promise<putClassesClassIdFeaturesFeatureIdSpellsIdResponse> => {
+  
+  return customFetch<putClassesClassIdFeaturesFeatureIdSpellsIdResponse>(getPutClassesClassIdFeaturesFeatureIdSpellsIdUrl(classId,featureId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      classFeatureSpell,)
+  }
+);}
+
+
+
+export type deleteClassesClassIdFeaturesFeatureIdSpellsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteClassesClassIdFeaturesFeatureIdSpellsIdResponseSuccess = (deleteClassesClassIdFeaturesFeatureIdSpellsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteClassesClassIdFeaturesFeatureIdSpellsIdResponse = (deleteClassesClassIdFeaturesFeatureIdSpellsIdResponseSuccess)
+
+export const getDeleteClassesClassIdFeaturesFeatureIdSpellsIdUrl = (classId: string,
+    featureId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${featureId}/spells/${id}`
+}
+
+export const deleteClassesClassIdFeaturesFeatureIdSpellsId = async (classId: string,
+    featureId: string,
+    id: string, options?: RequestInit): Promise<deleteClassesClassIdFeaturesFeatureIdSpellsIdResponse> => {
+  
+  return customFetch<deleteClassesClassIdFeaturesFeatureIdSpellsIdResponse>(getDeleteClassesClassIdFeaturesFeatureIdSpellsIdUrl(classId,featureId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postClassesClassIdFeaturesFeatureIdCreaturesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postClassesClassIdFeaturesFeatureIdCreaturesResponseSuccess = (postClassesClassIdFeaturesFeatureIdCreaturesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClassesClassIdFeaturesFeatureIdCreaturesResponse = (postClassesClassIdFeaturesFeatureIdCreaturesResponseSuccess)
+
+export const getPostClassesClassIdFeaturesFeatureIdCreaturesUrl = (classId: string,
+    featureId: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${featureId}/creatures`
+}
+
+export const postClassesClassIdFeaturesFeatureIdCreatures = async (classId: string,
+    featureId: string,
+    classFeatureCreature: ClassFeatureCreature, options?: RequestInit): Promise<postClassesClassIdFeaturesFeatureIdCreaturesResponse> => {
+  
+  return customFetch<postClassesClassIdFeaturesFeatureIdCreaturesResponse>(getPostClassesClassIdFeaturesFeatureIdCreaturesUrl(classId,featureId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      classFeatureCreature,)
+  }
+);}
+
+
+
+export type putClassesClassIdFeaturesFeatureIdCreaturesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putClassesClassIdFeaturesFeatureIdCreaturesIdResponseSuccess = (putClassesClassIdFeaturesFeatureIdCreaturesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putClassesClassIdFeaturesFeatureIdCreaturesIdResponse = (putClassesClassIdFeaturesFeatureIdCreaturesIdResponseSuccess)
+
+export const getPutClassesClassIdFeaturesFeatureIdCreaturesIdUrl = (classId: string,
+    featureId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${featureId}/creatures/${id}`
+}
+
+export const putClassesClassIdFeaturesFeatureIdCreaturesId = async (classId: string,
+    featureId: string,
+    id: string,
+    classFeatureCreature: ClassFeatureCreature, options?: RequestInit): Promise<putClassesClassIdFeaturesFeatureIdCreaturesIdResponse> => {
+  
+  return customFetch<putClassesClassIdFeaturesFeatureIdCreaturesIdResponse>(getPutClassesClassIdFeaturesFeatureIdCreaturesIdUrl(classId,featureId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      classFeatureCreature,)
+  }
+);}
+
+
+
+export type deleteClassesClassIdFeaturesFeatureIdCreaturesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteClassesClassIdFeaturesFeatureIdCreaturesIdResponseSuccess = (deleteClassesClassIdFeaturesFeatureIdCreaturesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteClassesClassIdFeaturesFeatureIdCreaturesIdResponse = (deleteClassesClassIdFeaturesFeatureIdCreaturesIdResponseSuccess)
+
+export const getDeleteClassesClassIdFeaturesFeatureIdCreaturesIdUrl = (classId: string,
+    featureId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${featureId}/creatures/${id}`
+}
+
+export const deleteClassesClassIdFeaturesFeatureIdCreaturesId = async (classId: string,
+    featureId: string,
+    id: string, options?: RequestInit): Promise<deleteClassesClassIdFeaturesFeatureIdCreaturesIdResponse> => {
+  
+  return customFetch<deleteClassesClassIdFeaturesFeatureIdCreaturesIdResponse>(getDeleteClassesClassIdFeaturesFeatureIdCreaturesIdUrl(classId,featureId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postClassesClassIdFeaturesFeatureIdLevelScalesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postClassesClassIdFeaturesFeatureIdLevelScalesResponseSuccess = (postClassesClassIdFeaturesFeatureIdLevelScalesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClassesClassIdFeaturesFeatureIdLevelScalesResponse = (postClassesClassIdFeaturesFeatureIdLevelScalesResponseSuccess)
+
+export const getPostClassesClassIdFeaturesFeatureIdLevelScalesUrl = (classId: string,
+    featureId: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${featureId}/level-scales`
+}
+
+export const postClassesClassIdFeaturesFeatureIdLevelScales = async (classId: string,
+    featureId: string,
+    classFeatureLevelScale: ClassFeatureLevelScale, options?: RequestInit): Promise<postClassesClassIdFeaturesFeatureIdLevelScalesResponse> => {
+  
+  return customFetch<postClassesClassIdFeaturesFeatureIdLevelScalesResponse>(getPostClassesClassIdFeaturesFeatureIdLevelScalesUrl(classId,featureId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      classFeatureLevelScale,)
+  }
+);}
+
+
+
+export type putClassesClassIdFeaturesFeatureIdLevelScalesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putClassesClassIdFeaturesFeatureIdLevelScalesIdResponseSuccess = (putClassesClassIdFeaturesFeatureIdLevelScalesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putClassesClassIdFeaturesFeatureIdLevelScalesIdResponse = (putClassesClassIdFeaturesFeatureIdLevelScalesIdResponseSuccess)
+
+export const getPutClassesClassIdFeaturesFeatureIdLevelScalesIdUrl = (classId: string,
+    featureId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${featureId}/level-scales/${id}`
+}
+
+export const putClassesClassIdFeaturesFeatureIdLevelScalesId = async (classId: string,
+    featureId: string,
+    id: string,
+    classFeatureLevelScale: ClassFeatureLevelScale, options?: RequestInit): Promise<putClassesClassIdFeaturesFeatureIdLevelScalesIdResponse> => {
+  
+  return customFetch<putClassesClassIdFeaturesFeatureIdLevelScalesIdResponse>(getPutClassesClassIdFeaturesFeatureIdLevelScalesIdUrl(classId,featureId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      classFeatureLevelScale,)
+  }
+);}
+
+
+
+export type deleteClassesClassIdFeaturesFeatureIdLevelScalesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteClassesClassIdFeaturesFeatureIdLevelScalesIdResponseSuccess = (deleteClassesClassIdFeaturesFeatureIdLevelScalesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteClassesClassIdFeaturesFeatureIdLevelScalesIdResponse = (deleteClassesClassIdFeaturesFeatureIdLevelScalesIdResponseSuccess)
+
+export const getDeleteClassesClassIdFeaturesFeatureIdLevelScalesIdUrl = (classId: string,
+    featureId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${featureId}/level-scales/${id}`
+}
+
+export const deleteClassesClassIdFeaturesFeatureIdLevelScalesId = async (classId: string,
+    featureId: string,
+    id: string, options?: RequestInit): Promise<deleteClassesClassIdFeaturesFeatureIdLevelScalesIdResponse> => {
+  
+  return customFetch<deleteClassesClassIdFeaturesFeatureIdLevelScalesIdResponse>(getDeleteClassesClassIdFeaturesFeatureIdLevelScalesIdUrl(classId,featureId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postClassesClassIdFeaturesFeatureIdModifiersResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postClassesClassIdFeaturesFeatureIdModifiersResponseSuccess = (postClassesClassIdFeaturesFeatureIdModifiersResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClassesClassIdFeaturesFeatureIdModifiersResponse = (postClassesClassIdFeaturesFeatureIdModifiersResponseSuccess)
+
+export const getPostClassesClassIdFeaturesFeatureIdModifiersUrl = (classId: string,
+    featureId: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${featureId}/modifiers`
+}
+
+export const postClassesClassIdFeaturesFeatureIdModifiers = async (classId: string,
+    featureId: string,
+    modifier: Modifier, options?: RequestInit): Promise<postClassesClassIdFeaturesFeatureIdModifiersResponse> => {
+  
+  return customFetch<postClassesClassIdFeaturesFeatureIdModifiersResponse>(getPostClassesClassIdFeaturesFeatureIdModifiersUrl(classId,featureId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      modifier,)
+  }
+);}
+
+
+
+export type putClassesClassIdFeaturesFeatureIdModifiersIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putClassesClassIdFeaturesFeatureIdModifiersIdResponseSuccess = (putClassesClassIdFeaturesFeatureIdModifiersIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putClassesClassIdFeaturesFeatureIdModifiersIdResponse = (putClassesClassIdFeaturesFeatureIdModifiersIdResponseSuccess)
+
+export const getPutClassesClassIdFeaturesFeatureIdModifiersIdUrl = (classId: string,
+    featureId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${featureId}/modifiers/${id}`
+}
+
+export const putClassesClassIdFeaturesFeatureIdModifiersId = async (classId: string,
+    featureId: string,
+    id: string,
+    modifier: Modifier, options?: RequestInit): Promise<putClassesClassIdFeaturesFeatureIdModifiersIdResponse> => {
+  
+  return customFetch<putClassesClassIdFeaturesFeatureIdModifiersIdResponse>(getPutClassesClassIdFeaturesFeatureIdModifiersIdUrl(classId,featureId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      modifier,)
+  }
+);}
+
+
+
+export type deleteClassesClassIdFeaturesFeatureIdModifiersIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteClassesClassIdFeaturesFeatureIdModifiersIdResponseSuccess = (deleteClassesClassIdFeaturesFeatureIdModifiersIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteClassesClassIdFeaturesFeatureIdModifiersIdResponse = (deleteClassesClassIdFeaturesFeatureIdModifiersIdResponseSuccess)
+
+export const getDeleteClassesClassIdFeaturesFeatureIdModifiersIdUrl = (classId: string,
+    featureId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/features/${featureId}/modifiers/${id}`
+}
+
+export const deleteClassesClassIdFeaturesFeatureIdModifiersId = async (classId: string,
+    featureId: string,
+    id: string, options?: RequestInit): Promise<deleteClassesClassIdFeaturesFeatureIdModifiersIdResponse> => {
+  
+  return customFetch<deleteClassesClassIdFeaturesFeatureIdModifiersIdResponse>(getDeleteClassesClassIdFeaturesFeatureIdModifiersIdUrl(classId,featureId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type getClassesClassIdSubclassesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getClassesClassIdSubclassesResponseSuccess = (getClassesClassIdSubclassesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getClassesClassIdSubclassesResponse = (getClassesClassIdSubclassesResponseSuccess)
+
+export const getGetClassesClassIdSubclassesUrl = (classId: string,) => {
+
+
+  
+
+  return `/classes/${classId}/subclasses`
+}
+
+export const getClassesClassIdSubclasses = async (classId: string, options?: RequestInit): Promise<getClassesClassIdSubclassesResponse> => {
+  
+  return customFetch<getClassesClassIdSubclassesResponse>(getGetClassesClassIdSubclassesUrl(classId),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type postClassesClassIdSubclassesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postClassesClassIdSubclassesResponseSuccess = (postClassesClassIdSubclassesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClassesClassIdSubclassesResponse = (postClassesClassIdSubclassesResponseSuccess)
+
+export const getPostClassesClassIdSubclassesUrl = (classId: string,) => {
+
+
+  
+
+  return `/classes/${classId}/subclasses`
+}
+
+export const postClassesClassIdSubclasses = async (classId: string,
+    subclass: Subclass, options?: RequestInit): Promise<postClassesClassIdSubclassesResponse> => {
+  
+  return customFetch<postClassesClassIdSubclassesResponse>(getPostClassesClassIdSubclassesUrl(classId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      subclass,)
+  }
+);}
+
+
+
+export type getClassesClassIdSubclassesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getClassesClassIdSubclassesIdResponseSuccess = (getClassesClassIdSubclassesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getClassesClassIdSubclassesIdResponse = (getClassesClassIdSubclassesIdResponseSuccess)
+
+export const getGetClassesClassIdSubclassesIdUrl = (classId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/subclasses/${id}`
+}
+
+export const getClassesClassIdSubclassesId = async (classId: string,
+    id: string, options?: RequestInit): Promise<getClassesClassIdSubclassesIdResponse> => {
+  
+  return customFetch<getClassesClassIdSubclassesIdResponse>(getGetClassesClassIdSubclassesIdUrl(classId,id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type putClassesClassIdSubclassesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putClassesClassIdSubclassesIdResponseSuccess = (putClassesClassIdSubclassesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putClassesClassIdSubclassesIdResponse = (putClassesClassIdSubclassesIdResponseSuccess)
+
+export const getPutClassesClassIdSubclassesIdUrl = (classId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/subclasses/${id}`
+}
+
+export const putClassesClassIdSubclassesId = async (classId: string,
+    id: string,
+    subclass: Subclass, options?: RequestInit): Promise<putClassesClassIdSubclassesIdResponse> => {
+  
+  return customFetch<putClassesClassIdSubclassesIdResponse>(getPutClassesClassIdSubclassesIdUrl(classId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      subclass,)
+  }
+);}
+
+
+
+export type deleteClassesClassIdSubclassesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteClassesClassIdSubclassesIdResponseSuccess = (deleteClassesClassIdSubclassesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteClassesClassIdSubclassesIdResponse = (deleteClassesClassIdSubclassesIdResponseSuccess)
+
+export const getDeleteClassesClassIdSubclassesIdUrl = (classId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/subclasses/${id}`
+}
+
+export const deleteClassesClassIdSubclassesId = async (classId: string,
+    id: string, options?: RequestInit): Promise<deleteClassesClassIdSubclassesIdResponse> => {
+  
+  return customFetch<deleteClassesClassIdSubclassesIdResponse>(getDeleteClassesClassIdSubclassesIdUrl(classId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type getClassesClassIdSubclassesSubclassIdFeaturesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getClassesClassIdSubclassesSubclassIdFeaturesResponseSuccess = (getClassesClassIdSubclassesSubclassIdFeaturesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getClassesClassIdSubclassesSubclassIdFeaturesResponse = (getClassesClassIdSubclassesSubclassIdFeaturesResponseSuccess)
+
+export const getGetClassesClassIdSubclassesSubclassIdFeaturesUrl = (classId: string,
+    subclassId: string,) => {
+
+
+  
+
+  return `/classes/${classId}/subclasses/${subclassId}/features`
+}
+
+export const getClassesClassIdSubclassesSubclassIdFeatures = async (classId: string,
+    subclassId: string, options?: RequestInit): Promise<getClassesClassIdSubclassesSubclassIdFeaturesResponse> => {
+  
+  return customFetch<getClassesClassIdSubclassesSubclassIdFeaturesResponse>(getGetClassesClassIdSubclassesSubclassIdFeaturesUrl(classId,subclassId),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type postClassesClassIdSubclassesSubclassIdFeaturesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postClassesClassIdSubclassesSubclassIdFeaturesResponseSuccess = (postClassesClassIdSubclassesSubclassIdFeaturesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClassesClassIdSubclassesSubclassIdFeaturesResponse = (postClassesClassIdSubclassesSubclassIdFeaturesResponseSuccess)
+
+export const getPostClassesClassIdSubclassesSubclassIdFeaturesUrl = (classId: string,
+    subclassId: string,) => {
+
+
+  
+
+  return `/classes/${classId}/subclasses/${subclassId}/features`
+}
+
+export const postClassesClassIdSubclassesSubclassIdFeatures = async (classId: string,
+    subclassId: string,
+    classFeature: ClassFeature, options?: RequestInit): Promise<postClassesClassIdSubclassesSubclassIdFeaturesResponse> => {
+  
+  return customFetch<postClassesClassIdSubclassesSubclassIdFeaturesResponse>(getPostClassesClassIdSubclassesSubclassIdFeaturesUrl(classId,subclassId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      classFeature,)
+  }
+);}
+
+
+
+export type putClassesClassIdSubclassesSubclassIdFeaturesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putClassesClassIdSubclassesSubclassIdFeaturesIdResponseSuccess = (putClassesClassIdSubclassesSubclassIdFeaturesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putClassesClassIdSubclassesSubclassIdFeaturesIdResponse = (putClassesClassIdSubclassesSubclassIdFeaturesIdResponseSuccess)
+
+export const getPutClassesClassIdSubclassesSubclassIdFeaturesIdUrl = (classId: string,
+    subclassId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/subclasses/${subclassId}/features/${id}`
+}
+
+export const putClassesClassIdSubclassesSubclassIdFeaturesId = async (classId: string,
+    subclassId: string,
+    id: string,
+    classFeature: ClassFeature, options?: RequestInit): Promise<putClassesClassIdSubclassesSubclassIdFeaturesIdResponse> => {
+  
+  return customFetch<putClassesClassIdSubclassesSubclassIdFeaturesIdResponse>(getPutClassesClassIdSubclassesSubclassIdFeaturesIdUrl(classId,subclassId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      classFeature,)
+  }
+);}
+
+
+
+export type deleteClassesClassIdSubclassesSubclassIdFeaturesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteClassesClassIdSubclassesSubclassIdFeaturesIdResponseSuccess = (deleteClassesClassIdSubclassesSubclassIdFeaturesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteClassesClassIdSubclassesSubclassIdFeaturesIdResponse = (deleteClassesClassIdSubclassesSubclassIdFeaturesIdResponseSuccess)
+
+export const getDeleteClassesClassIdSubclassesSubclassIdFeaturesIdUrl = (classId: string,
+    subclassId: string,
+    id: string,) => {
+
+
+  
+
+  return `/classes/${classId}/subclasses/${subclassId}/features/${id}`
+}
+
+export const deleteClassesClassIdSubclassesSubclassIdFeaturesId = async (classId: string,
+    subclassId: string,
+    id: string, options?: RequestInit): Promise<deleteClassesClassIdSubclassesSubclassIdFeaturesIdResponse> => {
+  
+  return customFetch<deleteClassesClassIdSubclassesSubclassIdFeaturesIdResponse>(getDeleteClassesClassIdSubclassesSubclassIdFeaturesIdUrl(classId,subclassId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type getCreaturesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getCreaturesResponseSuccess = (getCreaturesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCreaturesResponse = (getCreaturesResponseSuccess)
+
+export const getGetCreaturesUrl = (params?: GetCreaturesParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/creatures?${stringifiedParams}` : `/creatures`
+}
+
+export const getCreatures = async (params?: GetCreaturesParams, options?: RequestInit): Promise<getCreaturesResponse> => {
+  
+  return customFetch<getCreaturesResponse>(getGetCreaturesUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type postCreaturesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postCreaturesResponseSuccess = (postCreaturesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCreaturesResponse = (postCreaturesResponseSuccess)
+
+export const getPostCreaturesUrl = () => {
+
+
+  
+
+  return `/creatures`
+}
+
+export const postCreatures = async (creature: Creature, options?: RequestInit): Promise<postCreaturesResponse> => {
+  
+  return customFetch<postCreaturesResponse>(getPostCreaturesUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      creature,)
+  }
+);}
+
+
+
+export type getCreaturesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getCreaturesIdResponseSuccess = (getCreaturesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCreaturesIdResponse = (getCreaturesIdResponseSuccess)
+
+export const getGetCreaturesIdUrl = (id: string,) => {
+
+
+  
+
+  return `/creatures/${id}`
+}
+
+export const getCreaturesId = async (id: string, options?: RequestInit): Promise<getCreaturesIdResponse> => {
+  
+  return customFetch<getCreaturesIdResponse>(getGetCreaturesIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type putCreaturesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putCreaturesIdResponseSuccess = (putCreaturesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putCreaturesIdResponse = (putCreaturesIdResponseSuccess)
+
+export const getPutCreaturesIdUrl = (id: string,) => {
+
+
+  
+
+  return `/creatures/${id}`
+}
+
+export const putCreaturesId = async (id: string,
+    creature: Creature, options?: RequestInit): Promise<putCreaturesIdResponse> => {
+  
+  return customFetch<putCreaturesIdResponse>(getPutCreaturesIdUrl(id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      creature,)
+  }
+);}
+
+
+
+export type deleteCreaturesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteCreaturesIdResponseSuccess = (deleteCreaturesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteCreaturesIdResponse = (deleteCreaturesIdResponseSuccess)
+
+export const getDeleteCreaturesIdUrl = (id: string,) => {
+
+
+  
+
+  return `/creatures/${id}`
+}
+
+export const deleteCreaturesId = async (id: string, options?: RequestInit): Promise<deleteCreaturesIdResponse> => {
+  
+  return customFetch<deleteCreaturesIdResponse>(getDeleteCreaturesIdUrl(id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type getFeatsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getFeatsResponseSuccess = (getFeatsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getFeatsResponse = (getFeatsResponseSuccess)
+
+export const getGetFeatsUrl = (params?: GetFeatsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/feats?${stringifiedParams}` : `/feats`
+}
+
+export const getFeats = async (params?: GetFeatsParams, options?: RequestInit): Promise<getFeatsResponse> => {
+  
+  return customFetch<getFeatsResponse>(getGetFeatsUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type postFeatsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postFeatsResponseSuccess = (postFeatsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postFeatsResponse = (postFeatsResponseSuccess)
+
+export const getPostFeatsUrl = () => {
+
+
+  
+
+  return `/feats`
+}
+
+export const postFeats = async (feat: Feat, options?: RequestInit): Promise<postFeatsResponse> => {
+  
+  return customFetch<postFeatsResponse>(getPostFeatsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      feat,)
+  }
+);}
+
+
+
+export type getFeatsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getFeatsIdResponseSuccess = (getFeatsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getFeatsIdResponse = (getFeatsIdResponseSuccess)
+
+export const getGetFeatsIdUrl = (id: string,) => {
+
+
+  
+
+  return `/feats/${id}`
+}
+
+export const getFeatsId = async (id: string, options?: RequestInit): Promise<getFeatsIdResponse> => {
+  
+  return customFetch<getFeatsIdResponse>(getGetFeatsIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type putFeatsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putFeatsIdResponseSuccess = (putFeatsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putFeatsIdResponse = (putFeatsIdResponseSuccess)
+
+export const getPutFeatsIdUrl = (id: string,) => {
+
+
+  
+
+  return `/feats/${id}`
+}
+
+export const putFeatsId = async (id: string,
+    feat: Feat, options?: RequestInit): Promise<putFeatsIdResponse> => {
+  
+  return customFetch<putFeatsIdResponse>(getPutFeatsIdUrl(id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      feat,)
+  }
+);}
+
+
+
+export type deleteFeatsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteFeatsIdResponseSuccess = (deleteFeatsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteFeatsIdResponse = (deleteFeatsIdResponseSuccess)
+
+export const getDeleteFeatsIdUrl = (id: string,) => {
+
+
+  
+
+  return `/feats/${id}`
+}
+
+export const deleteFeatsId = async (id: string, options?: RequestInit): Promise<deleteFeatsIdResponse> => {
+  
+  return customFetch<deleteFeatsIdResponse>(getDeleteFeatsIdUrl(id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postFeatsFeatIdOptionsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postFeatsFeatIdOptionsResponseSuccess = (postFeatsFeatIdOptionsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postFeatsFeatIdOptionsResponse = (postFeatsFeatIdOptionsResponseSuccess)
+
+export const getPostFeatsFeatIdOptionsUrl = (featId: string,) => {
+
+
+  
+
+  return `/feats/${featId}/options`
+}
+
+export const postFeatsFeatIdOptions = async (featId: string,
+    featOption: FeatOption, options?: RequestInit): Promise<postFeatsFeatIdOptionsResponse> => {
+  
+  return customFetch<postFeatsFeatIdOptionsResponse>(getPostFeatsFeatIdOptionsUrl(featId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      featOption,)
+  }
+);}
+
+
+
+export type putFeatsFeatIdOptionsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putFeatsFeatIdOptionsIdResponseSuccess = (putFeatsFeatIdOptionsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putFeatsFeatIdOptionsIdResponse = (putFeatsFeatIdOptionsIdResponseSuccess)
+
+export const getPutFeatsFeatIdOptionsIdUrl = (featId: string,
+    id: string,) => {
+
+
+  
+
+  return `/feats/${featId}/options/${id}`
+}
+
+export const putFeatsFeatIdOptionsId = async (featId: string,
+    id: string,
+    featOption: FeatOption, options?: RequestInit): Promise<putFeatsFeatIdOptionsIdResponse> => {
+  
+  return customFetch<putFeatsFeatIdOptionsIdResponse>(getPutFeatsFeatIdOptionsIdUrl(featId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      featOption,)
+  }
+);}
+
+
+
+export type deleteFeatsFeatIdOptionsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteFeatsFeatIdOptionsIdResponseSuccess = (deleteFeatsFeatIdOptionsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteFeatsFeatIdOptionsIdResponse = (deleteFeatsFeatIdOptionsIdResponseSuccess)
+
+export const getDeleteFeatsFeatIdOptionsIdUrl = (featId: string,
+    id: string,) => {
+
+
+  
+
+  return `/feats/${featId}/options/${id}`
+}
+
+export const deleteFeatsFeatIdOptionsId = async (featId: string,
+    id: string, options?: RequestInit): Promise<deleteFeatsFeatIdOptionsIdResponse> => {
+  
+  return customFetch<deleteFeatsFeatIdOptionsIdResponse>(getDeleteFeatsFeatIdOptionsIdUrl(featId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postFeatsFeatIdActionsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postFeatsFeatIdActionsResponseSuccess = (postFeatsFeatIdActionsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postFeatsFeatIdActionsResponse = (postFeatsFeatIdActionsResponseSuccess)
+
+export const getPostFeatsFeatIdActionsUrl = (featId: string,) => {
+
+
+  
+
+  return `/feats/${featId}/actions`
+}
+
+export const postFeatsFeatIdActions = async (featId: string,
+    featAction: FeatAction, options?: RequestInit): Promise<postFeatsFeatIdActionsResponse> => {
+  
+  return customFetch<postFeatsFeatIdActionsResponse>(getPostFeatsFeatIdActionsUrl(featId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      featAction,)
+  }
+);}
+
+
+
+export type putFeatsFeatIdActionsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putFeatsFeatIdActionsIdResponseSuccess = (putFeatsFeatIdActionsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putFeatsFeatIdActionsIdResponse = (putFeatsFeatIdActionsIdResponseSuccess)
+
+export const getPutFeatsFeatIdActionsIdUrl = (featId: string,
+    id: string,) => {
+
+
+  
+
+  return `/feats/${featId}/actions/${id}`
+}
+
+export const putFeatsFeatIdActionsId = async (featId: string,
+    id: string,
+    featAction: FeatAction, options?: RequestInit): Promise<putFeatsFeatIdActionsIdResponse> => {
+  
+  return customFetch<putFeatsFeatIdActionsIdResponse>(getPutFeatsFeatIdActionsIdUrl(featId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      featAction,)
+  }
+);}
+
+
+
+export type deleteFeatsFeatIdActionsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteFeatsFeatIdActionsIdResponseSuccess = (deleteFeatsFeatIdActionsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteFeatsFeatIdActionsIdResponse = (deleteFeatsFeatIdActionsIdResponseSuccess)
+
+export const getDeleteFeatsFeatIdActionsIdUrl = (featId: string,
+    id: string,) => {
+
+
+  
+
+  return `/feats/${featId}/actions/${id}`
+}
+
+export const deleteFeatsFeatIdActionsId = async (featId: string,
+    id: string, options?: RequestInit): Promise<deleteFeatsFeatIdActionsIdResponse> => {
+  
+  return customFetch<deleteFeatsFeatIdActionsIdResponse>(getDeleteFeatsFeatIdActionsIdUrl(featId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postFeatsFeatIdSpellsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postFeatsFeatIdSpellsResponseSuccess = (postFeatsFeatIdSpellsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postFeatsFeatIdSpellsResponse = (postFeatsFeatIdSpellsResponseSuccess)
+
+export const getPostFeatsFeatIdSpellsUrl = (featId: string,) => {
+
+
+  
+
+  return `/feats/${featId}/spells`
+}
+
+export const postFeatsFeatIdSpells = async (featId: string,
+    featSpell: FeatSpell, options?: RequestInit): Promise<postFeatsFeatIdSpellsResponse> => {
+  
+  return customFetch<postFeatsFeatIdSpellsResponse>(getPostFeatsFeatIdSpellsUrl(featId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      featSpell,)
+  }
+);}
+
+
+
+export type putFeatsFeatIdSpellsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putFeatsFeatIdSpellsIdResponseSuccess = (putFeatsFeatIdSpellsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putFeatsFeatIdSpellsIdResponse = (putFeatsFeatIdSpellsIdResponseSuccess)
+
+export const getPutFeatsFeatIdSpellsIdUrl = (featId: string,
+    id: string,) => {
+
+
+  
+
+  return `/feats/${featId}/spells/${id}`
+}
+
+export const putFeatsFeatIdSpellsId = async (featId: string,
+    id: string,
+    featSpell: FeatSpell, options?: RequestInit): Promise<putFeatsFeatIdSpellsIdResponse> => {
+  
+  return customFetch<putFeatsFeatIdSpellsIdResponse>(getPutFeatsFeatIdSpellsIdUrl(featId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      featSpell,)
+  }
+);}
+
+
+
+export type deleteFeatsFeatIdSpellsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteFeatsFeatIdSpellsIdResponseSuccess = (deleteFeatsFeatIdSpellsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteFeatsFeatIdSpellsIdResponse = (deleteFeatsFeatIdSpellsIdResponseSuccess)
+
+export const getDeleteFeatsFeatIdSpellsIdUrl = (featId: string,
+    id: string,) => {
+
+
+  
+
+  return `/feats/${featId}/spells/${id}`
+}
+
+export const deleteFeatsFeatIdSpellsId = async (featId: string,
+    id: string, options?: RequestInit): Promise<deleteFeatsFeatIdSpellsIdResponse> => {
+  
+  return customFetch<deleteFeatsFeatIdSpellsIdResponse>(getDeleteFeatsFeatIdSpellsIdUrl(featId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postFeatsFeatIdModifiersResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postFeatsFeatIdModifiersResponseSuccess = (postFeatsFeatIdModifiersResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postFeatsFeatIdModifiersResponse = (postFeatsFeatIdModifiersResponseSuccess)
+
+export const getPostFeatsFeatIdModifiersUrl = (featId: string,) => {
+
+
+  
+
+  return `/feats/${featId}/modifiers`
+}
+
+export const postFeatsFeatIdModifiers = async (featId: string,
+    modifier: Modifier, options?: RequestInit): Promise<postFeatsFeatIdModifiersResponse> => {
+  
+  return customFetch<postFeatsFeatIdModifiersResponse>(getPostFeatsFeatIdModifiersUrl(featId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      modifier,)
+  }
+);}
+
+
+
+export type putFeatsFeatIdModifiersIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putFeatsFeatIdModifiersIdResponseSuccess = (putFeatsFeatIdModifiersIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putFeatsFeatIdModifiersIdResponse = (putFeatsFeatIdModifiersIdResponseSuccess)
+
+export const getPutFeatsFeatIdModifiersIdUrl = (featId: string,
+    id: string,) => {
+
+
+  
+
+  return `/feats/${featId}/modifiers/${id}`
+}
+
+export const putFeatsFeatIdModifiersId = async (featId: string,
+    id: string,
+    modifier: Modifier, options?: RequestInit): Promise<putFeatsFeatIdModifiersIdResponse> => {
+  
+  return customFetch<putFeatsFeatIdModifiersIdResponse>(getPutFeatsFeatIdModifiersIdUrl(featId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      modifier,)
+  }
+);}
+
+
+
+export type deleteFeatsFeatIdModifiersIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteFeatsFeatIdModifiersIdResponseSuccess = (deleteFeatsFeatIdModifiersIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteFeatsFeatIdModifiersIdResponse = (deleteFeatsFeatIdModifiersIdResponseSuccess)
+
+export const getDeleteFeatsFeatIdModifiersIdUrl = (featId: string,
+    id: string,) => {
+
+
+  
+
+  return `/feats/${featId}/modifiers/${id}`
+}
+
+export const deleteFeatsFeatIdModifiersId = async (featId: string,
+    id: string, options?: RequestInit): Promise<deleteFeatsFeatIdModifiersIdResponse> => {
+  
+  return customFetch<deleteFeatsFeatIdModifiersIdResponse>(getDeleteFeatsFeatIdModifiersIdUrl(featId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type getFilesIdResponse200 = {
+  data: void
+  status: 200
+}
+
+export type getFilesIdResponse404 = {
+  data: ProblemDetails
+  status: 404
+}
+    
+export type getFilesIdResponseSuccess = (getFilesIdResponse200) & {
+  headers: Headers;
+};
+export type getFilesIdResponseError = (getFilesIdResponse404) & {
+  headers: Headers;
+};
+
+export type getFilesIdResponse = (getFilesIdResponseSuccess | getFilesIdResponseError)
+
+export const getGetFilesIdUrl = (id: string,) => {
+
+
+  
+
+  return `/files/${id}`
+}
+
+export const getFilesId = async (id: string, options?: RequestInit): Promise<getFilesIdResponse> => {
+  
+  return customFetch<getFilesIdResponse>(getGetFilesIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type getItemsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getItemsResponseSuccess = (getItemsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getItemsResponse = (getItemsResponseSuccess)
+
+export const getGetItemsUrl = (params?: GetItemsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/items?${stringifiedParams}` : `/items`
+}
+
+export const getItems = async (params?: GetItemsParams, options?: RequestInit): Promise<getItemsResponse> => {
+  
+  return customFetch<getItemsResponse>(getGetItemsUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type postItemsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postItemsResponseSuccess = (postItemsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postItemsResponse = (postItemsResponseSuccess)
+
+export const getPostItemsUrl = () => {
+
+
+  
+
+  return `/items`
+}
+
+export const postItems = async (item: Item, options?: RequestInit): Promise<postItemsResponse> => {
+  
+  return customFetch<postItemsResponse>(getPostItemsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      item,)
+  }
+);}
+
+
+
+export type getItemsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getItemsIdResponseSuccess = (getItemsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getItemsIdResponse = (getItemsIdResponseSuccess)
+
+export const getGetItemsIdUrl = (id: string,) => {
+
+
+  
+
+  return `/items/${id}`
+}
+
+export const getItemsId = async (id: string, options?: RequestInit): Promise<getItemsIdResponse> => {
+  
+  return customFetch<getItemsIdResponse>(getGetItemsIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type putItemsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putItemsIdResponseSuccess = (putItemsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putItemsIdResponse = (putItemsIdResponseSuccess)
+
+export const getPutItemsIdUrl = (id: string,) => {
+
+
+  
+
+  return `/items/${id}`
+}
+
+export const putItemsId = async (id: string,
+    item: Item, options?: RequestInit): Promise<putItemsIdResponse> => {
+  
+  return customFetch<putItemsIdResponse>(getPutItemsIdUrl(id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      item,)
+  }
+);}
+
+
+
+export type deleteItemsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteItemsIdResponseSuccess = (deleteItemsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteItemsIdResponse = (deleteItemsIdResponseSuccess)
+
+export const getDeleteItemsIdUrl = (id: string,) => {
+
+
+  
+
+  return `/items/${id}`
+}
+
+export const deleteItemsId = async (id: string, options?: RequestInit): Promise<deleteItemsIdResponse> => {
+  
+  return customFetch<deleteItemsIdResponse>(getDeleteItemsIdUrl(id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type getLanguagesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getLanguagesResponseSuccess = (getLanguagesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getLanguagesResponse = (getLanguagesResponseSuccess)
+
+export const getGetLanguagesUrl = (params?: GetLanguagesParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/languages?${stringifiedParams}` : `/languages`
+}
+
+export const getLanguages = async (params?: GetLanguagesParams, options?: RequestInit): Promise<getLanguagesResponse> => {
+  
+  return customFetch<getLanguagesResponse>(getGetLanguagesUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type postLanguagesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postLanguagesResponseSuccess = (postLanguagesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postLanguagesResponse = (postLanguagesResponseSuccess)
+
+export const getPostLanguagesUrl = () => {
+
+
+  
+
+  return `/languages`
+}
+
+export const postLanguages = async (language: Language, options?: RequestInit): Promise<postLanguagesResponse> => {
+  
+  return customFetch<postLanguagesResponse>(getPostLanguagesUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      language,)
+  }
+);}
+
+
+
+export type getLanguagesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getLanguagesIdResponseSuccess = (getLanguagesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getLanguagesIdResponse = (getLanguagesIdResponseSuccess)
+
+export const getGetLanguagesIdUrl = (id: string,) => {
+
+
+  
+
+  return `/languages/${id}`
+}
+
+export const getLanguagesId = async (id: string, options?: RequestInit): Promise<getLanguagesIdResponse> => {
+  
+  return customFetch<getLanguagesIdResponse>(getGetLanguagesIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type putLanguagesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putLanguagesIdResponseSuccess = (putLanguagesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putLanguagesIdResponse = (putLanguagesIdResponseSuccess)
+
+export const getPutLanguagesIdUrl = (id: string,) => {
+
+
+  
+
+  return `/languages/${id}`
+}
+
+export const putLanguagesId = async (id: string,
+    language: Language, options?: RequestInit): Promise<putLanguagesIdResponse> => {
+  
+  return customFetch<putLanguagesIdResponse>(getPutLanguagesIdUrl(id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      language,)
+  }
+);}
+
+
+
+export type deleteLanguagesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteLanguagesIdResponseSuccess = (deleteLanguagesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteLanguagesIdResponse = (deleteLanguagesIdResponseSuccess)
+
+export const getDeleteLanguagesIdUrl = (id: string,) => {
+
+
+  
+
+  return `/languages/${id}`
+}
+
+export const deleteLanguagesId = async (id: string, options?: RequestInit): Promise<deleteLanguagesIdResponse> => {
+  
+  return customFetch<deleteLanguagesIdResponse>(getDeleteLanguagesIdUrl(id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type getRacesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getRacesResponseSuccess = (getRacesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getRacesResponse = (getRacesResponseSuccess)
+
+export const getGetRacesUrl = (params?: GetRacesParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/races?${stringifiedParams}` : `/races`
+}
+
+export const getRaces = async (params?: GetRacesParams, options?: RequestInit): Promise<getRacesResponse> => {
+  
+  return customFetch<getRacesResponse>(getGetRacesUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type postRacesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postRacesResponseSuccess = (postRacesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postRacesResponse = (postRacesResponseSuccess)
+
+export const getPostRacesUrl = () => {
+
+
+  
+
+  return `/races`
+}
+
+export const postRaces = async (race: Race, options?: RequestInit): Promise<postRacesResponse> => {
+  
+  return customFetch<postRacesResponse>(getPostRacesUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      race,)
+  }
+);}
+
+
+
+export type getRacesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getRacesIdResponseSuccess = (getRacesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getRacesIdResponse = (getRacesIdResponseSuccess)
+
+export const getGetRacesIdUrl = (id: string,) => {
+
+
+  
+
+  return `/races/${id}`
+}
+
+export const getRacesId = async (id: string, options?: RequestInit): Promise<getRacesIdResponse> => {
+  
+  return customFetch<getRacesIdResponse>(getGetRacesIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type putRacesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putRacesIdResponseSuccess = (putRacesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putRacesIdResponse = (putRacesIdResponseSuccess)
+
+export const getPutRacesIdUrl = (id: string,) => {
+
+
+  
+
+  return `/races/${id}`
+}
+
+export const putRacesId = async (id: string,
+    race: Race, options?: RequestInit): Promise<putRacesIdResponse> => {
+  
+  return customFetch<putRacesIdResponse>(getPutRacesIdUrl(id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      race,)
+  }
+);}
+
+
+
+export type deleteRacesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteRacesIdResponseSuccess = (deleteRacesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteRacesIdResponse = (deleteRacesIdResponseSuccess)
+
+export const getDeleteRacesIdUrl = (id: string,) => {
+
+
+  
+
+  return `/races/${id}`
+}
+
+export const deleteRacesId = async (id: string, options?: RequestInit): Promise<deleteRacesIdResponse> => {
+  
+  return customFetch<deleteRacesIdResponse>(getDeleteRacesIdUrl(id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type getRacesRaceIdTraitsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getRacesRaceIdTraitsResponseSuccess = (getRacesRaceIdTraitsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getRacesRaceIdTraitsResponse = (getRacesRaceIdTraitsResponseSuccess)
+
+export const getGetRacesRaceIdTraitsUrl = (raceId: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits`
+}
+
+export const getRacesRaceIdTraits = async (raceId: string, options?: RequestInit): Promise<getRacesRaceIdTraitsResponse> => {
+  
+  return customFetch<getRacesRaceIdTraitsResponse>(getGetRacesRaceIdTraitsUrl(raceId),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type postRacesRaceIdTraitsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postRacesRaceIdTraitsResponseSuccess = (postRacesRaceIdTraitsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postRacesRaceIdTraitsResponse = (postRacesRaceIdTraitsResponseSuccess)
+
+export const getPostRacesRaceIdTraitsUrl = (raceId: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits`
+}
+
+export const postRacesRaceIdTraits = async (raceId: string,
+    raceTrait: RaceTrait, options?: RequestInit): Promise<postRacesRaceIdTraitsResponse> => {
+  
+  return customFetch<postRacesRaceIdTraitsResponse>(getPostRacesRaceIdTraitsUrl(raceId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      raceTrait,)
+  }
+);}
+
+
+
+export type getRacesRaceIdTraitsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getRacesRaceIdTraitsIdResponseSuccess = (getRacesRaceIdTraitsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getRacesRaceIdTraitsIdResponse = (getRacesRaceIdTraitsIdResponseSuccess)
+
+export const getGetRacesRaceIdTraitsIdUrl = (raceId: string,
+    id: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits/${id}`
+}
+
+export const getRacesRaceIdTraitsId = async (raceId: string,
+    id: string, options?: RequestInit): Promise<getRacesRaceIdTraitsIdResponse> => {
+  
+  return customFetch<getRacesRaceIdTraitsIdResponse>(getGetRacesRaceIdTraitsIdUrl(raceId,id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type putRacesRaceIdTraitsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putRacesRaceIdTraitsIdResponseSuccess = (putRacesRaceIdTraitsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putRacesRaceIdTraitsIdResponse = (putRacesRaceIdTraitsIdResponseSuccess)
+
+export const getPutRacesRaceIdTraitsIdUrl = (raceId: string,
+    id: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits/${id}`
+}
+
+export const putRacesRaceIdTraitsId = async (raceId: string,
+    id: string,
+    raceTrait: RaceTrait, options?: RequestInit): Promise<putRacesRaceIdTraitsIdResponse> => {
+  
+  return customFetch<putRacesRaceIdTraitsIdResponse>(getPutRacesRaceIdTraitsIdUrl(raceId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      raceTrait,)
+  }
+);}
+
+
+
+export type deleteRacesRaceIdTraitsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteRacesRaceIdTraitsIdResponseSuccess = (deleteRacesRaceIdTraitsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteRacesRaceIdTraitsIdResponse = (deleteRacesRaceIdTraitsIdResponseSuccess)
+
+export const getDeleteRacesRaceIdTraitsIdUrl = (raceId: string,
+    id: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits/${id}`
+}
+
+export const deleteRacesRaceIdTraitsId = async (raceId: string,
+    id: string, options?: RequestInit): Promise<deleteRacesRaceIdTraitsIdResponse> => {
+  
+  return customFetch<deleteRacesRaceIdTraitsIdResponse>(getDeleteRacesRaceIdTraitsIdUrl(raceId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postRacesRaceIdTraitsTraitIdOptionsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postRacesRaceIdTraitsTraitIdOptionsResponseSuccess = (postRacesRaceIdTraitsTraitIdOptionsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postRacesRaceIdTraitsTraitIdOptionsResponse = (postRacesRaceIdTraitsTraitIdOptionsResponseSuccess)
+
+export const getPostRacesRaceIdTraitsTraitIdOptionsUrl = (raceId: string,
+    traitId: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits/${traitId}/options`
+}
+
+export const postRacesRaceIdTraitsTraitIdOptions = async (raceId: string,
+    traitId: string,
+    raceTraitOption: RaceTraitOption, options?: RequestInit): Promise<postRacesRaceIdTraitsTraitIdOptionsResponse> => {
+  
+  return customFetch<postRacesRaceIdTraitsTraitIdOptionsResponse>(getPostRacesRaceIdTraitsTraitIdOptionsUrl(raceId,traitId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      raceTraitOption,)
+  }
+);}
+
+
+
+export type putRacesRaceIdTraitsTraitIdOptionsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putRacesRaceIdTraitsTraitIdOptionsIdResponseSuccess = (putRacesRaceIdTraitsTraitIdOptionsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putRacesRaceIdTraitsTraitIdOptionsIdResponse = (putRacesRaceIdTraitsTraitIdOptionsIdResponseSuccess)
+
+export const getPutRacesRaceIdTraitsTraitIdOptionsIdUrl = (raceId: string,
+    traitId: string,
+    id: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits/${traitId}/options/${id}`
+}
+
+export const putRacesRaceIdTraitsTraitIdOptionsId = async (raceId: string,
+    traitId: string,
+    id: string,
+    raceTraitOption: RaceTraitOption, options?: RequestInit): Promise<putRacesRaceIdTraitsTraitIdOptionsIdResponse> => {
+  
+  return customFetch<putRacesRaceIdTraitsTraitIdOptionsIdResponse>(getPutRacesRaceIdTraitsTraitIdOptionsIdUrl(raceId,traitId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      raceTraitOption,)
+  }
+);}
+
+
+
+export type deleteRacesRaceIdTraitsTraitIdOptionsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteRacesRaceIdTraitsTraitIdOptionsIdResponseSuccess = (deleteRacesRaceIdTraitsTraitIdOptionsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteRacesRaceIdTraitsTraitIdOptionsIdResponse = (deleteRacesRaceIdTraitsTraitIdOptionsIdResponseSuccess)
+
+export const getDeleteRacesRaceIdTraitsTraitIdOptionsIdUrl = (raceId: string,
+    traitId: string,
+    id: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits/${traitId}/options/${id}`
+}
+
+export const deleteRacesRaceIdTraitsTraitIdOptionsId = async (raceId: string,
+    traitId: string,
+    id: string, options?: RequestInit): Promise<deleteRacesRaceIdTraitsTraitIdOptionsIdResponse> => {
+  
+  return customFetch<deleteRacesRaceIdTraitsTraitIdOptionsIdResponse>(getDeleteRacesRaceIdTraitsTraitIdOptionsIdUrl(raceId,traitId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postRacesRaceIdTraitsTraitIdActionsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postRacesRaceIdTraitsTraitIdActionsResponseSuccess = (postRacesRaceIdTraitsTraitIdActionsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postRacesRaceIdTraitsTraitIdActionsResponse = (postRacesRaceIdTraitsTraitIdActionsResponseSuccess)
+
+export const getPostRacesRaceIdTraitsTraitIdActionsUrl = (raceId: string,
+    traitId: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits/${traitId}/actions`
+}
+
+export const postRacesRaceIdTraitsTraitIdActions = async (raceId: string,
+    traitId: string,
+    raceTraitAction: RaceTraitAction, options?: RequestInit): Promise<postRacesRaceIdTraitsTraitIdActionsResponse> => {
+  
+  return customFetch<postRacesRaceIdTraitsTraitIdActionsResponse>(getPostRacesRaceIdTraitsTraitIdActionsUrl(raceId,traitId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      raceTraitAction,)
+  }
+);}
+
+
+
+export type putRacesRaceIdTraitsTraitIdActionsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putRacesRaceIdTraitsTraitIdActionsIdResponseSuccess = (putRacesRaceIdTraitsTraitIdActionsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putRacesRaceIdTraitsTraitIdActionsIdResponse = (putRacesRaceIdTraitsTraitIdActionsIdResponseSuccess)
+
+export const getPutRacesRaceIdTraitsTraitIdActionsIdUrl = (raceId: string,
+    traitId: string,
+    id: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits/${traitId}/actions/${id}`
+}
+
+export const putRacesRaceIdTraitsTraitIdActionsId = async (raceId: string,
+    traitId: string,
+    id: string,
+    raceTraitAction: RaceTraitAction, options?: RequestInit): Promise<putRacesRaceIdTraitsTraitIdActionsIdResponse> => {
+  
+  return customFetch<putRacesRaceIdTraitsTraitIdActionsIdResponse>(getPutRacesRaceIdTraitsTraitIdActionsIdUrl(raceId,traitId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      raceTraitAction,)
+  }
+);}
+
+
+
+export type deleteRacesRaceIdTraitsTraitIdActionsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteRacesRaceIdTraitsTraitIdActionsIdResponseSuccess = (deleteRacesRaceIdTraitsTraitIdActionsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteRacesRaceIdTraitsTraitIdActionsIdResponse = (deleteRacesRaceIdTraitsTraitIdActionsIdResponseSuccess)
+
+export const getDeleteRacesRaceIdTraitsTraitIdActionsIdUrl = (raceId: string,
+    traitId: string,
+    id: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits/${traitId}/actions/${id}`
+}
+
+export const deleteRacesRaceIdTraitsTraitIdActionsId = async (raceId: string,
+    traitId: string,
+    id: string, options?: RequestInit): Promise<deleteRacesRaceIdTraitsTraitIdActionsIdResponse> => {
+  
+  return customFetch<deleteRacesRaceIdTraitsTraitIdActionsIdResponse>(getDeleteRacesRaceIdTraitsTraitIdActionsIdUrl(raceId,traitId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postRacesRaceIdTraitsTraitIdSpellsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postRacesRaceIdTraitsTraitIdSpellsResponseSuccess = (postRacesRaceIdTraitsTraitIdSpellsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postRacesRaceIdTraitsTraitIdSpellsResponse = (postRacesRaceIdTraitsTraitIdSpellsResponseSuccess)
+
+export const getPostRacesRaceIdTraitsTraitIdSpellsUrl = (raceId: string,
+    traitId: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits/${traitId}/spells`
+}
+
+export const postRacesRaceIdTraitsTraitIdSpells = async (raceId: string,
+    traitId: string,
+    raceTraitSpell: RaceTraitSpell, options?: RequestInit): Promise<postRacesRaceIdTraitsTraitIdSpellsResponse> => {
+  
+  return customFetch<postRacesRaceIdTraitsTraitIdSpellsResponse>(getPostRacesRaceIdTraitsTraitIdSpellsUrl(raceId,traitId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      raceTraitSpell,)
+  }
+);}
+
+
+
+export type putRacesRaceIdTraitsTraitIdSpellsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putRacesRaceIdTraitsTraitIdSpellsIdResponseSuccess = (putRacesRaceIdTraitsTraitIdSpellsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putRacesRaceIdTraitsTraitIdSpellsIdResponse = (putRacesRaceIdTraitsTraitIdSpellsIdResponseSuccess)
+
+export const getPutRacesRaceIdTraitsTraitIdSpellsIdUrl = (raceId: string,
+    traitId: string,
+    id: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits/${traitId}/spells/${id}`
+}
+
+export const putRacesRaceIdTraitsTraitIdSpellsId = async (raceId: string,
+    traitId: string,
+    id: string,
+    raceTraitSpell: RaceTraitSpell, options?: RequestInit): Promise<putRacesRaceIdTraitsTraitIdSpellsIdResponse> => {
+  
+  return customFetch<putRacesRaceIdTraitsTraitIdSpellsIdResponse>(getPutRacesRaceIdTraitsTraitIdSpellsIdUrl(raceId,traitId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      raceTraitSpell,)
+  }
+);}
+
+
+
+export type deleteRacesRaceIdTraitsTraitIdSpellsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteRacesRaceIdTraitsTraitIdSpellsIdResponseSuccess = (deleteRacesRaceIdTraitsTraitIdSpellsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteRacesRaceIdTraitsTraitIdSpellsIdResponse = (deleteRacesRaceIdTraitsTraitIdSpellsIdResponseSuccess)
+
+export const getDeleteRacesRaceIdTraitsTraitIdSpellsIdUrl = (raceId: string,
+    traitId: string,
+    id: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits/${traitId}/spells/${id}`
+}
+
+export const deleteRacesRaceIdTraitsTraitIdSpellsId = async (raceId: string,
+    traitId: string,
+    id: string, options?: RequestInit): Promise<deleteRacesRaceIdTraitsTraitIdSpellsIdResponse> => {
+  
+  return customFetch<deleteRacesRaceIdTraitsTraitIdSpellsIdResponse>(getDeleteRacesRaceIdTraitsTraitIdSpellsIdUrl(raceId,traitId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postRacesRaceIdTraitsTraitIdCreaturesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postRacesRaceIdTraitsTraitIdCreaturesResponseSuccess = (postRacesRaceIdTraitsTraitIdCreaturesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postRacesRaceIdTraitsTraitIdCreaturesResponse = (postRacesRaceIdTraitsTraitIdCreaturesResponseSuccess)
+
+export const getPostRacesRaceIdTraitsTraitIdCreaturesUrl = (raceId: string,
+    traitId: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits/${traitId}/creatures`
+}
+
+export const postRacesRaceIdTraitsTraitIdCreatures = async (raceId: string,
+    traitId: string,
+    raceTraitCreature: RaceTraitCreature, options?: RequestInit): Promise<postRacesRaceIdTraitsTraitIdCreaturesResponse> => {
+  
+  return customFetch<postRacesRaceIdTraitsTraitIdCreaturesResponse>(getPostRacesRaceIdTraitsTraitIdCreaturesUrl(raceId,traitId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      raceTraitCreature,)
+  }
+);}
+
+
+
+export type putRacesRaceIdTraitsTraitIdCreaturesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putRacesRaceIdTraitsTraitIdCreaturesIdResponseSuccess = (putRacesRaceIdTraitsTraitIdCreaturesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putRacesRaceIdTraitsTraitIdCreaturesIdResponse = (putRacesRaceIdTraitsTraitIdCreaturesIdResponseSuccess)
+
+export const getPutRacesRaceIdTraitsTraitIdCreaturesIdUrl = (raceId: string,
+    traitId: string,
+    id: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits/${traitId}/creatures/${id}`
+}
+
+export const putRacesRaceIdTraitsTraitIdCreaturesId = async (raceId: string,
+    traitId: string,
+    id: string,
+    raceTraitCreature: RaceTraitCreature, options?: RequestInit): Promise<putRacesRaceIdTraitsTraitIdCreaturesIdResponse> => {
+  
+  return customFetch<putRacesRaceIdTraitsTraitIdCreaturesIdResponse>(getPutRacesRaceIdTraitsTraitIdCreaturesIdUrl(raceId,traitId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      raceTraitCreature,)
+  }
+);}
+
+
+
+export type deleteRacesRaceIdTraitsTraitIdCreaturesIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteRacesRaceIdTraitsTraitIdCreaturesIdResponseSuccess = (deleteRacesRaceIdTraitsTraitIdCreaturesIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteRacesRaceIdTraitsTraitIdCreaturesIdResponse = (deleteRacesRaceIdTraitsTraitIdCreaturesIdResponseSuccess)
+
+export const getDeleteRacesRaceIdTraitsTraitIdCreaturesIdUrl = (raceId: string,
+    traitId: string,
+    id: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits/${traitId}/creatures/${id}`
+}
+
+export const deleteRacesRaceIdTraitsTraitIdCreaturesId = async (raceId: string,
+    traitId: string,
+    id: string, options?: RequestInit): Promise<deleteRacesRaceIdTraitsTraitIdCreaturesIdResponse> => {
+  
+  return customFetch<deleteRacesRaceIdTraitsTraitIdCreaturesIdResponse>(getDeleteRacesRaceIdTraitsTraitIdCreaturesIdUrl(raceId,traitId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postRacesRaceIdTraitsTraitIdModifiersResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postRacesRaceIdTraitsTraitIdModifiersResponseSuccess = (postRacesRaceIdTraitsTraitIdModifiersResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postRacesRaceIdTraitsTraitIdModifiersResponse = (postRacesRaceIdTraitsTraitIdModifiersResponseSuccess)
+
+export const getPostRacesRaceIdTraitsTraitIdModifiersUrl = (raceId: string,
+    traitId: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits/${traitId}/modifiers`
+}
+
+export const postRacesRaceIdTraitsTraitIdModifiers = async (raceId: string,
+    traitId: string,
+    modifier: Modifier, options?: RequestInit): Promise<postRacesRaceIdTraitsTraitIdModifiersResponse> => {
+  
+  return customFetch<postRacesRaceIdTraitsTraitIdModifiersResponse>(getPostRacesRaceIdTraitsTraitIdModifiersUrl(raceId,traitId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      modifier,)
+  }
+);}
+
+
+
+export type putRacesRaceIdTraitsTraitIdModifiersIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putRacesRaceIdTraitsTraitIdModifiersIdResponseSuccess = (putRacesRaceIdTraitsTraitIdModifiersIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putRacesRaceIdTraitsTraitIdModifiersIdResponse = (putRacesRaceIdTraitsTraitIdModifiersIdResponseSuccess)
+
+export const getPutRacesRaceIdTraitsTraitIdModifiersIdUrl = (raceId: string,
+    traitId: string,
+    id: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits/${traitId}/modifiers/${id}`
+}
+
+export const putRacesRaceIdTraitsTraitIdModifiersId = async (raceId: string,
+    traitId: string,
+    id: string,
+    modifier: Modifier, options?: RequestInit): Promise<putRacesRaceIdTraitsTraitIdModifiersIdResponse> => {
+  
+  return customFetch<putRacesRaceIdTraitsTraitIdModifiersIdResponse>(getPutRacesRaceIdTraitsTraitIdModifiersIdUrl(raceId,traitId,id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      modifier,)
+  }
+);}
+
+
+
+export type deleteRacesRaceIdTraitsTraitIdModifiersIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteRacesRaceIdTraitsTraitIdModifiersIdResponseSuccess = (deleteRacesRaceIdTraitsTraitIdModifiersIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteRacesRaceIdTraitsTraitIdModifiersIdResponse = (deleteRacesRaceIdTraitsTraitIdModifiersIdResponseSuccess)
+
+export const getDeleteRacesRaceIdTraitsTraitIdModifiersIdUrl = (raceId: string,
+    traitId: string,
+    id: string,) => {
+
+
+  
+
+  return `/races/${raceId}/traits/${traitId}/modifiers/${id}`
+}
+
+export const deleteRacesRaceIdTraitsTraitIdModifiersId = async (raceId: string,
+    traitId: string,
+    id: string, options?: RequestInit): Promise<deleteRacesRaceIdTraitsTraitIdModifiersIdResponse> => {
+  
+  return customFetch<deleteRacesRaceIdTraitsTraitIdModifiersIdResponse>(getDeleteRacesRaceIdTraitsTraitIdModifiersIdUrl(raceId,traitId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type getSpellsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getSpellsResponseSuccess = (getSpellsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getSpellsResponse = (getSpellsResponseSuccess)
+
+export const getGetSpellsUrl = (params?: GetSpellsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/spells?${stringifiedParams}` : `/spells`
+}
+
+export const getSpells = async (params?: GetSpellsParams, options?: RequestInit): Promise<getSpellsResponse> => {
+  
+  return customFetch<getSpellsResponse>(getGetSpellsUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type postSpellsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postSpellsResponseSuccess = (postSpellsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postSpellsResponse = (postSpellsResponseSuccess)
+
+export const getPostSpellsUrl = () => {
+
+
+  
+
+  return `/spells`
+}
+
+export const postSpells = async (spell: Spell, options?: RequestInit): Promise<postSpellsResponse> => {
+  
+  return customFetch<postSpellsResponse>(getPostSpellsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      spell,)
+  }
+);}
+
+
+
+export type getSpellsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getSpellsIdResponseSuccess = (getSpellsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getSpellsIdResponse = (getSpellsIdResponseSuccess)
+
+export const getGetSpellsIdUrl = (id: string,) => {
+
+
+  
+
+  return `/spells/${id}`
+}
+
+export const getSpellsId = async (id: string, options?: RequestInit): Promise<getSpellsIdResponse> => {
+  
+  return customFetch<getSpellsIdResponse>(getGetSpellsIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type putSpellsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putSpellsIdResponseSuccess = (putSpellsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putSpellsIdResponse = (putSpellsIdResponseSuccess)
+
+export const getPutSpellsIdUrl = (id: string,) => {
+
+
+  
+
+  return `/spells/${id}`
+}
+
+export const putSpellsId = async (id: string,
+    spell: Spell, options?: RequestInit): Promise<putSpellsIdResponse> => {
+  
+  return customFetch<putSpellsIdResponse>(getPutSpellsIdUrl(id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      spell,)
+  }
+);}
+
+
+
+export type deleteSpellsIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteSpellsIdResponseSuccess = (deleteSpellsIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteSpellsIdResponse = (deleteSpellsIdResponseSuccess)
+
+export const getDeleteSpellsIdUrl = (id: string,) => {
+
+
+  
+
+  return `/spells/${id}`
+}
+
+export const deleteSpellsId = async (id: string, options?: RequestInit): Promise<deleteSpellsIdResponse> => {
+  
+  return customFetch<deleteSpellsIdResponse>(getDeleteSpellsIdUrl(id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type getUsersIdResponse200 = {
+  data: UserResponse
+  status: 200
+}
+
+export type getUsersIdResponse401 = {
+  data: ProblemDetails
+  status: 401
+}
+
+export type getUsersIdResponse403 = {
+  data: ProblemDetails
+  status: 403
+}
+
+export type getUsersIdResponse404 = {
+  data: ProblemDetails
+  status: 404
+}
+    
+export type getUsersIdResponseSuccess = (getUsersIdResponse200) & {
+  headers: Headers;
+};
+export type getUsersIdResponseError = (getUsersIdResponse401 | getUsersIdResponse403 | getUsersIdResponse404) & {
+  headers: Headers;
+};
+
+export type getUsersIdResponse = (getUsersIdResponseSuccess | getUsersIdResponseError)
+
+export const getGetUsersIdUrl = (id: string,) => {
+
+
+  
+
+  return `/users/${id}`
+}
+
+export const getUsersId = async (id: string, options?: RequestInit): Promise<getUsersIdResponse> => {
+  
+  return customFetch<getUsersIdResponse>(getGetUsersIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type putUsersMeAvatarResponse200 = {
+  data: UserResponse
+  status: 200
+}
+
+export type putUsersMeAvatarResponse400 = {
+  data: ProblemDetails
+  status: 400
+}
+
+export type putUsersMeAvatarResponse401 = {
+  data: ProblemDetails
+  status: 401
+}
+    
+export type putUsersMeAvatarResponseSuccess = (putUsersMeAvatarResponse200) & {
+  headers: Headers;
+};
+export type putUsersMeAvatarResponseError = (putUsersMeAvatarResponse400 | putUsersMeAvatarResponse401) & {
+  headers: Headers;
+};
+
+export type putUsersMeAvatarResponse = (putUsersMeAvatarResponseSuccess | putUsersMeAvatarResponseError)
+
+export const getPutUsersMeAvatarUrl = () => {
+
+
+  
+
+  return `/users/@me/avatar`
+}
+
+export const putUsersMeAvatar = async (putUsersMeAvatarBody: PutUsersMeAvatarBody, options?: RequestInit): Promise<putUsersMeAvatarResponse> => {
+    const formData = new FormData();
+if(putUsersMeAvatarBody.file !== undefined) {
+ formData.append(`file`, putUsersMeAvatarBody.file);
+ }
+
+  return customFetch<putUsersMeAvatarResponse>(getPutUsersMeAvatarUrl(),
+  {      
+    ...options,
+    method: 'PUT'
+    ,
+    body: 
+      formData,
+  }
+);}
+
+
+
+export type deleteUsersMeAvatarResponse200 = {
+  data: UserResponse
+  status: 200
+}
+
+export type deleteUsersMeAvatarResponse401 = {
+  data: ProblemDetails
+  status: 401
+}
+    
+export type deleteUsersMeAvatarResponseSuccess = (deleteUsersMeAvatarResponse200) & {
+  headers: Headers;
+};
+export type deleteUsersMeAvatarResponseError = (deleteUsersMeAvatarResponse401) & {
+  headers: Headers;
+};
+
+export type deleteUsersMeAvatarResponse = (deleteUsersMeAvatarResponseSuccess | deleteUsersMeAvatarResponseError)
+
+export const getDeleteUsersMeAvatarUrl = () => {
+
+
+  
+
+  return `/users/@me/avatar`
+}
+
+export const deleteUsersMeAvatar = async ( options?: RequestInit): Promise<deleteUsersMeAvatarResponse> => {
+  
+  return customFetch<deleteUsersMeAvatarResponse>(getDeleteUsersMeAvatarUrl(),
+  {      
+    ...options,
+    method: 'DELETE'
     
     
   }

@@ -4,7 +4,6 @@ import { computed } from 'vue'
 type Size = 'sm' | 'md' | 'lg'
 
 const props = defineProps<{
-  modelValue: string
   label?: string
   placeholder?: string
   size?: Size
@@ -17,9 +16,7 @@ const props = defineProps<{
   rightIcon?: string | null
 }>()
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void
-}>()
+const model = defineModel<string>({default: ""});
 
 const sizeClass = computed(() => `input--${props.size ?? 'md'}`)
 
@@ -48,8 +45,7 @@ const classList = computed(() => [
         :class="classList"
         :placeholder="placeholder"
         :disabled="disabled"
-        :value="modelValue"
-        @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+        v-model="model"
       />
 
       <span

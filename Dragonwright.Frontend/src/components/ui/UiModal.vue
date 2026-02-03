@@ -2,20 +2,20 @@
 import { onMounted, onBeforeUnmount, watch } from 'vue'
 
 const props = defineProps<{
-  modelValue: boolean
   title?: string
   closeOnBackdrop?: boolean
   closeOnEsc?: boolean
   topmost?: boolean
 }>()
 
+const model = defineModel<boolean>({default: false})
+
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
   (e: 'close'): void
 }>()
 
 const close = () => {
-  emit('update:modelValue', false)
+  model.value = false
   emit('close')
 }
 
@@ -24,7 +24,7 @@ const onBackdropClick = () => {
 }
 
 const onKeyDown = (e: KeyboardEvent) => {
-  if (!props.modelValue) return
+  if (!model.value) return
   if (!props.closeOnEsc) return
   if (e.key === 'Escape') close()
 }
@@ -38,7 +38,7 @@ onBeforeUnmount(() => {
 })
 
 watch(
-  () => props.modelValue,
+  () => model.value,
   (open) => {
     if (open) {
       document.body.style.overflow = 'hidden'
@@ -52,8 +52,8 @@ watch(
 
 <template>
   <Teleport to="body">
-    <div v-if="modelValue" class="modal-backdrop" :class="{topmost}" @click.self="onBackdropClick">
-      <section class="modal" role="dialog" aria-modal="true" :aria-label="title">
+    <div v-if="model" class="modal-backdrop" :class="{topmost}" @click.self="onBackdropClick">
+      <section v-bind="$attrs" class="modal" role="dialog" aria-modal="true" :aria-label="title">
         <header class="modal__header">
           <h2 v-if="title" class="modal__title">{{ title }}</h2>
           <button type="button" class="toast__close" aria-label="Close" @click="close">

@@ -6,38 +6,113 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Dragonwright.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class AddInitialCharacterEntities : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Users_StoredFiles_AvatarId",
-                table: "Users");
+            migrationBuilder.CreateTable(
+                name: "Creatures",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    Size = table.Column<string>(type: "text", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false),
+                    Alignment = table.Column<string>(type: "text", nullable: false),
+                    ArmorClass = table.Column<int>(type: "integer", nullable: false),
+                    ArmorClassNotes = table.Column<string>(type: "text", nullable: false),
+                    HitPoints = table.Column<int>(type: "integer", nullable: false),
+                    HitPointDiceCount = table.Column<int>(type: "integer", nullable: false),
+                    HitPointDiceValue = table.Column<int>(type: "integer", nullable: false),
+                    HitPointDiceBonus = table.Column<int>(type: "integer", nullable: false),
+                    Speed = table.Column<int>(type: "integer", nullable: false),
+                    FlyingSpeed = table.Column<int>(type: "integer", nullable: false),
+                    SwimmingSpeed = table.Column<int>(type: "integer", nullable: false),
+                    ClimbSpeed = table.Column<int>(type: "integer", nullable: false),
+                    ChallengeRating = table.Column<float>(type: "real", nullable: false),
+                    XP = table.Column<int>(type: "integer", nullable: false),
+                    ProficiencyBonus = table.Column<int>(type: "integer", nullable: false),
+                    StrengthScore = table.Column<int>(type: "integer", nullable: false),
+                    StrengthSavingThrowBonus = table.Column<int>(type: "integer", nullable: false),
+                    DexterityScore = table.Column<int>(type: "integer", nullable: false),
+                    DexteritySavingThrowBonus = table.Column<int>(type: "integer", nullable: false),
+                    ConstitutionScore = table.Column<int>(type: "integer", nullable: false),
+                    ConstitutionSavingThrowBonus = table.Column<int>(type: "integer", nullable: false),
+                    IntelligenceScore = table.Column<int>(type: "integer", nullable: false),
+                    IntelligenceSavingThrowBonus = table.Column<int>(type: "integer", nullable: false),
+                    WisdomScore = table.Column<int>(type: "integer", nullable: false),
+                    WisdomSavingThrowBonus = table.Column<int>(type: "integer", nullable: false),
+                    CharismaScore = table.Column<int>(type: "integer", nullable: false),
+                    CharismaSavingThrowBonus = table.Column<int>(type: "integer", nullable: false),
+                    SkillModifiers = table.Column<string>(type: "text", nullable: false),
+                    PassivePerceptionBonus = table.Column<int>(type: "integer", nullable: false),
+                    PassiveInvestigationBonus = table.Column<int>(type: "integer", nullable: false),
+                    PassiveInsightBonus = table.Column<int>(type: "integer", nullable: false),
+                    Languages = table.Column<string>(type: "text", nullable: false),
+                    DarkvisionRange = table.Column<int>(type: "integer", nullable: false),
+                    TruesightRange = table.Column<int>(type: "integer", nullable: false),
+                    TremorsenseRange = table.Column<int>(type: "integer", nullable: false),
+                    BlindsightRange = table.Column<int>(type: "integer", nullable: false),
+                    Traits = table.Column<string>(type: "text", nullable: false),
+                    Actions = table.Column<string>(type: "text", nullable: false),
+                    LegendaryActions = table.Column<string>(type: "text", nullable: false),
+                    LairActions = table.Column<string>(type: "text", nullable: false),
+                    Reactions = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Creatures", x => x.Id);
+                });
 
-            migrationBuilder.DropIndex(
-                name: "IX_RefreshTokens_UserId",
-                table: "RefreshTokens");
+            migrationBuilder.CreateTable(
+                name: "Languages",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Languages", x => x.Id);
+                });
 
-            migrationBuilder.DropColumn(
-                name: "Role",
-                table: "Users");
+            migrationBuilder.CreateTable(
+                name: "StoredFiles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FileName = table.Column<string>(type: "text", nullable: false),
+                    ContentType = table.Column<string>(type: "text", nullable: false),
+                    Size = table.Column<long>(type: "bigint", nullable: false),
+                    StoragePath = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StoredFiles", x => x.Id);
+                });
 
-            migrationBuilder.AlterColumn<string>(
-                name: "Username",
-                table: "Users",
-                type: "character varying(50)",
-                maxLength: 50,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "text");
-
-            migrationBuilder.AddColumn<string>(
-                name: "UserRole",
-                table: "Users",
-                type: "text",
-                nullable: false,
-                defaultValue: "");
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Username = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: false),
+                    AvatarId = table.Column<Guid>(type: "uuid", nullable: true),
+                    UserRole = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_StoredFiles_AvatarId",
+                        column: x => x.AvatarId,
+                        principalTable: "StoredFiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Backgrounds",
@@ -101,6 +176,8 @@ namespace Dragonwright.Database.Migrations
                     PassiveInvestigationBonus = table.Column<int>(type: "integer", nullable: false),
                     PassiveInsightBonus = table.Column<int>(type: "integer", nullable: false),
                     XP = table.Column<int>(type: "integer", nullable: false),
+                    DeathSaveSuccesses = table.Column<int>(type: "integer", nullable: false),
+                    DeathSaveFailures = table.Column<int>(type: "integer", nullable: false),
                     ExhaustionLevel = table.Column<int>(type: "integer", nullable: false),
                     Conditions = table.Column<string>(type: "text", nullable: false),
                     DamageDefenses = table.Column<string>(type: "text", nullable: false),
@@ -128,8 +205,8 @@ namespace Dragonwright.Database.Migrations
                     BoltQuiver = table.Column<int>(type: "integer", nullable: false),
                     Lifestyle = table.Column<string>(type: "text", nullable: false),
                     Alignment = table.Column<string>(type: "text", nullable: false),
-                    Gender = table.Column<int>(type: "integer", nullable: false),
-                    Size = table.Column<int>(type: "integer", nullable: false),
+                    Gender = table.Column<string>(type: "text", nullable: false),
+                    Size = table.Column<string>(type: "text", nullable: false),
                     Age = table.Column<int>(type: "integer", nullable: false),
                     HeightInInches = table.Column<int>(type: "integer", nullable: false),
                     WeightInPounds = table.Column<int>(type: "integer", nullable: false),
@@ -183,11 +260,18 @@ namespace Dragonwright.Database.Migrations
                     SkillProficienciesOptions = table.Column<string>(type: "text", nullable: false),
                     ToolProficiencies = table.Column<string>(type: "text", nullable: false),
                     ArmorProficiencies = table.Column<string>(type: "text", nullable: false),
-                    WeaponProficiencies = table.Column<string>(type: "text", nullable: false)
+                    WeaponProficiencies = table.Column<string>(type: "text", nullable: false),
+                    ImageId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Classes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Classes_StoredFiles_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "StoredFiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Classes_Users_SourceCreatorId",
                         column: x => x.SourceCreatorId,
@@ -197,24 +281,22 @@ namespace Dragonwright.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Creatures",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Creatures", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Feats",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Source = table.Column<string>(type: "text", nullable: false),
                     SourceCreatorId = table.Column<Guid>(type: "uuid", nullable: true),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: false),
+                    FeatLevel = table.Column<int>(type: "integer", nullable: false),
+                    IsRepeatable = table.Column<bool>(type: "boolean", nullable: false),
+                    PrerequisiteDescription = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                    PrerequisiteAbilityScore = table.Column<string>(type: "text", nullable: true),
+                    PrerequisiteAbilityScoreMinimum = table.Column<int>(type: "integer", nullable: false),
+                    PrerequisiteSpellcasting = table.Column<bool>(type: "boolean", nullable: false),
+                    AbilityScoreOptions = table.Column<string>(type: "text", nullable: false),
+                    AbilityScoreIncrease = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -257,9 +339,7 @@ namespace Dragonwright.Database.Migrations
                     RangeInFeet = table.Column<int>(type: "integer", nullable: false),
                     MaximumRangeInFeet = table.Column<int>(type: "integer", nullable: false),
                     AttackBonus = table.Column<int>(type: "integer", nullable: false),
-                    DamageDice = table.Column<int>(type: "integer", nullable: false),
-                    DamageDieCount = table.Column<int>(type: "integer", nullable: false),
-                    DamageBonus = table.Column<int>(type: "integer", nullable: false),
+                    Damages = table.Column<string>(type: "text", nullable: false),
                     DamageBonusAbility = table.Column<string>(type: "text", nullable: true),
                     DamageTypes = table.Column<string>(type: "text", nullable: false),
                     Mastery = table.Column<string>(type: "text", nullable: true),
@@ -285,17 +365,52 @@ namespace Dragonwright.Database.Migrations
                     Source = table.Column<string>(type: "text", nullable: false),
                     SourceCreatorId = table.Column<Guid>(type: "uuid", nullable: true),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Type = table.Column<string>(type: "text", nullable: false)
+                    Type = table.Column<string>(type: "text", nullable: false),
+                    ImageId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Races", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Races_StoredFiles_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "StoredFiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Races_Users_SourceCreatorId",
                         column: x => x.SourceCreatorId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RefreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Token = table.Column<string>(type: "text", nullable: false),
+                    JwtId = table.Column<string>(type: "text", nullable: false),
+                    DeviceId = table.Column<string>(type: "text", nullable: false),
+                    DeviceName = table.Column<string>(type: "text", nullable: true),
+                    TokenFamily = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ExpiryDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    AbsoluteExpiryDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsUsed = table.Column<bool>(type: "boolean", nullable: false),
+                    IsRevoked = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RefreshTokens_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -322,6 +437,7 @@ namespace Dragonwright.Database.Migrations
                     AreaOfEffect = table.Column<int>(type: "integer", nullable: true),
                     AreaSize = table.Column<int>(type: "integer", nullable: false),
                     DamageTypes = table.Column<string>(type: "text", nullable: false),
+                    Damages = table.Column<string>(type: "text", nullable: false),
                     Conditions = table.Column<string>(type: "text", nullable: false),
                     Durations = table.Column<string>(type: "text", nullable: false),
                     Tags = table.Column<string>(type: "text", nullable: false)
@@ -387,7 +503,10 @@ namespace Dragonwright.Database.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     CharacterId = table.Column<Guid>(type: "uuid", nullable: false),
-                    BackgroundId = table.Column<Guid>(type: "uuid", nullable: false)
+                    BackgroundId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ChosenAbilityScoreIncreases = table.Column<string>(type: "text", nullable: false),
+                    ChosenLanguages = table.Column<string>(type: "text", nullable: false),
+                    ChosenCharacteristics = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -430,25 +549,6 @@ namespace Dragonwright.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClassFeatures",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsOptional = table.Column<bool>(type: "boolean", nullable: false),
-                    ClassId = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClassFeatures", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ClassFeatures_Classes_ClassId",
-                        column: x => x.ClassId,
-                        principalTable: "Classes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "StartItemChoices",
                 columns: table => new
                 {
@@ -481,7 +581,16 @@ namespace Dragonwright.Database.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Source = table.Column<string>(type: "text", nullable: false),
                     SourceCreatorId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ClassId = table.Column<Guid>(type: "uuid", nullable: false)
+                    ClassId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    ShortDescription = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    CanCastSpells = table.Column<bool>(type: "boolean", nullable: false),
+                    SpellcastingAbility = table.Column<string>(type: "text", nullable: true),
+                    KnowsAllSpells = table.Column<bool>(type: "boolean", nullable: false),
+                    SpellPrepareType = table.Column<string>(type: "text", nullable: true),
+                    SpellLearnType = table.Column<string>(type: "text", nullable: true),
+                    ImageId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -492,6 +601,12 @@ namespace Dragonwright.Database.Migrations
                         principalTable: "Classes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Subclasses_StoredFiles_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "StoredFiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Subclasses_Users_SourceCreatorId",
                         column: x => x.SourceCreatorId,
@@ -532,7 +647,10 @@ namespace Dragonwright.Database.Migrations
                     CharacterId = table.Column<Guid>(type: "uuid", nullable: false),
                     FeatId = table.Column<Guid>(type: "uuid", nullable: false),
                     Source = table.Column<string>(type: "text", nullable: false),
-                    SourceId = table.Column<Guid>(type: "uuid", nullable: true)
+                    SourceId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ChosenAbilityScoreIncrease = table.Column<string>(type: "text", nullable: true),
+                    ChosenOptions = table.Column<string>(type: "text", nullable: false),
+                    ChosenSpells = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -549,6 +667,80 @@ namespace Dragonwright.Database.Migrations
                         principalTable: "Feats",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FeatActions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FeatId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ActionType = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    AbilityScore = table.Column<string>(type: "text", nullable: true),
+                    RequiredCharacterLevel = table.Column<int>(type: "integer", nullable: false),
+                    IsProficient = table.Column<bool>(type: "boolean", nullable: false),
+                    AttackType = table.Column<string>(type: "text", nullable: true),
+                    Save = table.Column<string>(type: "text", nullable: true),
+                    FixedSaveDC = table.Column<int>(type: "integer", nullable: false),
+                    DiceCount = table.Column<int>(type: "integer", nullable: false),
+                    DiceValue = table.Column<int>(type: "integer", nullable: false),
+                    FixedValue = table.Column<int>(type: "integer", nullable: false),
+                    EffectOnMiss = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: false),
+                    EffectOnSaveSuccess = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: false),
+                    EffectOnSaveFailure = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: false),
+                    IsUnarmedWeapon = table.Column<bool>(type: "boolean", nullable: false),
+                    IsNaturalWeapon = table.Column<bool>(type: "boolean", nullable: false),
+                    DamageType = table.Column<string>(type: "text", nullable: true),
+                    DisplayAsAttack = table.Column<bool>(type: "boolean", nullable: false),
+                    EffectByMartialArts = table.Column<bool>(type: "boolean", nullable: false),
+                    Range = table.Column<int>(type: "integer", nullable: true),
+                    MaximumRange = table.Column<int>(type: "integer", nullable: true),
+                    AreaOfEffect = table.Column<string>(type: "text", nullable: true),
+                    AreaSize = table.Column<int>(type: "integer", nullable: false),
+                    ActivationTime = table.Column<string>(type: "text", nullable: true),
+                    ResetType = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FeatActions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FeatActions_Feats_FeatId",
+                        column: x => x.FeatId,
+                        principalTable: "Feats",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FeatOptions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FeatId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    RequiredOptionId = table.Column<Guid>(type: "uuid", nullable: true),
+                    RequirementDescription = table.Column<string>(type: "text", nullable: false),
+                    RequiredCharacterLevel = table.Column<int>(type: "integer", nullable: false),
+                    IsGranted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FeatOptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FeatOptions_FeatOptions_RequiredOptionId",
+                        column: x => x.RequiredOptionId,
+                        principalTable: "FeatOptions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_FeatOptions_Feats_FeatId",
+                        column: x => x.FeatId,
+                        principalTable: "Feats",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -707,7 +899,9 @@ namespace Dragonwright.Database.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     CharacterId = table.Column<Guid>(type: "uuid", nullable: false),
                     RaceId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RaceTraitUsages = table.Column<string>(type: "text", nullable: false)
+                    RaceTraitUsages = table.Column<string>(type: "text", nullable: false),
+                    ChosenTraitOptions = table.Column<string>(type: "text", nullable: false),
+                    ChosenSpells = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -789,7 +983,15 @@ namespace Dragonwright.Database.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     CharacterId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SpellId = table.Column<Guid>(type: "uuid", nullable: false)
+                    SpellId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SpellSource = table.Column<string>(type: "text", nullable: false),
+                    SourceClassId = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsPrepared = table.Column<bool>(type: "boolean", nullable: false),
+                    AlwaysPrepared = table.Column<bool>(type: "boolean", nullable: false),
+                    CastAtLevelOverride = table.Column<int>(type: "integer", nullable: true),
+                    UsesRemaining = table.Column<int>(type: "integer", nullable: true),
+                    MaxUses = table.Column<int>(type: "integer", nullable: true),
+                    ResetType = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -800,6 +1002,12 @@ namespace Dragonwright.Database.Migrations
                         principalTable: "Characters",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CharacterSpells_Classes_SourceClassId",
+                        column: x => x.SourceClassId,
+                        principalTable: "Classes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_CharacterSpells_Spells_SpellId",
                         column: x => x.SpellId,
@@ -830,6 +1038,85 @@ namespace Dragonwright.Database.Migrations
                         principalTable: "Spells",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FeatSpell",
+                columns: table => new
+                {
+                    FeatId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SpellListId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FeatSpell", x => new { x.FeatId, x.SpellListId });
+                    table.ForeignKey(
+                        name: "FK_FeatSpell_Feats_FeatId",
+                        column: x => x.FeatId,
+                        principalTable: "Feats",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FeatSpell_Spells_SpellListId",
+                        column: x => x.SpellListId,
+                        principalTable: "Spells",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FeatSpells",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FeatId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SpellId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ClassId = table.Column<Guid>(type: "uuid", nullable: true),
+                    SpellLevels = table.Column<string>(type: "text", nullable: false),
+                    SpellSchools = table.Column<string>(type: "text", nullable: false),
+                    AttackTypes = table.Column<string>(type: "text", nullable: false),
+                    LevelDivisor = table.Column<int>(type: "integer", nullable: false),
+                    OnlyRitualSpells = table.Column<bool>(type: "boolean", nullable: false),
+                    AbilityScore = table.Column<string>(type: "text", nullable: true),
+                    NumberOfUses = table.Column<int>(type: "integer", nullable: false),
+                    NumberOfUsesStatModifierOperation = table.Column<string>(type: "text", nullable: true),
+                    NumberOfUsesStatModifierAbility = table.Column<string>(type: "text", nullable: true),
+                    NumberOfUsesProficiencyBonusIfProficient = table.Column<bool>(type: "boolean", nullable: false),
+                    NumberOfUsesProficiencyOperation = table.Column<string>(type: "text", nullable: true),
+                    ResetType = table.Column<string>(type: "text", nullable: true),
+                    CastAtLevel = table.Column<int>(type: "integer", nullable: true),
+                    CastingTime = table.Column<string>(type: "text", nullable: true),
+                    ActivationTimeUnit = table.Column<string>(type: "text", nullable: true),
+                    Range = table.Column<int>(type: "integer", nullable: true),
+                    AdditionalDescription = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: false),
+                    Restrictions = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    ConsumesSpellSlot = table.Column<bool>(type: "boolean", nullable: false),
+                    CountsAsKnownSpell = table.Column<bool>(type: "boolean", nullable: false),
+                    AlwaysPrepared = table.Column<bool>(type: "boolean", nullable: false),
+                    AvailableAtCharacterLevel = table.Column<int>(type: "integer", nullable: false),
+                    IsInfinite = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FeatSpells", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FeatSpells_Classes_ClassId",
+                        column: x => x.ClassId,
+                        principalTable: "Classes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_FeatSpells_Feats_FeatId",
+                        column: x => x.FeatId,
+                        principalTable: "Feats",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FeatSpells_Spells_SpellId",
+                        column: x => x.SpellId,
+                        principalTable: "Spells",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -864,7 +1151,13 @@ namespace Dragonwright.Database.Migrations
                     ClassId = table.Column<Guid>(type: "uuid", nullable: false),
                     Level = table.Column<int>(type: "integer", nullable: false),
                     SubclassId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ClassFeatureUsages = table.Column<string>(type: "text", nullable: false)
+                    IsStartingClass = table.Column<bool>(type: "boolean", nullable: false),
+                    ClassFeatureUsages = table.Column<string>(type: "text", nullable: false),
+                    ChosenSkillProficiencies = table.Column<string>(type: "text", nullable: false),
+                    ChosenFeatureOptions = table.Column<string>(type: "text", nullable: false),
+                    ChosenSpells = table.Column<string>(type: "text", nullable: false),
+                    SpellSlotsUsed = table.Column<string>(type: "text", nullable: false),
+                    PactSlotsUsed = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -890,27 +1183,91 @@ namespace Dragonwright.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Modifiers",
+                name: "ClassFeatures",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Type = table.Column<string>(type: "text", nullable: false),
-                    Subtype = table.Column<string>(type: "text", nullable: true),
-                    AbilityScore = table.Column<string>(type: "text", nullable: true),
-                    DiceCount = table.Column<int>(type: "integer", nullable: false),
-                    DiceValue = table.Column<int>(type: "integer", nullable: false),
-                    FixedValue = table.Column<int>(type: "integer", nullable: false),
-                    Details = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: false),
-                    Duration = table.Column<string>(type: "text", nullable: true),
-                    RaceTraitId = table.Column<Guid>(type: "uuid", nullable: true)
+                    IsOptional = table.Column<bool>(type: "boolean", nullable: false),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    DisplayOrder = table.Column<int>(type: "integer", nullable: false),
+                    HideInBuilder = table.Column<bool>(type: "boolean", nullable: false),
+                    HideInCharacterSheet = table.Column<bool>(type: "boolean", nullable: false),
+                    HasOptions = table.Column<bool>(type: "boolean", nullable: false),
+                    DisplayRequiredLevel = table.Column<bool>(type: "boolean", nullable: false),
+                    RequiredCharacterLevel = table.Column<int>(type: "integer", nullable: false),
+                    FeatureType = table.Column<string>(type: "text", nullable: false),
+                    FeatureToReplaceId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ClassLevelWhereOptionsArePresented = table.Column<string>(type: "text", nullable: false),
+                    ClassId = table.Column<Guid>(type: "uuid", nullable: true),
+                    SubclassId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Modifiers", x => x.Id);
+                    table.PrimaryKey("PK_ClassFeatures", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Modifiers_RaceTraits_RaceTraitId",
-                        column: x => x.RaceTraitId,
-                        principalTable: "RaceTraits",
+                        name: "FK_ClassFeatures_ClassFeatures_FeatureToReplaceId",
+                        column: x => x.FeatureToReplaceId,
+                        principalTable: "ClassFeatures",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ClassFeatures_Classes_ClassId",
+                        column: x => x.ClassId,
+                        principalTable: "Classes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClassFeatures_Subclasses_SubclassId",
+                        column: x => x.SubclassId,
+                        principalTable: "Subclasses",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClassSubclass",
+                columns: table => new
+                {
+                    AdditionalSpellListsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SubclassId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClassSubclass", x => new { x.AdditionalSpellListsId, x.SubclassId });
+                    table.ForeignKey(
+                        name: "FK_ClassSubclass_Classes_AdditionalSpellListsId",
+                        column: x => x.AdditionalSpellListsId,
+                        principalTable: "Classes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClassSubclass_Subclasses_SubclassId",
+                        column: x => x.SubclassId,
+                        principalTable: "Subclasses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SpellSubclass",
+                columns: table => new
+                {
+                    AdditionalSpellsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SubclassId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SpellSubclass", x => new { x.AdditionalSpellsId, x.SubclassId });
+                    table.ForeignKey(
+                        name: "FK_SpellSubclass_Spells_AdditionalSpellsId",
+                        column: x => x.AdditionalSpellsId,
+                        principalTable: "Spells",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SpellSubclass_Subclasses_SubclassId",
+                        column: x => x.SubclassId,
+                        principalTable: "Subclasses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -942,7 +1299,7 @@ namespace Dragonwright.Database.Migrations
                     EffectByMartialArts = table.Column<bool>(type: "boolean", nullable: false),
                     Range = table.Column<int>(type: "integer", nullable: true),
                     MaximumRange = table.Column<int>(type: "integer", nullable: true),
-                    AreaOfEffect = table.Column<int>(type: "integer", nullable: true),
+                    AreaOfEffect = table.Column<string>(type: "text", nullable: true),
                     AreaSize = table.Column<int>(type: "integer", nullable: false),
                     ActivationTime = table.Column<string>(type: "text", nullable: true),
                     ResetType = table.Column<string>(type: "text", nullable: true),
@@ -1000,6 +1357,7 @@ namespace Dragonwright.Database.Migrations
                     Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     RequiredOptionId = table.Column<Guid>(type: "uuid", nullable: true),
+                    RequirementDescription = table.Column<string>(type: "text", nullable: false),
                     RequiredCharacterLevel = table.Column<int>(type: "integer", nullable: false),
                     IsGranted = table.Column<bool>(type: "boolean", nullable: false)
                 },
@@ -1060,7 +1418,7 @@ namespace Dragonwright.Database.Migrations
                     AbilityScore = table.Column<string>(type: "text", nullable: true),
                     NumberOfUses = table.Column<int>(type: "integer", nullable: false),
                     NumberOfUsesStatModifierOperation = table.Column<string>(type: "text", nullable: true),
-                    NumberOfUsesStatModifierAbility = table.Column<int>(type: "integer", nullable: true),
+                    NumberOfUsesStatModifierAbility = table.Column<string>(type: "text", nullable: true),
                     NumberOfUsesProficiencyBonusIfProficient = table.Column<bool>(type: "boolean", nullable: false),
                     NumberOfUsesProficiencyOperation = table.Column<string>(type: "text", nullable: true),
                     ResetType = table.Column<string>(type: "text", nullable: true),
@@ -1099,33 +1457,253 @@ namespace Dragonwright.Database.Migrations
                         onDelete: ReferentialAction.SetNull);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_Username",
-                table: "Users",
-                column: "Username",
-                unique: true);
+            migrationBuilder.CreateTable(
+                name: "ClassFeatureActions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClassFeatureId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ActionType = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    AbilityScore = table.Column<string>(type: "text", nullable: true),
+                    RequiredCharacterLevel = table.Column<int>(type: "integer", nullable: false),
+                    IsProficient = table.Column<bool>(type: "boolean", nullable: false),
+                    AttackType = table.Column<string>(type: "text", nullable: true),
+                    Save = table.Column<string>(type: "text", nullable: true),
+                    FixedSaveDC = table.Column<int>(type: "integer", nullable: false),
+                    DiceCount = table.Column<int>(type: "integer", nullable: false),
+                    DiceValue = table.Column<int>(type: "integer", nullable: false),
+                    FixedValue = table.Column<int>(type: "integer", nullable: false),
+                    EffectOnMiss = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: false),
+                    EffectOnSaveSuccess = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: false),
+                    EffectOnSaveFailure = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: false),
+                    IsUnarmedWeapon = table.Column<bool>(type: "boolean", nullable: false),
+                    IsNaturalWeapon = table.Column<bool>(type: "boolean", nullable: false),
+                    DamageType = table.Column<string>(type: "text", nullable: true),
+                    DisplayAsAttack = table.Column<bool>(type: "boolean", nullable: false),
+                    EffectByMartialArts = table.Column<bool>(type: "boolean", nullable: false),
+                    Range = table.Column<int>(type: "integer", nullable: true),
+                    MaximumRange = table.Column<int>(type: "integer", nullable: true),
+                    AreaOfEffect = table.Column<string>(type: "text", nullable: true),
+                    AreaSize = table.Column<int>(type: "integer", nullable: false),
+                    ActivationTime = table.Column<string>(type: "text", nullable: true),
+                    ResetType = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClassFeatureActions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClassFeatureActions_ClassFeatures_ClassFeatureId",
+                        column: x => x.ClassFeatureId,
+                        principalTable: "ClassFeatures",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_StoredFiles_StoragePath",
-                table: "StoredFiles",
-                column: "StoragePath",
-                unique: true);
+            migrationBuilder.CreateTable(
+                name: "ClassFeatureCreatures",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClassFeatureId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatureGroup = table.Column<string>(type: "text", nullable: false),
+                    ExistingCreatureId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatureType = table.Column<int>(type: "integer", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    MaxChallengeRating = table.Column<float>(type: "real", nullable: true),
+                    ChallengeRatingLevelDivisor = table.Column<int>(type: "integer", nullable: true),
+                    RestrictedMovementTypes = table.Column<string>(type: "text", nullable: false),
+                    CreatureSizes = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClassFeatureCreatures", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClassFeatureCreatures_ClassFeatures_ClassFeatureId",
+                        column: x => x.ClassFeatureId,
+                        principalTable: "ClassFeatures",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClassFeatureCreatures_Creatures_ExistingCreatureId",
+                        column: x => x.ExistingCreatureId,
+                        principalTable: "Creatures",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_RefreshTokens_Token",
-                table: "RefreshTokens",
-                column: "Token",
-                unique: true);
+            migrationBuilder.CreateTable(
+                name: "ClassFeatureLevelScales",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClassFeatureId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Description = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: false),
+                    ClassLevel = table.Column<int>(type: "integer", nullable: false),
+                    DiceCount = table.Column<int>(type: "integer", nullable: false),
+                    DiceValue = table.Column<int>(type: "integer", nullable: false),
+                    FixedValue = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClassFeatureLevelScales", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClassFeatureLevelScales_ClassFeatures_ClassFeatureId",
+                        column: x => x.ClassFeatureId,
+                        principalTable: "ClassFeatures",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_RefreshTokens_TokenFamily",
-                table: "RefreshTokens",
-                column: "TokenFamily");
+            migrationBuilder.CreateTable(
+                name: "ClassFeatureOptions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClassFeatureId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    RequiredOptionId = table.Column<Guid>(type: "uuid", nullable: true),
+                    RequirementDescription = table.Column<string>(type: "text", nullable: false),
+                    RequiredCharacterLevel = table.Column<int>(type: "integer", nullable: false),
+                    IsGranted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClassFeatureOptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClassFeatureOptions_ClassFeatureOptions_RequiredOptionId",
+                        column: x => x.RequiredOptionId,
+                        principalTable: "ClassFeatureOptions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ClassFeatureOptions_ClassFeatures_ClassFeatureId",
+                        column: x => x.ClassFeatureId,
+                        principalTable: "ClassFeatures",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_RefreshTokens_UserId_DeviceId",
-                table: "RefreshTokens",
-                columns: new[] { "UserId", "DeviceId" });
+            migrationBuilder.CreateTable(
+                name: "ClassFeatureSpell",
+                columns: table => new
+                {
+                    ClassFeatureId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SpellListId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClassFeatureSpell", x => new { x.ClassFeatureId, x.SpellListId });
+                    table.ForeignKey(
+                        name: "FK_ClassFeatureSpell_ClassFeatures_ClassFeatureId",
+                        column: x => x.ClassFeatureId,
+                        principalTable: "ClassFeatures",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClassFeatureSpell_Spells_SpellListId",
+                        column: x => x.SpellListId,
+                        principalTable: "Spells",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClassFeatureSpells",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClassFeatureId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SpellId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ClassId = table.Column<Guid>(type: "uuid", nullable: true),
+                    SpellLevels = table.Column<string>(type: "text", nullable: false),
+                    SpellSchools = table.Column<string>(type: "text", nullable: false),
+                    AttackTypes = table.Column<string>(type: "text", nullable: false),
+                    LevelDivisor = table.Column<int>(type: "integer", nullable: false),
+                    OnlyRitualSpells = table.Column<bool>(type: "boolean", nullable: false),
+                    AbilityScore = table.Column<string>(type: "text", nullable: true),
+                    NumberOfUses = table.Column<int>(type: "integer", nullable: false),
+                    NumberOfUsesStatModifierOperation = table.Column<string>(type: "text", nullable: true),
+                    NumberOfUsesStatModifierAbility = table.Column<string>(type: "text", nullable: true),
+                    NumberOfUsesProficiencyBonusIfProficient = table.Column<bool>(type: "boolean", nullable: false),
+                    NumberOfUsesProficiencyOperation = table.Column<string>(type: "text", nullable: true),
+                    ResetType = table.Column<string>(type: "text", nullable: true),
+                    CastAtLevel = table.Column<int>(type: "integer", nullable: true),
+                    CastingTime = table.Column<string>(type: "text", nullable: true),
+                    ActivationTimeUnit = table.Column<string>(type: "text", nullable: true),
+                    Range = table.Column<int>(type: "integer", nullable: true),
+                    AdditionalDescription = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: false),
+                    Restrictions = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    ConsumesSpellSlot = table.Column<bool>(type: "boolean", nullable: false),
+                    CountsAsKnownSpell = table.Column<bool>(type: "boolean", nullable: false),
+                    AlwaysPrepared = table.Column<bool>(type: "boolean", nullable: false),
+                    AvailableAtCharacterLevel = table.Column<int>(type: "integer", nullable: false),
+                    IsInfinite = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClassFeatureSpells", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClassFeatureSpells_ClassFeatures_ClassFeatureId",
+                        column: x => x.ClassFeatureId,
+                        principalTable: "ClassFeatures",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClassFeatureSpells_Classes_ClassId",
+                        column: x => x.ClassId,
+                        principalTable: "Classes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_ClassFeatureSpells_Spells_SpellId",
+                        column: x => x.SpellId,
+                        principalTable: "Spells",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Modifiers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false),
+                    Subtype = table.Column<string>(type: "text", nullable: true),
+                    AbilityScore = table.Column<string>(type: "text", nullable: true),
+                    DiceCount = table.Column<int>(type: "integer", nullable: false),
+                    DiceValue = table.Column<int>(type: "integer", nullable: false),
+                    FixedValue = table.Column<int>(type: "integer", nullable: false),
+                    Details = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: false),
+                    Duration = table.Column<string>(type: "text", nullable: true),
+                    ClassFeatureId = table.Column<Guid>(type: "uuid", nullable: true),
+                    FeatId = table.Column<Guid>(type: "uuid", nullable: true),
+                    RaceTraitId = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Modifiers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Modifiers_ClassFeatures_ClassFeatureId",
+                        column: x => x.ClassFeatureId,
+                        principalTable: "ClassFeatures",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Modifiers_Feats_FeatId",
+                        column: x => x.FeatId,
+                        principalTable: "Feats",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Modifiers_RaceTraits_RaceTraitId",
+                        column: x => x.RaceTraitId,
+                        principalTable: "RaceTraits",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BackgroundFeat_GrantedFeatsId",
@@ -1250,9 +1828,19 @@ namespace Dragonwright.Database.Migrations
                 column: "CharacterId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CharacterSpells_SourceClassId",
+                table: "CharacterSpells",
+                column: "SourceClassId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CharacterSpells_SpellId",
                 table: "CharacterSpells",
                 column: "SpellId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Classes_ImageId",
+                table: "Classes",
+                column: "ImageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Classes_SourceCreatorId",
@@ -1260,9 +1848,69 @@ namespace Dragonwright.Database.Migrations
                 column: "SourceCreatorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ClassFeatureActions_ClassFeatureId",
+                table: "ClassFeatureActions",
+                column: "ClassFeatureId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassFeatureCreatures_ClassFeatureId",
+                table: "ClassFeatureCreatures",
+                column: "ClassFeatureId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassFeatureCreatures_ExistingCreatureId",
+                table: "ClassFeatureCreatures",
+                column: "ExistingCreatureId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassFeatureLevelScales_ClassFeatureId",
+                table: "ClassFeatureLevelScales",
+                column: "ClassFeatureId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassFeatureOptions_ClassFeatureId",
+                table: "ClassFeatureOptions",
+                column: "ClassFeatureId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassFeatureOptions_RequiredOptionId",
+                table: "ClassFeatureOptions",
+                column: "RequiredOptionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ClassFeatures_ClassId",
                 table: "ClassFeatures",
                 column: "ClassId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassFeatures_FeatureToReplaceId",
+                table: "ClassFeatures",
+                column: "FeatureToReplaceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassFeatures_SubclassId",
+                table: "ClassFeatures",
+                column: "SubclassId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassFeatureSpell_SpellListId",
+                table: "ClassFeatureSpell",
+                column: "SpellListId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassFeatureSpells_ClassFeatureId",
+                table: "ClassFeatureSpells",
+                column: "ClassFeatureId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassFeatureSpells_ClassId",
+                table: "ClassFeatureSpells",
+                column: "ClassId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassFeatureSpells_SpellId",
+                table: "ClassFeatureSpells",
+                column: "SpellId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClassItem_SpecificWeaponProficienciesId",
@@ -1275,9 +1923,49 @@ namespace Dragonwright.Database.Migrations
                 column: "SpellListId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ClassSubclass_SubclassId",
+                table: "ClassSubclass",
+                column: "SubclassId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FeatActions_FeatId",
+                table: "FeatActions",
+                column: "FeatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FeatOptions_FeatId",
+                table: "FeatOptions",
+                column: "FeatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FeatOptions_RequiredOptionId",
+                table: "FeatOptions",
+                column: "RequiredOptionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Feats_SourceCreatorId",
                 table: "Feats",
                 column: "SourceCreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FeatSpell_SpellListId",
+                table: "FeatSpell",
+                column: "SpellListId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FeatSpells_ClassId",
+                table: "FeatSpells",
+                column: "ClassId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FeatSpells_FeatId",
+                table: "FeatSpells",
+                column: "FeatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FeatSpells_SpellId",
+                table: "FeatSpells",
+                column: "SpellId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Items_SourceCreatorId",
@@ -1285,9 +1973,24 @@ namespace Dragonwright.Database.Migrations
                 column: "SourceCreatorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Modifiers_ClassFeatureId",
+                table: "Modifiers",
+                column: "ClassFeatureId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Modifiers_FeatId",
+                table: "Modifiers",
+                column: "FeatId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Modifiers_RaceTraitId",
                 table: "Modifiers",
                 column: "RaceTraitId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Races_ImageId",
+                table: "Races",
+                column: "ImageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Races_SourceCreatorId",
@@ -1350,9 +2053,30 @@ namespace Dragonwright.Database.Migrations
                 column: "SpellId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_Token",
+                table: "RefreshTokens",
+                column: "Token",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_TokenFamily",
+                table: "RefreshTokens",
+                column: "TokenFamily");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_UserId_DeviceId",
+                table: "RefreshTokens",
+                columns: new[] { "UserId", "DeviceId" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Spells_SourceCreatorId",
                 table: "Spells",
                 column: "SourceCreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SpellSubclass_SubclassId",
+                table: "SpellSubclass",
+                column: "SubclassId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StartItemChoices_BackgroundId",
@@ -1370,31 +2094,41 @@ namespace Dragonwright.Database.Migrations
                 column: "ChoiceId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_StoredFiles_StoragePath",
+                table: "StoredFiles",
+                column: "StoragePath",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Subclasses_ClassId",
                 table: "Subclasses",
                 column: "ClassId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subclasses_ImageId",
+                table: "Subclasses",
+                column: "ImageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Subclasses_SourceCreatorId",
                 table: "Subclasses",
                 column: "SourceCreatorId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Users_StoredFiles_AvatarId",
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_AvatarId",
                 table: "Users",
-                column: "AvatarId",
-                principalTable: "StoredFiles",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.SetNull);
+                column: "AvatarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Username",
+                table: "Users",
+                column: "Username",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Users_StoredFiles_AvatarId",
-                table: "Users");
-
             migrationBuilder.DropTable(
                 name: "BackgroundFeat");
 
@@ -1441,13 +2175,46 @@ namespace Dragonwright.Database.Migrations
                 name: "CharacterSpells");
 
             migrationBuilder.DropTable(
-                name: "ClassFeatures");
+                name: "ClassFeatureActions");
+
+            migrationBuilder.DropTable(
+                name: "ClassFeatureCreatures");
+
+            migrationBuilder.DropTable(
+                name: "ClassFeatureLevelScales");
+
+            migrationBuilder.DropTable(
+                name: "ClassFeatureOptions");
+
+            migrationBuilder.DropTable(
+                name: "ClassFeatureSpell");
+
+            migrationBuilder.DropTable(
+                name: "ClassFeatureSpells");
 
             migrationBuilder.DropTable(
                 name: "ClassItem");
 
             migrationBuilder.DropTable(
                 name: "ClassSpell");
+
+            migrationBuilder.DropTable(
+                name: "ClassSubclass");
+
+            migrationBuilder.DropTable(
+                name: "FeatActions");
+
+            migrationBuilder.DropTable(
+                name: "FeatOptions");
+
+            migrationBuilder.DropTable(
+                name: "FeatSpell");
+
+            migrationBuilder.DropTable(
+                name: "FeatSpells");
+
+            migrationBuilder.DropTable(
+                name: "Languages");
 
             migrationBuilder.DropTable(
                 name: "Modifiers");
@@ -1468,19 +2235,25 @@ namespace Dragonwright.Database.Migrations
                 name: "RaceTraitSpells");
 
             migrationBuilder.DropTable(
+                name: "RefreshTokens");
+
+            migrationBuilder.DropTable(
+                name: "SpellSubclass");
+
+            migrationBuilder.DropTable(
                 name: "StartItems");
-
-            migrationBuilder.DropTable(
-                name: "Subclasses");
-
-            migrationBuilder.DropTable(
-                name: "Feats");
 
             migrationBuilder.DropTable(
                 name: "Characters");
 
             migrationBuilder.DropTable(
                 name: "Items");
+
+            migrationBuilder.DropTable(
+                name: "ClassFeatures");
+
+            migrationBuilder.DropTable(
+                name: "Feats");
 
             migrationBuilder.DropTable(
                 name: "Creatures");
@@ -1495,6 +2268,9 @@ namespace Dragonwright.Database.Migrations
                 name: "StartItemChoices");
 
             migrationBuilder.DropTable(
+                name: "Subclasses");
+
+            migrationBuilder.DropTable(
                 name: "Races");
 
             migrationBuilder.DropTable(
@@ -1503,57 +2279,11 @@ namespace Dragonwright.Database.Migrations
             migrationBuilder.DropTable(
                 name: "Classes");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Users_Username",
-                table: "Users");
+            migrationBuilder.DropTable(
+                name: "Users");
 
-            migrationBuilder.DropIndex(
-                name: "IX_StoredFiles_StoragePath",
-                table: "StoredFiles");
-
-            migrationBuilder.DropIndex(
-                name: "IX_RefreshTokens_Token",
-                table: "RefreshTokens");
-
-            migrationBuilder.DropIndex(
-                name: "IX_RefreshTokens_TokenFamily",
-                table: "RefreshTokens");
-
-            migrationBuilder.DropIndex(
-                name: "IX_RefreshTokens_UserId_DeviceId",
-                table: "RefreshTokens");
-
-            migrationBuilder.DropColumn(
-                name: "UserRole",
-                table: "Users");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Username",
-                table: "Users",
-                type: "text",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "character varying(50)",
-                oldMaxLength: 50);
-
-            migrationBuilder.AddColumn<int>(
-                name: "Role",
-                table: "Users",
-                type: "integer",
-                nullable: false,
-                defaultValue: 0);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RefreshTokens_UserId",
-                table: "RefreshTokens",
-                column: "UserId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Users_StoredFiles_AvatarId",
-                table: "Users",
-                column: "AvatarId",
-                principalTable: "StoredFiles",
-                principalColumn: "Id");
+            migrationBuilder.DropTable(
+                name: "StoredFiles");
         }
     }
 }
