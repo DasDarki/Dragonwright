@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useContentForm } from '@/composables/useContentForm'
+import { useToast } from '@/composables/useToast'
 import { getRacesId, postRaces, putRacesId, postRacesRaceIdTraits, putRacesRaceIdTraitsId, deleteRacesRaceIdTraitsId } from '@/api'
 import type { Race, RaceTrait } from '@/api'
 import ContentFormLayout from '@/components/content/ContentFormLayout.vue'
@@ -13,10 +14,12 @@ import { sourceOptions, creatureTypeOptions, featureTypeOptions, featureTypeLabe
 import { commonTips, raceTips } from '@/content/tips'
 
 const props = defineProps<{ id?: string }>()
+const { showToast } = useToast()
 
-const originalTraits = ref<RaceTrait[]>([])
+// Pending traits for create mode
+const pendingTraits = ref<RaceTrait[]>([])
 
-const { form, loading, saving, isEdit, save, cancel } = useContentForm<Race>({
+const { form, loading, saving, isEdit, entityId, save, cancel } = useContentForm<Race>({
   typeLabel: 'Race',
   listRoute: '/content/races',
   editRoute: '/content/races',
@@ -27,42 +30,25 @@ const { form, loading, saving, isEdit, save, cancel } = useContentForm<Race>({
     type: 9,
     traits: [],
   }),
-  getFn: async (id) => {
-    const res = await getRacesId(id)
-    const data = (res as any).data ?? res
-    originalTraits.value = (data.traits ?? []).map((t: RaceTrait) => ({ ...t }))
-    return res
-  },
+  getFn: getRacesId,
   createFn: postRaces,
   updateFn: putRacesId,
   onAfterSave: async (raceId) => {
-    const current = form.value.traits ?? []
-    const original = originalTraits.value
-
-    // Delete removed traits
-    for (const orig of original) {
-      if (orig.id && !current.some(t => t.id === orig.id)) {
-        await deleteRacesRaceIdTraitsId(raceId, String(orig.id))
-      }
+    // Save pending traits after parent creation
+    for (const trait of pendingTraits.value) {
+      const { id: _id, ...payload } = trait
+      await postRacesRaceIdTraits(raceId, payload as RaceTrait)
     }
-
-    // Create or update traits
-    for (const trait of current) {
-      if (trait.id && original.some(o => o.id === trait.id)) {
-        await putRacesRaceIdTraitsId(raceId, String(trait.id), trait)
-      } else {
-        await postRacesRaceIdTraits(raceId, trait)
-      }
-    }
-
-    // Refresh original snapshot
-    originalTraits.value = current.map(t => ({ ...t }))
+    pendingTraits.value = []
   },
 })
+
+// ─── Traits ─────────────────────────────────────────────────
 
 const traitModalOpen = ref(false)
 const traitEditIndex = ref<number | null>(null)
 const traitForm = ref<RaceTrait>(defaultTrait())
+const traitSaving = ref(false)
 
 function defaultTrait(): RaceTrait {
   return { name: '', description: '', displayOrder: 0, requiredCharacterLevel: 1, featureType: 0 }
@@ -81,17 +67,60 @@ function openEditTrait(index: number) {
   traitModalOpen.value = true
 }
 
-function saveTrait() {
+async function saveTrait() {
   if (!form.value.traits) form.value.traits = []
-  if (traitEditIndex.value !== null) {
-    form.value.traits[traitEditIndex.value] = { ...traitForm.value }
+
+  if (isEdit.value) {
+    // Edit mode: save to backend immediately
+    traitSaving.value = true
+    try {
+      if (traitEditIndex.value !== null) {
+        const existing = form.value.traits[traitEditIndex.value]!
+        if (existing.id) {
+          await putRacesRaceIdTraitsId(entityId.value!, String(existing.id), traitForm.value)
+        }
+        form.value.traits[traitEditIndex.value] = { ...traitForm.value }
+      } else {
+        // Strip id when creating new - backend assigns it
+        const { id: _id, ...payload } = traitForm.value
+        const res = await postRacesRaceIdTraits(entityId.value!, payload as RaceTrait)
+        const data = (res as any).data ?? res
+        form.value.traits.push({ ...traitForm.value, id: data.id })
+      }
+      showToast({ variant: 'success', message: 'Trait saved.' })
+    } catch {
+      showToast({ variant: 'danger', message: 'Failed to save trait.' })
+    } finally {
+      traitSaving.value = false
+    }
   } else {
-    form.value.traits.push({ ...traitForm.value })
+    // Create mode: store locally until parent is saved
+    if (traitEditIndex.value !== null) {
+      pendingTraits.value[traitEditIndex.value] = { ...traitForm.value }
+      form.value.traits[traitEditIndex.value] = { ...traitForm.value }
+    } else {
+      pendingTraits.value.push({ ...traitForm.value })
+      form.value.traits.push({ ...traitForm.value })
+    }
   }
   traitModalOpen.value = false
 }
 
-function removeTrait(index: number) {
+async function removeTrait(index: number) {
+  const trait = form.value.traits?.[index]
+  if (!trait) return
+
+  if (isEdit.value && trait.id) {
+    try {
+      await deleteRacesRaceIdTraitsId(entityId.value!, String(trait.id))
+      showToast({ variant: 'success', message: 'Trait deleted.' })
+    } catch {
+      showToast({ variant: 'danger', message: 'Failed to delete trait.' })
+      return
+    }
+  } else if (!isEdit.value) {
+    pendingTraits.value.splice(index, 1)
+  }
   form.value.traits?.splice(index, 1)
 }
 </script>

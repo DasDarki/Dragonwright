@@ -10,7 +10,7 @@ public sealed class RaceTraitCreature : IEntity<RaceTraitCreature>
     public Guid RaceTraitId { get; set; }
     
     [JsonIgnore]
-    public RaceTrait RaceTrait { get; set; } = null!;
+    public RaceTrait? RaceTrait { get; set; }
 
     /// <summary>
     /// Defines a group which this creature belongs to or is used for (e.g. "Wild Shape").

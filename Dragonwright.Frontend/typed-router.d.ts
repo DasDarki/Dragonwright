@@ -86,6 +86,20 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/content/feats/[id]': RouteRecordInfo<
+      '/content/feats/[id]',
+      '/content/feats/:id',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
+    '/content/feats/new': RouteRecordInfo<
+      '/content/feats/new',
+      '/content/feats/new',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/content/items/': RouteRecordInfo<
       '/content/items/',
       '/content/items',
@@ -241,6 +255,18 @@ declare module 'vue-router/auto-routes' {
     'src/pages/content/feats/index.vue': {
       routes:
         | '/content/feats/'
+      views:
+        | never
+    }
+    'src/pages/content/feats/[id].vue': {
+      routes:
+        | '/content/feats/[id]'
+      views:
+        | never
+    }
+    'src/pages/content/feats/new.vue': {
+      routes:
+        | '/content/feats/new'
       views:
         | never
     }

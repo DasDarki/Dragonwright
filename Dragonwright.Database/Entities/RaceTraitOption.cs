@@ -10,7 +10,7 @@ public sealed class RaceTraitOption : IEntity<RaceTraitOption>
     public Guid RaceTraitId { get; set; }
     
     [JsonIgnore]
-    public RaceTrait RaceTrait { get; set; } = null!;
+    public RaceTrait? RaceTrait { get; set; }
     
     [Required]
     [MaxLength(200)]

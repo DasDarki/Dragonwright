@@ -11,7 +11,7 @@ public sealed class RaceTraitSpell : IEntity<RaceTraitSpell>
     public Guid RaceTraitId { get; set; }
     
     [JsonIgnore]
-    public RaceTrait RaceTrait { get; set; } = null!;
+    public RaceTrait? RaceTrait { get; set; }
     
     public Guid? SpellId { get; set; }
     

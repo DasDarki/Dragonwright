@@ -11,7 +11,7 @@ public sealed class FeatAction : IEntity<FeatAction>
     public Guid FeatId { get; set; }
 
     [JsonIgnore]
-    public Feat Feat { get; set; } = null!;
+    public Feat? Feat { get; set; }
 
     public ActionType ActionType { get; set; }
 

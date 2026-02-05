@@ -1,4 +1,4 @@
-using Dragonwright.Database.Entities.Models;
+﻿using Dragonwright.Database.Entities.Models;
 using System.Text.Json.Serialization;
 
 namespace Dragonwright.Database.Entities;
@@ -11,7 +11,7 @@ public sealed class ClassFeatureAction : IEntity<ClassFeatureAction>
     public Guid ClassFeatureId { get; set; }
     
     [JsonIgnore]
-    public ClassFeature ClassFeature { get; set; } = null!;
+    public ClassFeature? ClassFeature { get; set; }
     
     public ActionType ActionType { get; set; }
     

@@ -25,6 +25,11 @@ public sealed class Modifier : IEntity<Modifier>
     
     public Time? Duration { get; set; }
     
+    /// <summary>
+    /// Whether this modifier should be applied if this modifier is added through multiclassing.
+    /// </summary>
+    public bool ApplyOnMulticlass { get; set; }
+    
     public void Configure(EntityTypeBuilder<Modifier> builder)
     {
         builder.Property(m => m.Type).HasConversion<string>();

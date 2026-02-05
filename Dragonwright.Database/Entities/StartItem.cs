@@ -10,7 +10,7 @@ public sealed class StartItem : IEntity<StartItem>
     public Guid ChoiceId { get; set; }
     
     [JsonIgnore]
-    public StartItemChoice Choice { get; set; } = null!;
+    public StartItemChoice? Choice { get; set; }
     
     public StartItemType Type { get; set; }
     

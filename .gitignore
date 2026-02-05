@@ -6,6 +6,7 @@ riderModule.iml
 Logs/
 .claude/
 .idea/
+.srd/
 
 appsettings.local.json
 Dragonwright.sln.Settings.user

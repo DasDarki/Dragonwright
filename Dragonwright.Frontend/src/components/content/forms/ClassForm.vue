@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useContentForm } from '@/composables/useContentForm'
+import { useToast } from '@/composables/useToast'
 import { getClassesId, postClasses, putClassesId, postClassesClassIdFeatures, putClassesClassIdFeaturesId, deleteClassesClassIdFeaturesId, postClassesClassIdSubclasses, putClassesClassIdSubclassesId, deleteClassesClassIdSubclassesId } from '@/api'
 import type { Class, ClassFeature, Subclass } from '@/api'
 import ContentFormLayout from '@/components/content/ContentFormLayout.vue'
@@ -19,11 +20,13 @@ import {
 import { commonTips, classTips } from '@/content/tips'
 
 const props = defineProps<{ id?: string }>()
+const { showToast } = useToast()
 
-const originalFeatures = ref<ClassFeature[]>([])
-const originalSubclasses = ref<Subclass[]>([])
+// Pending sub-entities for create mode (saved when parent is created)
+const pendingFeatures = ref<ClassFeature[]>([])
+const pendingSubclasses = ref<Subclass[]>([])
 
-const { form, loading, saving, isEdit, save, cancel } = useContentForm<Class>({
+const { form, loading, saving, isEdit, entityId, save, cancel } = useContentForm<Class>({
   typeLabel: 'Class',
   listRoute: '/content/classes',
   editRoute: '/content/classes',
@@ -45,53 +48,30 @@ const { form, loading, saving, isEdit, save, cancel } = useContentForm<Class>({
     features: [],
     subclasses: [],
   }),
-  getFn: async (id) => {
-    const res = await getClassesId(id)
-    const data = (res as any).data ?? res
-    originalFeatures.value = (data.features ?? []).map((f: ClassFeature) => ({ ...f }))
-    originalSubclasses.value = (data.subclasses ?? []).map((s: Subclass) => ({ ...s }))
-    return res
-  },
+  getFn: getClassesId,
   createFn: postClasses,
   updateFn: putClassesId,
   onAfterSave: async (classId) => {
-    const currentFeatures = form.value.features ?? []
-    const currentSubclasses = form.value.subclasses ?? []
-
-    for (const orig of originalFeatures.value) {
-      if (orig.id && !currentFeatures.some(f => f.id === orig.id)) {
-        await deleteClassesClassIdFeaturesId(classId, String(orig.id))
-      }
+    // Save pending sub-entities after parent creation
+    for (const feature of pendingFeatures.value) {
+      const { id: _id, ...payload } = feature
+      await postClassesClassIdFeatures(classId, payload as ClassFeature)
     }
-    for (const feature of currentFeatures) {
-      if (feature.id && originalFeatures.value.some(o => o.id === feature.id)) {
-        await putClassesClassIdFeaturesId(classId, String(feature.id), feature)
-      } else {
-        await postClassesClassIdFeatures(classId, feature)
-      }
+    for (const sub of pendingSubclasses.value) {
+      const { id: _id, ...rest } = sub
+      await postClassesClassIdSubclasses(classId, { ...rest, classId } as Subclass)
     }
-
-    for (const orig of originalSubclasses.value) {
-      if (orig.id && !currentSubclasses.some(s => s.id === orig.id)) {
-        await deleteClassesClassIdSubclassesId(classId, String(orig.id))
-      }
-    }
-    for (const sub of currentSubclasses) {
-      if (sub.id && originalSubclasses.value.some(o => o.id === sub.id)) {
-        await putClassesClassIdSubclassesId(classId, String(sub.id), sub)
-      } else {
-        await postClassesClassIdSubclasses(classId, sub)
-      }
-    }
-
-    originalFeatures.value = currentFeatures.map(f => ({ ...f }))
-    originalSubclasses.value = currentSubclasses.map(s => ({ ...s }))
+    pendingFeatures.value = []
+    pendingSubclasses.value = []
   },
 })
+
+// ─── Features ───────────────────────────────────────────────
 
 const featureModalOpen = ref(false)
 const featureEditIndex = ref<number | null>(null)
 const featureForm = ref<ClassFeature>(defaultFeature())
+const featureSaving = ref(false)
 
 function defaultFeature(): ClassFeature {
   return {
@@ -120,23 +100,69 @@ function openEditFeature(index: number) {
   featureModalOpen.value = true
 }
 
-function saveFeature() {
+async function saveFeature() {
   if (!form.value.features) form.value.features = []
-  if (featureEditIndex.value !== null) {
-    form.value.features[featureEditIndex.value] = { ...featureForm.value }
+
+  if (isEdit.value) {
+    // Edit mode: save to backend immediately
+    featureSaving.value = true
+    try {
+      if (featureEditIndex.value !== null) {
+        const existing = form.value.features[featureEditIndex.value]!
+        if (existing.id) {
+          await putClassesClassIdFeaturesId(entityId.value!, String(existing.id), featureForm.value)
+        }
+        form.value.features[featureEditIndex.value] = { ...featureForm.value }
+      } else {
+        // Strip id when creating new - backend assigns it
+        const { id: _id, ...payload } = featureForm.value
+        const res = await postClassesClassIdFeatures(entityId.value!, payload as ClassFeature)
+        const data = (res as any).data ?? res
+        form.value.features.push({ ...featureForm.value, id: data.id })
+      }
+      showToast({ variant: 'success', message: 'Feature saved.' })
+    } catch {
+      showToast({ variant: 'danger', message: 'Failed to save feature.' })
+    } finally {
+      featureSaving.value = false
+    }
   } else {
-    form.value.features.push({ ...featureForm.value })
+    // Create mode: store locally until parent is saved
+    if (featureEditIndex.value !== null) {
+      pendingFeatures.value[featureEditIndex.value] = { ...featureForm.value }
+      form.value.features[featureEditIndex.value] = { ...featureForm.value }
+    } else {
+      pendingFeatures.value.push({ ...featureForm.value })
+      form.value.features.push({ ...featureForm.value })
+    }
   }
   featureModalOpen.value = false
 }
 
-function removeFeature(index: number) {
+async function removeFeature(index: number) {
+  const feature = form.value.features?.[index]
+  if (!feature) return
+
+  if (isEdit.value && feature.id) {
+    try {
+      await deleteClassesClassIdFeaturesId(entityId.value!, String(feature.id))
+      showToast({ variant: 'success', message: 'Feature deleted.' })
+    } catch {
+      showToast({ variant: 'danger', message: 'Failed to delete feature.' })
+      return
+    }
+  } else if (!isEdit.value) {
+    pendingFeatures.value.splice(index, 1)
+  }
   form.value.features?.splice(index, 1)
 }
+
+// ─── Subclasses ─────────────────────────────────────────────
 
 const subclassModalOpen = ref(false)
 const subclassEditIndex = ref<number | null>(null)
 const subclassForm = ref<Subclass>(defaultSubclass())
+const subclassSaving = ref(false)
 
 function defaultSubclass(): Subclass {
   return {
@@ -163,17 +189,62 @@ function openEditSubclass(index: number) {
   subclassModalOpen.value = true
 }
 
-function saveSubclass() {
+async function saveSubclass() {
   if (!form.value.subclasses) form.value.subclasses = []
-  if (subclassEditIndex.value !== null) {
-    form.value.subclasses[subclassEditIndex.value] = { ...subclassForm.value }
+
+  if (isEdit.value) {
+    // Edit mode: save to backend immediately
+    subclassSaving.value = true
+    try {
+      if (subclassEditIndex.value !== null) {
+        const existing = form.value.subclasses[subclassEditIndex.value]!
+        if (existing.id) {
+          const payload = { ...subclassForm.value, classId: entityId.value }
+          await putClassesClassIdSubclassesId(entityId.value!, String(existing.id), payload)
+        }
+        form.value.subclasses[subclassEditIndex.value] = { ...subclassForm.value }
+      } else {
+        // Strip id when creating new - backend assigns it
+        const { id: _id, ...rest } = subclassForm.value
+        const payload = { ...rest, classId: entityId.value }
+        const res = await postClassesClassIdSubclasses(entityId.value!, payload as Subclass)
+        const data = (res as any).data ?? res
+        form.value.subclasses.push({ ...subclassForm.value, id: data.id })
+      }
+      showToast({ variant: 'success', message: 'Subclass saved.' })
+    } catch {
+      showToast({ variant: 'danger', message: 'Failed to save subclass.' })
+    } finally {
+      subclassSaving.value = false
+    }
   } else {
-    form.value.subclasses.push({ ...subclassForm.value })
+    // Create mode: store locally until parent is saved
+    if (subclassEditIndex.value !== null) {
+      pendingSubclasses.value[subclassEditIndex.value] = { ...subclassForm.value }
+      form.value.subclasses[subclassEditIndex.value] = { ...subclassForm.value }
+    } else {
+      pendingSubclasses.value.push({ ...subclassForm.value })
+      form.value.subclasses.push({ ...subclassForm.value })
+    }
   }
   subclassModalOpen.value = false
 }
 
-function removeSubclass(index: number) {
+async function removeSubclass(index: number) {
+  const subclass = form.value.subclasses?.[index]
+  if (!subclass) return
+
+  if (isEdit.value && subclass.id) {
+    try {
+      await deleteClassesClassIdSubclassesId(entityId.value!, String(subclass.id))
+      showToast({ variant: 'success', message: 'Subclass deleted.' })
+    } catch {
+      showToast({ variant: 'danger', message: 'Failed to delete subclass.' })
+      return
+    }
+  } else if (!isEdit.value) {
+    pendingSubclasses.value.splice(index, 1)
+  }
   form.value.subclasses?.splice(index, 1)
 }
 </script>

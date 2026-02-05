@@ -10,7 +10,7 @@ public sealed class FeatOption : IEntity<FeatOption>
     public Guid FeatId { get; set; }
 
     [JsonIgnore]
-    public Feat Feat { get; set; } = null!;
+    public Feat? Feat { get; set; }
 
     [Required]
     [MaxLength(200)]

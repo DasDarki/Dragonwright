@@ -11,7 +11,7 @@ public sealed class ClassFeatureSpell : IEntity<ClassFeatureSpell>
     public Guid ClassFeatureId { get; set; }
     
     [JsonIgnore]
-    public ClassFeature ClassFeature { get; set; } = null!;
+    public ClassFeature? ClassFeature { get; set; }
     
     public Guid? SpellId { get; set; }
     

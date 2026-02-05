@@ -6,6 +6,7 @@ import {
   getItemsId, postItems, putItemsId,
   getClassesId, postClasses, putClassesId,
   getRacesId, postRaces, putRacesId,
+  getFeatsId, postFeats, putFeatsId,
   getBackgroundsId, postBackgrounds, putBackgroundsId,
   getLanguagesId, postLanguages, putLanguagesId,
 } from '@/api'
@@ -99,6 +100,9 @@ export const contentTypes: ContentTypeDefinition[] = [
     teamOnly: false,
     fetchFn: (p) => getFeats(p),
     deleteFn: (id) => deleteFeatsId(id),
+    getFn: (id) => getFeatsId(id),
+    createFn: (data) => postFeats(data),
+    updateFn: (id, data) => putFeatsId(id, data),
   },
   {
     key: 'backgrounds',

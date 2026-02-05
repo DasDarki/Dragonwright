@@ -443,6 +443,55 @@ export const languageTips = {
   } satisfies FieldTip,
 }
 
+export const featTips = {
+  featLevel: {
+    title: 'Feat Level',
+    body: 'Determines when the feat becomes available. Level 1 feats can be taken at character creation. Level 4+ feats require higher character levels.',
+    examples: ['1 (Origin feats in 2024 rules)', '4 (General feats)', '8 (Epic Boons in older editions)'],
+  } satisfies FieldTip,
+
+  isRepeatable: {
+    title: 'Repeatable',
+    body: 'If checked, this feat can be taken multiple times. Each time grants the benefits again (unless stated otherwise). Most feats cannot be repeated.',
+  } satisfies FieldTip,
+
+  prerequisiteDescription: {
+    title: 'Prerequisite Description',
+    body: 'A text description of any requirements to take this feat. This is displayed to players and can describe complex requirements not captured by the other fields.',
+    examples: ['Proficiency with a martial weapon', 'The ability to cast at least one spell', 'Dexterity 13 or higher'],
+  } satisfies FieldTip,
+
+  prerequisiteAbilityScore: {
+    title: 'Prerequisite Ability',
+    body: 'Some feats require a minimum ability score. Select the ability that must meet the minimum.',
+  } satisfies FieldTip,
+
+  prerequisiteAbilityScoreMinimum: {
+    title: 'Prerequisite Minimum',
+    body: 'The minimum score required in the selected ability. Usually 13 or 15.',
+  } satisfies FieldTip,
+
+  prerequisiteSpellcasting: {
+    title: 'Requires Spellcasting',
+    body: 'If checked, the character must be able to cast at least one spell to take this feat.',
+  } satisfies FieldTip,
+
+  abilityScoreOptions: {
+    title: 'Ability Score Options',
+    body: 'Which ability scores can be increased by this feat. The player chooses one from the selected options.',
+  } satisfies FieldTip,
+
+  abilityScoreIncrease: {
+    title: 'Ability Score Increase',
+    body: 'The amount the chosen ability score increases. Usually +1. The score cannot exceed 20 through this increase.',
+  } satisfies FieldTip,
+
+  options: {
+    title: 'Feat Options',
+    body: 'Sub-choices within the feat. Some feats let you pick one option from a list.',
+  } satisfies FieldTip,
+}
+
 export const timeValueTip: FieldTip = {
   title: 'Time Value',
   body: 'The numeric amount paired with the time unit. For actions and reactions, the value is typically 1. For longer durations, enter the number of minutes, hours, or days.',

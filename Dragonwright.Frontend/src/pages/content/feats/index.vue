@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useTitle } from '@/composables/useTitle'
 import { useAuthStore } from '@/stores/auth'
 import { useContentList } from '@/composables/useContentList'
@@ -14,6 +15,7 @@ import { sourceBadge } from '@/content/enums'
 
 useTitle('Feats')
 
+const router = useRouter()
 const typeDef = getContentType('feats')!
 const authStore = useAuthStore()
 const isTeamMember = computed(() => (authStore.loggedInUser?.userRole ?? 0) >= 1)
@@ -49,6 +51,7 @@ function canDelete(item: Feat): boolean {
       v-model:source="source"
       :show-source-filter="true"
       :show-new-button="true"
+      @new="router.push('/content/feats/new')"
     />
 
     <ContentListTable
@@ -68,7 +71,7 @@ function canDelete(item: Feat): boolean {
         <span v-else>No</span>
       </template>
       <template #cell-name="{ item }">
-        <span>{{ item.name }}</span>
+        <RouterLink :to="`/content/feats/${item.id}`" class="content-table__link">{{ item.name }}</RouterLink>
         <UiBadge
           v-if="item.source !== undefined && sourceBadge[item.source]"
           :label="sourceBadge[item.source]!.label"

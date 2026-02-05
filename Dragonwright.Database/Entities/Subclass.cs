@@ -19,7 +19,7 @@ public sealed class Subclass : IEntity<Subclass>
     public Guid ClassId { get; set; }
     
     [JsonIgnore]
-    public Class Class { get; set; } = null!;
+    public Class? Class { get; set; } = null!;
     
     [Required]
     [MaxLength(200)]

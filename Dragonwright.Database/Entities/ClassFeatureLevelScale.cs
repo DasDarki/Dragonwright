@@ -1,4 +1,4 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Dragonwright.Database.Entities;
 
@@ -10,7 +10,7 @@ public sealed class ClassFeatureLevelScale : IEntity<ClassFeatureLevelScale>
     public Guid ClassFeatureId { get; set; }
     
     [JsonIgnore]
-    public ClassFeature ClassFeature { get; set; } = null!;
+    public ClassFeature? ClassFeature { get; set; }
     
     [Required]
     [MaxLength(4000)]

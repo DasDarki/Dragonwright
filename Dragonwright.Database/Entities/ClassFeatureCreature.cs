@@ -10,7 +10,7 @@ public sealed class ClassFeatureCreature : IEntity<ClassFeatureCreature>
     public Guid ClassFeatureId { get; set; }
     
     [JsonIgnore]
-    public ClassFeature ClassFeature { get; set; } = null!;
+    public ClassFeature? ClassFeature { get; set; }
 
     /// <summary>
     /// Defines a group which this creature belongs to or is used for (e.g. "Wild Shape").

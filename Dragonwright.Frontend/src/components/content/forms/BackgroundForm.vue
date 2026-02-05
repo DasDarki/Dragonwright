@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useContentForm } from '@/composables/useContentForm'
+import { useToast } from '@/composables/useToast'
 import { getBackgroundsId, postBackgrounds, putBackgroundsId, postBackgroundsBackgroundIdCharacteristics, putBackgroundsBackgroundIdCharacteristicsId, deleteBackgroundsBackgroundIdCharacteristicsId } from '@/api'
 import type { Background, Characteristics } from '@/api'
 import ContentFormLayout from '@/components/content/ContentFormLayout.vue'
@@ -17,10 +18,12 @@ import {
 import { commonTips, backgroundTips } from '@/content/tips'
 
 const props = defineProps<{ id?: string }>()
+const { showToast } = useToast()
 
-const originalCharacteristics = ref<Characteristics[]>([])
+// Pending characteristics for create mode
+const pendingCharacteristics = ref<Characteristics[]>([])
 
-const { form, loading, saving, isEdit, save, cancel } = useContentForm<Background>({
+const { form, loading, saving, isEdit, entityId, save, cancel } = useContentForm<Background>({
   typeLabel: 'Background',
   listRoute: '/content/backgrounds',
   editRoute: '/content/backgrounds',
@@ -36,41 +39,25 @@ const { form, loading, saving, isEdit, save, cancel } = useContentForm<Backgroun
     weaponProficiencies: [],
     characteristics: [],
   }),
-  getFn: async (id) => {
-    const res = await getBackgroundsId(id)
-    const data = (res as any).data ?? res
-    originalCharacteristics.value = (data.characteristics ?? []).map((c: Characteristics) => ({ ...c }))
-    return res
-  },
+  getFn: getBackgroundsId,
   createFn: postBackgrounds,
   updateFn: putBackgroundsId,
   onAfterSave: async (bgId) => {
-    const current = form.value.characteristics ?? []
-    const original = originalCharacteristics.value
-
-    // Delete removed characteristics
-    for (const orig of original) {
-      if (orig.id && !current.some(c => c.id === orig.id)) {
-        await deleteBackgroundsBackgroundIdCharacteristicsId(bgId, String(orig.id))
-      }
+    // Save pending characteristics after parent creation
+    for (const char of pendingCharacteristics.value) {
+      const { id: _id, ...payload } = char
+      await postBackgroundsBackgroundIdCharacteristics(bgId, payload as Characteristics)
     }
-
-    // Create or update characteristics
-    for (const char of current) {
-      if (char.id && original.some(o => o.id === char.id)) {
-        await putBackgroundsBackgroundIdCharacteristicsId(bgId, String(char.id), char)
-      } else {
-        await postBackgroundsBackgroundIdCharacteristics(bgId, char)
-      }
-    }
-
-    originalCharacteristics.value = current.map(c => ({ ...c }))
+    pendingCharacteristics.value = []
   },
 })
+
+// ─── Characteristics ────────────────────────────────────────
 
 const charModalOpen = ref(false)
 const charEditIndex = ref<number | null>(null)
 const charForm = ref<Characteristics>({ type: 0, text: '' })
+const charSaving = ref(false)
 
 function openAddCharacteristic() {
   charForm.value = { type: 0, text: '' }
@@ -85,17 +72,60 @@ function openEditCharacteristic(index: number) {
   charModalOpen.value = true
 }
 
-function saveCharacteristic() {
+async function saveCharacteristic() {
   if (!form.value.characteristics) form.value.characteristics = []
-  if (charEditIndex.value !== null) {
-    form.value.characteristics[charEditIndex.value] = { ...charForm.value }
+
+  if (isEdit.value) {
+    // Edit mode: save to backend immediately
+    charSaving.value = true
+    try {
+      if (charEditIndex.value !== null) {
+        const existing = form.value.characteristics[charEditIndex.value]!
+        if (existing.id) {
+          await putBackgroundsBackgroundIdCharacteristicsId(entityId.value!, String(existing.id), charForm.value)
+        }
+        form.value.characteristics[charEditIndex.value] = { ...charForm.value }
+      } else {
+        // Strip id when creating new - backend assigns it
+        const { id: _id, ...payload } = charForm.value
+        const res = await postBackgroundsBackgroundIdCharacteristics(entityId.value!, payload as Characteristics)
+        const data = (res as any).data ?? res
+        form.value.characteristics.push({ ...charForm.value, id: data.id })
+      }
+      showToast({ variant: 'success', message: 'Characteristic saved.' })
+    } catch {
+      showToast({ variant: 'danger', message: 'Failed to save characteristic.' })
+    } finally {
+      charSaving.value = false
+    }
   } else {
-    form.value.characteristics.push({ ...charForm.value })
+    // Create mode: store locally until parent is saved
+    if (charEditIndex.value !== null) {
+      pendingCharacteristics.value[charEditIndex.value] = { ...charForm.value }
+      form.value.characteristics[charEditIndex.value] = { ...charForm.value }
+    } else {
+      pendingCharacteristics.value.push({ ...charForm.value })
+      form.value.characteristics.push({ ...charForm.value })
+    }
   }
   charModalOpen.value = false
 }
 
-function removeCharacteristic(index: number) {
+async function removeCharacteristic(index: number) {
+  const char = form.value.characteristics?.[index]
+  if (!char) return
+
+  if (isEdit.value && char.id) {
+    try {
+      await deleteBackgroundsBackgroundIdCharacteristicsId(entityId.value!, String(char.id))
+      showToast({ variant: 'success', message: 'Characteristic deleted.' })
+    } catch {
+      showToast({ variant: 'danger', message: 'Failed to delete characteristic.' })
+      return
+    }
+  } else if (!isEdit.value) {
+    pendingCharacteristics.value.splice(index, 1)
+  }
   form.value.characteristics?.splice(index, 1)
 }
 </script>
