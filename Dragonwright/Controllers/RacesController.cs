@@ -65,7 +65,20 @@ public sealed class RacesController(AppDbContext dbContext) : ContentControllerB
 
         race.Id = Guid.NewGuid();
         race.SourceCreatorId = userId.Value;
+
+        // Assign new GUIDs to all nested entities to prevent DbUpdateConcurrencyException
+        foreach (var trait in race.Traits)
+        {
+            trait.Id = Guid.NewGuid();
+            foreach (var opt in trait.Options) opt.Id = Guid.NewGuid();
+            foreach (var act in trait.Actions) act.Id = Guid.NewGuid();
+            foreach (var spell in trait.Spells) spell.Id = Guid.NewGuid();
+            foreach (var creature in trait.Creatures) creature.Id = Guid.NewGuid();
+            foreach (var mod in trait.Modifiers) mod.Id = Guid.NewGuid();
+        }
+
         dbContext.Races.Add(race);
+        dbContext.ChangeTracker.TrackGraph(race, n => n.Entry.State = EntityState.Added);
         await dbContext.SaveChangesAsync();
         return CreatedAtAction(nameof(GetRace), new { id = race.Id }, race);
     }
@@ -142,7 +155,13 @@ public sealed class RacesController(AppDbContext dbContext) : ContentControllerB
         if (!CanModifyContent(race.SourceCreatorId)) return Forbid();
 
         trait.Id = Guid.NewGuid();
+        foreach (var opt in trait.Options) opt.Id = Guid.NewGuid();
+        foreach (var act in trait.Actions) act.Id = Guid.NewGuid();
+        foreach (var spell in trait.Spells) spell.Id = Guid.NewGuid();
+        foreach (var creature in trait.Creatures) creature.Id = Guid.NewGuid();
+        foreach (var mod in trait.Modifiers) mod.Id = Guid.NewGuid();
         race.Traits.Add(trait);
+        dbContext.ChangeTracker.TrackGraph(trait, n => n.Entry.State = EntityState.Added);
         await dbContext.SaveChangesAsync();
         return CreatedAtAction(nameof(GetTrait), new { raceId, id = trait.Id }, trait);
     }
@@ -451,6 +470,7 @@ public sealed class RacesController(AppDbContext dbContext) : ContentControllerB
 
         modifier.Id = Guid.NewGuid();
         trait.Modifiers.Add(modifier);
+        dbContext.ChangeTracker.TrackGraph(modifier, n => n.Entry.State = EntityState.Added);
         await dbContext.SaveChangesAsync();
         return Created($"/races/{raceId}/traits/{traitId}/modifiers/{modifier.Id}", modifier);
     }

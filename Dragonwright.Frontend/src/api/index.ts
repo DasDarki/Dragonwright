@@ -502,26 +502,6 @@ export interface ClassFeatureSpell {
   isInfinite?: boolean;
 }
 
-export type ModifierType = number;
-
-export interface ModifierSubtype { [key: string]: unknown }
-
-export interface Modifier {
-  id?: string;
-  type?: ModifierType;
-  subtype?: null | ModifierSubtype;
-  abilityScore?: null | AbilityScore;
-  /** @pattern ^-?(?:0|[1-9]\d*)$ */
-  diceCount?: number | string;
-  /** @pattern ^-?(?:0|[1-9]\d*)$ */
-  diceValue?: number | string;
-  /** @pattern ^-?(?:0|[1-9]\d*)$ */
-  fixedValue?: number | string;
-  /** @maxLength 4000 */
-  details?: string;
-  duration?: null | Time;
-}
-
 export interface ClassFeatureLevelScale {
   id?: string;
   classFeatureId?: string;
@@ -560,7 +540,7 @@ export interface ClassFeature {
   actions?: ClassFeatureAction[];
   creatures?: ClassFeatureCreature[];
   spells?: ClassFeatureSpell[];
-  modifiers?: Modifier[];
+  modifiers?: unknown[];
   levelScales?: ClassFeatureLevelScale[];
   spellList?: Spell[];
 }
@@ -735,7 +715,7 @@ export interface Feat {
   options?: FeatOption[];
   actions?: FeatAction[];
   spells?: FeatSpell[];
-  modifiers?: Modifier[];
+  modifiers?: unknown[];
   spellList?: Spell[];
 }
 
@@ -792,6 +772,8 @@ export interface LoginRequest {
 export interface LogoutRequest {
   refreshToken: string;
 }
+
+export interface Modifier {}
 
 export interface ProblemDetails {
   /** @nullable */
@@ -959,7 +941,7 @@ export interface RaceTrait {
   actions?: RaceTraitAction[];
   creatures?: RaceTraitCreature[];
   spells?: RaceTraitSpell[];
-  modifiers?: Modifier[];
+  modifiers?: unknown[];
   spellList?: Spell[];
 }
 

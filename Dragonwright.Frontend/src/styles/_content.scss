@@ -494,6 +494,14 @@ select.input {
     flex-direction: column;
     gap: $space-3;
     min-width: 20rem;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  &__section-divider {
+    height: 1px;
+    background: $color-border-subtle;
+    margin: $space-2 0;
   }
 
   &__chip-list {

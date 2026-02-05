@@ -2,9 +2,16 @@
 import { ref } from 'vue'
 import { useContentForm } from '@/composables/useContentForm'
 import { useToast } from '@/composables/useToast'
-import { getClassesId, postClasses, putClassesId, postClassesClassIdFeatures, putClassesClassIdFeaturesId, deleteClassesClassIdFeaturesId, postClassesClassIdSubclasses, putClassesClassIdSubclassesId, deleteClassesClassIdSubclassesId } from '@/api'
+import {
+  getClassesId, postClasses, putClassesId,
+  postClassesClassIdFeatures, putClassesClassIdFeaturesId, deleteClassesClassIdFeaturesId,
+  postClassesClassIdSubclasses, putClassesClassIdSubclassesId, deleteClassesClassIdSubclassesId,
+  postClassesClassIdFeaturesFeatureIdModifiers, putClassesClassIdFeaturesFeatureIdModifiersId, deleteClassesClassIdFeaturesFeatureIdModifiersId,
+} from '@/api'
 import type { Class, ClassFeature, Subclass } from '@/api'
 import ContentFormLayout from '@/components/content/ContentFormLayout.vue'
+import ModifierEditor from '@/components/content/ModifierEditor.vue'
+import type { Modifier } from '@/content/modifiers'
 import UiInput from '@/components/ui/UiInput.vue'
 import UiSelect from '@/components/ui/UiSelect.vue'
 import UiTextarea from '@/components/ui/UiTextarea.vue'
@@ -12,6 +19,7 @@ import UiCheckbox from '@/components/ui/UiCheckbox.vue'
 import UiCheckboxGroup from '@/components/ui/UiCheckboxGroup.vue'
 import UiModal from '@/components/ui/UiModal.vue'
 import UiButton from '@/components/ui/UiButton.vue'
+import UiEntitySelect from '@/components/ui/UiEntitySelect.vue'
 import {
   sourceOptions, abilityScoreOptions, skillOptions, toolOptions,
   itemTypeOptions, weaponTypeOptions, featureTypeOptions, featureTypeLabels,
@@ -85,6 +93,59 @@ function defaultFeature(): ClassFeature {
     hideInCharacterSheet: false,
     hasOptions: false,
     displayRequiredLevel: true,
+    modifiers: [],
+    featureToReplaceId: null,
+  }
+}
+
+// For "Feature to Replace" entity select - returns other features excluding the one being edited
+function fetchOtherFeatures() {
+  const currentId = featureForm.value.id
+  const allFeatures = form.value.features ?? []
+  const filtered = currentId
+    ? allFeatures.filter(f => f.id !== currentId)
+    : allFeatures
+  return Promise.resolve({ items: filtered, page: 1, totalCount: filtered.length })
+}
+
+function getFeatureLabel(feature: ClassFeature) {
+  return feature.name || '(unnamed)'
+}
+
+function getFeatureValue(feature: ClassFeature) {
+  return feature.id as string
+}
+
+async function onFeatureModifierSave(modifier: Modifier, index: number | null) {
+  const featureId = featureForm.value.id
+  if (!isEdit.value || !featureId) return
+
+  try {
+    if (index !== null && modifier.id) {
+      await putClassesClassIdFeaturesFeatureIdModifiersId(entityId.value!, String(featureId), String(modifier.id), modifier as any)
+    } else {
+      const { id: _id, ...payload } = modifier
+      const res = await postClassesClassIdFeaturesFeatureIdModifiers(entityId.value!, String(featureId), payload as any)
+      const data = (res as any).data ?? res
+      if (featureForm.value.modifiers && index === null) {
+        featureForm.value.modifiers[featureForm.value.modifiers.length - 1] = { ...modifier, id: data.id }
+      }
+    }
+    showToast({ variant: 'success', message: 'Modifier saved.' })
+  } catch {
+    showToast({ variant: 'danger', message: 'Failed to save modifier.' })
+  }
+}
+
+async function onFeatureModifierDelete(modifier: Modifier, _index: number) {
+  const featureId = featureForm.value.id
+  if (!isEdit.value || !featureId || !modifier.id) return
+
+  try {
+    await deleteClassesClassIdFeaturesFeatureIdModifiersId(entityId.value!, String(featureId), String(modifier.id))
+    showToast({ variant: 'success', message: 'Modifier deleted.' })
+  } catch {
+    showToast({ variant: 'danger', message: 'Failed to delete modifier.' })
   }
 }
 
@@ -371,6 +432,23 @@ async function removeSubclass(index: number) {
           <UiCheckbox v-model="featureForm.hideInBuilder" label="Hide in Builder" :tip="classTips.featureHideBuilder" />
           <UiCheckbox v-model="featureForm.hideInCharacterSheet" label="Hide in Sheet" :tip="classTips.featureHideSheet" />
         </div>
+        <UiEntitySelect
+          v-model="featureForm.featureToReplaceId"
+          label="Replaces Feature"
+          placeholder="None (new feature)"
+          :fetch-fn="fetchOtherFeatures"
+          :get-option-label="getFeatureLabel"
+          :get-option-value="getFeatureValue"
+          clearable
+          :tip="{ title: 'Replaces Feature', body: 'If this feature replaces another feature (e.g., an optional feature replacing a base class feature), select the feature it replaces.' }"
+        />
+        <div class="content-form__section-divider" />
+        <ModifierEditor
+          :model-value="(featureForm.modifiers ?? []) as any"
+          @update:model-value="featureForm.modifiers = $event as any"
+          @save="onFeatureModifierSave"
+          @delete="onFeatureModifierDelete"
+        />
       </div>
       <template #footer>
         <UiButton @click="saveFeature">Save</UiButton>

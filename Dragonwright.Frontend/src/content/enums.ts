@@ -167,3 +167,68 @@ export const spellLearnTypeLabels: Record<number, string> = {
   0: 'Known', 1: 'Spellbook',
 }
 export const spellLearnTypeOptions = toOptions(spellLearnTypeLabels)
+
+export const modifierTypeLabels: Record<number, string> = {
+  0: 'Bonus', 1: 'Damage', 2: 'Advantage', 3: 'Disadvantage',
+  4: 'Resistance', 5: 'Immunity', 6: 'Vulnerability', 7: 'Sense',
+  8: 'Set', 9: 'Half Proficiency', 10: 'Proficiency', 11: 'Expertise',
+  12: 'Language', 13: 'Feat', 14: 'Carrying Capacity', 15: 'Natural Weapon',
+  16: 'Stealth Disadvantage', 17: 'Speed Reduction', 18: 'Speed Increase',
+  19: 'Melee Weapon Attack', 20: 'Ranged Weapon Attack', 21: 'Weapon Property',
+  22: 'Half Proficiency (Round Up)', 23: 'Favored Enemy', 24: 'Ignore',
+  25: 'Eldritch Blast', 26: 'Replace Damage Type', 27: 'Twice Proficiency',
+  28: 'Monk Weapon', 29: 'Protection', 30: 'Stacking Bonus', 31: 'Set Base',
+  32: 'Ignore Weapon Property', 33: 'Size', 34: 'Weapon Mastery',
+  35: 'Enable Feature', 36: 'Replace Weapon Ability',
+}
+export const modifierTypeOptions = toOptions(modifierTypeLabels)
+
+export const bonusTargetLabels: Record<number, string> = {
+  0: 'Ability Score', 1: 'All Ability Checks', 2: 'Ability Check',
+  3: 'All Saving Throws', 4: 'Saving Throw', 5: 'Skill', 6: 'Armor Class',
+  7: 'Initiative', 8: 'Attack Roll', 9: 'Melee Attack Roll',
+  10: 'Ranged Attack Roll', 11: 'Spell Attack Roll', 12: 'Weapon Damage',
+  13: 'Melee Weapon Damage', 14: 'Ranged Weapon Damage', 15: 'Spell Damage',
+  16: 'Spell Save DC', 17: 'Hit Points', 18: 'Hit Points Per Level',
+  19: 'Speed', 20: 'Passive Perception', 21: 'Passive Investigation',
+  22: 'Passive Insight', 23: 'Spell Slots', 24: 'Spells Known',
+  25: 'Cantrips Known', 26: 'Proficiency Bonus', 27: 'Carrying Capacity',
+  28: 'Death Save Success', 29: 'Death Save Failure',
+}
+export const bonusTargetOptions = toOptions(bonusTargetLabels)
+
+export const proficiencyTargetLabels: Record<number, string> = {
+  0: 'Skill', 1: 'Tool', 2: 'Saving Throw', 3: 'Weapon Type',
+  4: 'Specific Weapon', 5: 'Armor Type', 6: 'Shield', 7: 'Initiative',
+}
+export const proficiencyTargetOptions = toOptions(proficiencyTargetLabels)
+
+export const rollTargetLabels: Record<number, string> = {
+  0: 'Attack Roll', 1: 'Melee Attack Roll', 2: 'Ranged Attack Roll',
+  3: 'Spell Attack Roll', 4: 'All Ability Checks', 5: 'Ability Check',
+  6: 'All Saving Throws', 7: 'Saving Throw', 8: 'Skill', 9: 'Initiative',
+  10: 'Death Save', 11: 'Concentration Check',
+}
+export const rollTargetOptions = toOptions(rollTargetLabels)
+
+export const senseTypeLabels: Record<number, string> = {
+  0: 'Darkvision', 1: 'Blindsight', 2: 'Truesight',
+  3: 'Tremorsense', 4: 'Superior Darkvision', 5: "Devil's Sight",
+}
+export const senseTypeOptions = toOptions(senseTypeLabels)
+
+export const movementTypeLabels: Record<number, string> = {
+  0: 'Burrow', 1: 'Climb', 2: 'Fly', 3: 'Swim', 4: 'Walk',
+}
+export const movementTypeOptions = toOptions(movementTypeLabels)
+
+export const sizeLabels: Record<number, string> = {
+  0: 'Tiny', 1: 'Small', 2: 'Medium', 3: 'Large', 4: 'Huge', 5: 'Gargantuan',
+}
+export const sizeOptions = toOptions(sizeLabels)
+
+export const armorTypeLabels: Record<number, string> = {
+  0: 'Unspecified', 1: 'Weapon', 2: 'Light Armor', 3: 'Medium Armor',
+  4: 'Heavy Armor', 5: 'Shield',
+}
+export const armorTypeOptions = toOptions(armorTypeLabels)

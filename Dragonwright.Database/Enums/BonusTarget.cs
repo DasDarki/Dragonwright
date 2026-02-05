@@ -1,0 +1,35 @@
+namespace Dragonwright.Database.Enums;
+
+public enum BonusTarget
+{
+    AbilityScore,
+    AbilityCheckAll,
+    AbilityCheck,
+    SavingThrowAll,
+    SavingThrow,
+    Skill,
+    ArmorClass,
+    Initiative,
+    AttackRoll,
+    MeleeAttackRoll,
+    RangedAttackRoll,
+    SpellAttackRoll,
+    WeaponDamage,
+    MeleeWeaponDamage,
+    RangedWeaponDamage,
+    SpellDamage,
+    SpellSaveDc,
+    HitPoints,
+    HitPointsPerLevel,
+    Speed,
+    PassivePerception,
+    PassiveInvestigation,
+    PassiveInsight,
+    SpellSlots,
+    SpellsKnown,
+    CantripsKnown,
+    ProficiencyBonus,
+    CarryingCapacity,
+    DeathSaveSuccess,
+    DeathSaveFailure
+}

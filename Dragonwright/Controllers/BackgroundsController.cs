@@ -62,7 +62,24 @@ public sealed class BackgroundsController(AppDbContext dbContext) : ContentContr
 
         background.Id = Guid.NewGuid();
         background.SourceCreatorId = userId.Value;
+
+        // Assign new GUIDs to all nested entities to prevent DbUpdateConcurrencyException
+        foreach (var characteristic in background.Characteristics)
+        {
+            characteristic.Id = Guid.NewGuid();
+        }
+        foreach (var startItemChoice in background.StartingItems)
+        {
+            startItemChoice.Id = Guid.NewGuid();
+            foreach (var item in startItemChoice.Items)
+            {
+                item.Id = Guid.NewGuid();
+                item.ChoiceId = startItemChoice.Id;
+            }
+        }
+
         dbContext.Backgrounds.Add(background);
+        dbContext.ChangeTracker.TrackGraph(background, n => n.Entry.State = EntityState.Added);
         await dbContext.SaveChangesAsync();
         return CreatedAtAction(nameof(GetBackground), new { id = background.Id }, background);
     }
@@ -110,6 +127,7 @@ public sealed class BackgroundsController(AppDbContext dbContext) : ContentContr
 
         characteristic.Id = Guid.NewGuid();
         background.Characteristics.Add(characteristic);
+        dbContext.ChangeTracker.TrackGraph(characteristic, n => n.Entry.State = EntityState.Added);
         await dbContext.SaveChangesAsync();
         return Created($"/backgrounds/{backgroundId}/characteristics/{characteristic.Id}", characteristic);
     }
@@ -161,6 +179,7 @@ public sealed class BackgroundsController(AppDbContext dbContext) : ContentContr
         }
 
         background.StartingItems.Add(choice);
+        dbContext.ChangeTracker.TrackGraph(choice, n => n.Entry.State = EntityState.Added);
         await dbContext.SaveChangesAsync();
         return Created($"/backgrounds/{backgroundId}/starting-items/{choice.Id}", choice);
     }

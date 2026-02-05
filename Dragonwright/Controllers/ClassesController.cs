@@ -68,7 +68,46 @@ public sealed class ClassesController(AppDbContext dbContext) : ContentControlle
 
         cls.Id = Guid.NewGuid();
         cls.SourceCreatorId = userId.Value;
+
+        // Assign new GUIDs to all nested entities to prevent DbUpdateConcurrencyException
+        foreach (var feature in cls.Features)
+        {
+            feature.Id = Guid.NewGuid();
+            foreach (var opt in feature.Options) opt.Id = Guid.NewGuid();
+            foreach (var act in feature.Actions) act.Id = Guid.NewGuid();
+            foreach (var spell in feature.Spells) spell.Id = Guid.NewGuid();
+            foreach (var creature in feature.Creatures) creature.Id = Guid.NewGuid();
+            foreach (var mod in feature.Modifiers) mod.Id = Guid.NewGuid();
+            foreach (var scale in feature.LevelScales) scale.Id = Guid.NewGuid();
+        }
+        foreach (var subclass in cls.Subclasses)
+        {
+            subclass.Id = Guid.NewGuid();
+            subclass.ClassId = cls.Id;
+            subclass.SourceCreatorId = userId.Value;
+            foreach (var feature in subclass.ClassFeatures)
+            {
+                feature.Id = Guid.NewGuid();
+                foreach (var opt in feature.Options) opt.Id = Guid.NewGuid();
+                foreach (var act in feature.Actions) act.Id = Guid.NewGuid();
+                foreach (var spell in feature.Spells) spell.Id = Guid.NewGuid();
+                foreach (var creature in feature.Creatures) creature.Id = Guid.NewGuid();
+                foreach (var mod in feature.Modifiers) mod.Id = Guid.NewGuid();
+                foreach (var scale in feature.LevelScales) scale.Id = Guid.NewGuid();
+            }
+        }
+        foreach (var startItemChoice in cls.StartingItems)
+        {
+            startItemChoice.Id = Guid.NewGuid();
+            foreach (var item in startItemChoice.Items)
+            {
+                item.Id = Guid.NewGuid();
+                item.ChoiceId = startItemChoice.Id;
+            }
+        }
+
         dbContext.Classes.Add(cls);
+        dbContext.ChangeTracker.TrackGraph(cls, n => n.Entry.State = EntityState.Added);
         await dbContext.SaveChangesAsync();
         return CreatedAtAction(nameof(GetClass), new { id = cls.Id }, cls);
     }
@@ -156,7 +195,14 @@ public sealed class ClassesController(AppDbContext dbContext) : ContentControlle
         if (!CanModifyContent(cls.SourceCreatorId)) return Forbid();
 
         feature.Id = Guid.NewGuid();
+        foreach (var opt in feature.Options) opt.Id = Guid.NewGuid();
+        foreach (var act in feature.Actions) act.Id = Guid.NewGuid();
+        foreach (var spell in feature.Spells) spell.Id = Guid.NewGuid();
+        foreach (var creature in feature.Creatures) creature.Id = Guid.NewGuid();
+        foreach (var mod in feature.Modifiers) mod.Id = Guid.NewGuid();
+        foreach (var scale in feature.LevelScales) scale.Id = Guid.NewGuid();
         cls.Features.Add(feature);
+        dbContext.ChangeTracker.TrackGraph(feature, n => n.Entry.State = EntityState.Added);
         await dbContext.SaveChangesAsync();
         return CreatedAtAction(nameof(GetFeature), new { classId, id = feature.Id }, feature);
     }
@@ -520,6 +566,7 @@ public sealed class ClassesController(AppDbContext dbContext) : ContentControlle
 
         modifier.Id = Guid.NewGuid();
         feature.Modifiers.Add(modifier);
+        dbContext.ChangeTracker.TrackGraph(modifier, n => n.Entry.State = EntityState.Added);
         await dbContext.SaveChangesAsync();
         return Created($"/classes/{classId}/features/{featureId}/modifiers/{modifier.Id}", modifier);
     }
@@ -605,7 +652,20 @@ public sealed class ClassesController(AppDbContext dbContext) : ContentControlle
         subclass.Id = Guid.NewGuid();
         subclass.ClassId = classId;
         subclass.SourceCreatorId = userId.Value;
+
+        foreach (var feature in subclass.ClassFeatures)
+        {
+            feature.Id = Guid.NewGuid();
+            foreach (var opt in feature.Options) opt.Id = Guid.NewGuid();
+            foreach (var act in feature.Actions) act.Id = Guid.NewGuid();
+            foreach (var spell in feature.Spells) spell.Id = Guid.NewGuid();
+            foreach (var creature in feature.Creatures) creature.Id = Guid.NewGuid();
+            foreach (var mod in feature.Modifiers) mod.Id = Guid.NewGuid();
+            foreach (var scale in feature.LevelScales) scale.Id = Guid.NewGuid();
+        }
+
         dbContext.Subclasses.Add(subclass);
+        dbContext.ChangeTracker.TrackGraph(subclass, n => n.Entry.State = EntityState.Added);
         await dbContext.SaveChangesAsync();
         return CreatedAtAction(nameof(GetSubclass), new { classId, id = subclass.Id }, subclass);
     }
@@ -673,7 +733,14 @@ public sealed class ClassesController(AppDbContext dbContext) : ContentControlle
         if (!CanModifyContent(subclass.SourceCreatorId)) return Forbid();
 
         feature.Id = Guid.NewGuid();
+        foreach (var opt in feature.Options) opt.Id = Guid.NewGuid();
+        foreach (var act in feature.Actions) act.Id = Guid.NewGuid();
+        foreach (var spell in feature.Spells) spell.Id = Guid.NewGuid();
+        foreach (var creature in feature.Creatures) creature.Id = Guid.NewGuid();
+        foreach (var mod in feature.Modifiers) mod.Id = Guid.NewGuid();
+        foreach (var scale in feature.LevelScales) scale.Id = Guid.NewGuid();
         subclass.ClassFeatures.Add(feature);
+        dbContext.ChangeTracker.TrackGraph(feature, n => n.Entry.State = EntityState.Added);
         await dbContext.SaveChangesAsync();
         return Created($"/classes/{classId}/subclasses/{subclassId}/features/{feature.Id}", feature);
     }

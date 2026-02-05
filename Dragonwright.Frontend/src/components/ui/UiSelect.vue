@@ -31,8 +31,7 @@ const sizeClass = computed(() => `input--${props.size ?? 'md'}`)
       class="input"
       :class="[sizeClass]"
       :disabled="disabled"
-      :value="model"
-      @change="model = ($event.target as HTMLSelectElement).value === '' ? undefined : ($event.target as HTMLSelectElement).value"
+      v-model="model"
     >
       <option v-if="placeholder" value="">{{ placeholder }}</option>
       <option

@@ -5,9 +5,12 @@ import { useToast } from '@/composables/useToast'
 import {
   getFeatsId, postFeats, putFeatsId,
   postFeatsFeatIdOptions, putFeatsFeatIdOptionsId, deleteFeatsFeatIdOptionsId,
+  postFeatsFeatIdModifiers, putFeatsFeatIdModifiersId, deleteFeatsFeatIdModifiersId,
 } from '@/api'
 import type { Feat, FeatOption } from '@/api'
 import ContentFormLayout from '@/components/content/ContentFormLayout.vue'
+import ModifierEditor from '@/components/content/ModifierEditor.vue'
+import type { Modifier } from '@/content/modifiers'
 import UiInput from '@/components/ui/UiInput.vue'
 import UiSelect from '@/components/ui/UiSelect.vue'
 import UiTextarea from '@/components/ui/UiTextarea.vue'
@@ -22,6 +25,7 @@ const props = defineProps<{ id?: string }>()
 const { showToast } = useToast()
 
 const pendingOptions = ref<FeatOption[]>([])
+const pendingModifiers = ref<Modifier[]>([])
 
 const { form, loading, saving, isEdit, entityId, save, cancel } = useContentForm<Feat>({
   typeLabel: 'Feat',
@@ -54,6 +58,11 @@ const { form, loading, saving, isEdit, entityId, save, cancel } = useContentForm
       await postFeatsFeatIdOptions(featId, { ...payload, featId } as FeatOption)
     }
     pendingOptions.value = []
+    for (const mod of pendingModifiers.value) {
+      const { id: _id, ...payload } = mod
+      await postFeatsFeatIdModifiers(featId, payload as any)
+    }
+    pendingModifiers.value = []
   },
 })
 
@@ -136,6 +145,49 @@ async function removeOption(index: number) {
   }
   form.value.options?.splice(index, 1)
 }
+
+async function onModifierSave(modifier: Modifier, index: number | null) {
+  if (!isEdit.value) {
+    if (index === null) {
+      pendingModifiers.value.push(modifier)
+    } else {
+      pendingModifiers.value[index] = modifier
+    }
+    return
+  }
+
+  try {
+    if (index !== null && modifier.id) {
+      await putFeatsFeatIdModifiersId(entityId.value!, String(modifier.id), modifier as any)
+    } else {
+      const { id: _id, ...payload } = modifier
+      const res = await postFeatsFeatIdModifiers(entityId.value!, payload as any)
+      const data = (res as any).data ?? res
+      if (form.value.modifiers && index === null) {
+        form.value.modifiers[form.value.modifiers.length - 1] = { ...modifier, id: data.id }
+      }
+    }
+    showToast({ variant: 'success', message: 'Modifier saved.' })
+  } catch {
+    showToast({ variant: 'danger', message: 'Failed to save modifier.' })
+  }
+}
+
+async function onModifierDelete(modifier: Modifier, index: number) {
+  if (!isEdit.value) {
+    pendingModifiers.value.splice(index, 1)
+    return
+  }
+
+  if (modifier.id) {
+    try {
+      await deleteFeatsFeatIdModifiersId(entityId.value!, String(modifier.id))
+      showToast({ variant: 'success', message: 'Modifier deleted.' })
+    } catch {
+      showToast({ variant: 'danger', message: 'Failed to delete modifier.' })
+    }
+  }
+}
 </script>
 
 <template>
@@ -201,6 +253,16 @@ async function removeOption(index: number) {
         </tbody>
       </table>
       <p v-else class="content-form__empty-hint">No options added yet.</p>
+    </div>
+
+    <div class="content-form__section">
+      <h3 class="content-form__section-title">Modifiers</h3>
+      <ModifierEditor
+        :model-value="(form.modifiers ?? []) as any"
+        @update:model-value="form.modifiers = $event as any"
+        @save="onModifierSave"
+        @delete="onModifierDelete"
+      />
     </div>
 
     <UiModal v-model="optionModalOpen" :title="optionEditIndex !== null ? 'Edit Option' : 'Add Option'" close-on-backdrop close-on-esc>

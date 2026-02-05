@@ -2,14 +2,21 @@
 import { ref } from 'vue'
 import { useContentForm } from '@/composables/useContentForm'
 import { useToast } from '@/composables/useToast'
-import { getRacesId, postRaces, putRacesId, postRacesRaceIdTraits, putRacesRaceIdTraitsId, deleteRacesRaceIdTraitsId } from '@/api'
+import {
+  getRacesId, postRaces, putRacesId,
+  postRacesRaceIdTraits, putRacesRaceIdTraitsId, deleteRacesRaceIdTraitsId,
+  postRacesRaceIdTraitsTraitIdModifiers, putRacesRaceIdTraitsTraitIdModifiersId, deleteRacesRaceIdTraitsTraitIdModifiersId,
+} from '@/api'
 import type { Race, RaceTrait } from '@/api'
 import ContentFormLayout from '@/components/content/ContentFormLayout.vue'
+import ModifierEditor from '@/components/content/ModifierEditor.vue'
+import type { Modifier } from '@/content/modifiers'
 import UiInput from '@/components/ui/UiInput.vue'
 import UiSelect from '@/components/ui/UiSelect.vue'
 import UiTextarea from '@/components/ui/UiTextarea.vue'
 import UiModal from '@/components/ui/UiModal.vue'
 import UiButton from '@/components/ui/UiButton.vue'
+import UiEntitySelect from '@/components/ui/UiEntitySelect.vue'
 import { sourceOptions, creatureTypeOptions, featureTypeOptions, featureTypeLabels } from '@/content/enums'
 import { commonTips, raceTips } from '@/content/tips'
 
@@ -51,7 +58,58 @@ const traitForm = ref<RaceTrait>(defaultTrait())
 const traitSaving = ref(false)
 
 function defaultTrait(): RaceTrait {
-  return { name: '', description: '', displayOrder: 0, requiredCharacterLevel: 1, featureType: 0 }
+  return { name: '', description: '', displayOrder: 0, requiredCharacterLevel: 1, featureType: 0, modifiers: [], traitToReplaceId: null }
+}
+
+// For "Trait to Replace" entity select - returns other traits excluding the one being edited
+function fetchOtherTraits() {
+  const currentId = traitForm.value.id
+  const allTraits = form.value.traits ?? []
+  const filtered = currentId
+    ? allTraits.filter(t => t.id !== currentId)
+    : allTraits
+  return Promise.resolve({ items: filtered, page: 1, totalCount: filtered.length })
+}
+
+function getTraitLabel(trait: RaceTrait) {
+  return trait.name || '(unnamed)'
+}
+
+function getTraitValue(trait: RaceTrait) {
+  return trait.id as string
+}
+
+async function onTraitModifierSave(modifier: Modifier, index: number | null) {
+  const traitId = traitForm.value.id
+  if (!isEdit.value || !traitId) return
+
+  try {
+    if (index !== null && modifier.id) {
+      await putRacesRaceIdTraitsTraitIdModifiersId(entityId.value!, String(traitId), String(modifier.id), modifier as any)
+    } else {
+      const { id: _id, ...payload } = modifier
+      const res = await postRacesRaceIdTraitsTraitIdModifiers(entityId.value!, String(traitId), payload as any)
+      const data = (res as any).data ?? res
+      if (traitForm.value.modifiers && index === null) {
+        traitForm.value.modifiers[traitForm.value.modifiers.length - 1] = { ...modifier, id: data.id }
+      }
+    }
+    showToast({ variant: 'success', message: 'Modifier saved.' })
+  } catch {
+    showToast({ variant: 'danger', message: 'Failed to save modifier.' })
+  }
+}
+
+async function onTraitModifierDelete(modifier: Modifier, _index: number) {
+  const traitId = traitForm.value.id
+  if (!isEdit.value || !traitId || !modifier.id) return
+
+  try {
+    await deleteRacesRaceIdTraitsTraitIdModifiersId(entityId.value!, String(traitId), String(modifier.id))
+    showToast({ variant: 'success', message: 'Modifier deleted.' })
+  } catch {
+    showToast({ variant: 'danger', message: 'Failed to delete modifier.' })
+  }
 }
 
 function openAddTrait() {
@@ -186,6 +244,23 @@ async function removeTrait(index: number) {
           <UiInput v-model="traitForm.requiredCharacterLevel" label="Required Level" type="number" placeholder="1" :tip="commonTips.requiredLevel" />
         </div>
         <UiInput v-model="traitForm.displayOrder" label="Display Order" type="number" placeholder="0" :tip="commonTips.displayOrder" />
+        <UiEntitySelect
+          v-model="traitForm.traitToReplaceId"
+          label="Replaces Trait"
+          placeholder="None (new trait)"
+          :fetch-fn="fetchOtherTraits"
+          :get-option-label="getTraitLabel"
+          :get-option-value="getTraitValue"
+          clearable
+          :tip="{ title: 'Replaces Trait', body: 'If this trait replaces another trait (e.g., a subrace trait replacing a base race trait), select the trait it replaces.' }"
+        />
+        <div class="content-form__section-divider" />
+        <ModifierEditor
+          :model-value="(traitForm.modifiers ?? []) as any"
+          @update:model-value="traitForm.modifiers = $event as any"
+          @save="onTraitModifierSave"
+          @delete="onTraitModifierDelete"
+        />
       </div>
       <template #footer>
         <UiButton @click="saveTrait">Save</UiButton>

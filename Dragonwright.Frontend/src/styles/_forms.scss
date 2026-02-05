@@ -100,3 +100,108 @@
   position: absolute;
   right: $space-2;
 }
+
+.entity-select__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-3;
+  text-align: left;
+  cursor: pointer;
+}
+
+.entity-select__value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.entity-select__placeholder {
+  color: $color-text-soft;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.entity-select__controls {
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+  flex: 0 0 auto;
+}
+
+.entity-select__clear {
+  color: $color-text-muted;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0 $space-1;
+  cursor: pointer;
+  transition: color 150ms ease;
+
+  &:hover {
+    color: $color-danger;
+  }
+}
+
+.entity-select__chev {
+  color: $color-text-soft;
+  flex: 0 0 auto;
+}
+
+.entity-select__popover {
+  margin-top: $space-2;
+  border: 1px solid $color-border-subtle;
+  background: $color-bg-elevated;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+  overflow: hidden;
+}
+
+.entity-select__search {
+  padding: $space-2;
+  border-bottom: 1px solid $color-border-subtle;
+}
+
+.entity-select__list {
+  max-height: 260px;
+  overflow: auto;
+}
+
+.entity-select__option {
+  width: 100%;
+  padding: $space-2 $space-3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-3;
+  background: transparent;
+  border: 0;
+  color: $color-text;
+  cursor: pointer;
+  text-align: left;
+
+  &:hover {
+    background: rgba(249, 115, 22, 0.10);
+  }
+
+  &.is-selected {
+    background: $color-accent-soft;
+  }
+}
+
+.entity-select__option-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.entity-select__check {
+  color: $color-accent;
+  flex: 0 0 auto;
+}
+
+.entity-select__state {
+  padding: $space-3;
+  color: $color-text-muted;
+}
+

@@ -64,7 +64,30 @@ public sealed class FeatsController(AppDbContext dbContext) : ContentControllerB
 
         feat.Id = Guid.NewGuid();
         feat.SourceCreatorId = userId.Value;
+
+        // Assign new GUIDs to all nested entities to prevent DbUpdateConcurrencyException
+        foreach (var opt in feat.Options)
+        {
+            opt.Id = Guid.NewGuid();
+            opt.FeatId = feat.Id;
+        }
+        foreach (var act in feat.Actions)
+        {
+            act.Id = Guid.NewGuid();
+            act.FeatId = feat.Id;
+        }
+        foreach (var spell in feat.Spells)
+        {
+            spell.Id = Guid.NewGuid();
+            spell.FeatId = feat.Id;
+        }
+        foreach (var mod in feat.Modifiers)
+        {
+            mod.Id = Guid.NewGuid();
+        }
+
         dbContext.Feats.Add(feat);
+        dbContext.ChangeTracker.TrackGraph(feat, n => n.Entry.State = EntityState.Added);
         await dbContext.SaveChangesAsync();
         return CreatedAtAction(nameof(GetFeat), new { id = feat.Id }, feat);
     }
@@ -303,6 +326,7 @@ public sealed class FeatsController(AppDbContext dbContext) : ContentControllerB
 
         modifier.Id = Guid.NewGuid();
         feat.Modifiers.Add(modifier);
+        dbContext.ChangeTracker.TrackGraph(modifier, n => n.Entry.State = EntityState.Added);
         await dbContext.SaveChangesAsync();
         return Created($"/feats/{featId}/modifiers/{modifier.Id}", modifier);
     }
