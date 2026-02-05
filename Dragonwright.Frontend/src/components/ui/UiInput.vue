@@ -1,5 +1,7 @@
 ﻿<script setup lang="ts">
 import { computed } from 'vue'
+import UiFieldTip from '@/components/ui/UiFieldTip.vue'
+import type { FieldTip } from '@/components/ui/UiFieldTip.vue'
 
 type Size = 'sm' | 'md' | 'lg'
 
@@ -14,9 +16,10 @@ const props = defineProps<{
   hint?: string
   leftIcon?: string | null
   rightIcon?: string | null
+  tip?: FieldTip
 }>()
 
-const model = defineModel<string>({default: ""});
+const model = defineModel<any>({default: ""});
 
 const sizeClass = computed(() => `input--${props.size ?? 'md'}`)
 
@@ -32,7 +35,7 @@ const classList = computed(() => [
 <template>
   <div class="field">
     <label v-if="label" class="field__label">
-      {{ label }}
+      {{ label }}<UiFieldTip v-if="tip" v-bind="tip" />
     </label>
 
     <div class="input-wrapper">

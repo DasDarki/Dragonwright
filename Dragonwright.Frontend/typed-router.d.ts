@@ -30,6 +30,146 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/content/': RouteRecordInfo<
+      '/content/',
+      '/content',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/content/backgrounds/': RouteRecordInfo<
+      '/content/backgrounds/',
+      '/content/backgrounds',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/content/backgrounds/[id]': RouteRecordInfo<
+      '/content/backgrounds/[id]',
+      '/content/backgrounds/:id',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
+    '/content/backgrounds/new': RouteRecordInfo<
+      '/content/backgrounds/new',
+      '/content/backgrounds/new',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/content/classes/': RouteRecordInfo<
+      '/content/classes/',
+      '/content/classes',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/content/classes/[id]': RouteRecordInfo<
+      '/content/classes/[id]',
+      '/content/classes/:id',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
+    '/content/classes/new': RouteRecordInfo<
+      '/content/classes/new',
+      '/content/classes/new',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/content/feats/': RouteRecordInfo<
+      '/content/feats/',
+      '/content/feats',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/content/items/': RouteRecordInfo<
+      '/content/items/',
+      '/content/items',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/content/items/[id]': RouteRecordInfo<
+      '/content/items/[id]',
+      '/content/items/:id',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
+    '/content/items/new': RouteRecordInfo<
+      '/content/items/new',
+      '/content/items/new',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/content/languages/': RouteRecordInfo<
+      '/content/languages/',
+      '/content/languages',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/content/languages/[id]': RouteRecordInfo<
+      '/content/languages/[id]',
+      '/content/languages/:id',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
+    '/content/languages/new': RouteRecordInfo<
+      '/content/languages/new',
+      '/content/languages/new',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/content/races/': RouteRecordInfo<
+      '/content/races/',
+      '/content/races',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/content/races/[id]': RouteRecordInfo<
+      '/content/races/[id]',
+      '/content/races/:id',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
+    '/content/races/new': RouteRecordInfo<
+      '/content/races/new',
+      '/content/races/new',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/content/spells/': RouteRecordInfo<
+      '/content/spells/',
+      '/content/spells',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/content/spells/[id]': RouteRecordInfo<
+      '/content/spells/[id]',
+      '/content/spells/:id',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
+    '/content/spells/new': RouteRecordInfo<
+      '/content/spells/new',
+      '/content/spells/new',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/login': RouteRecordInfo<
       '/login',
       '/login',
@@ -53,6 +193,126 @@ declare module 'vue-router/auto-routes' {
     'src/pages/index.vue': {
       routes:
         | '/'
+      views:
+        | never
+    }
+    'src/pages/content/index.vue': {
+      routes:
+        | '/content/'
+      views:
+        | never
+    }
+    'src/pages/content/backgrounds/index.vue': {
+      routes:
+        | '/content/backgrounds/'
+      views:
+        | never
+    }
+    'src/pages/content/backgrounds/[id].vue': {
+      routes:
+        | '/content/backgrounds/[id]'
+      views:
+        | never
+    }
+    'src/pages/content/backgrounds/new.vue': {
+      routes:
+        | '/content/backgrounds/new'
+      views:
+        | never
+    }
+    'src/pages/content/classes/index.vue': {
+      routes:
+        | '/content/classes/'
+      views:
+        | never
+    }
+    'src/pages/content/classes/[id].vue': {
+      routes:
+        | '/content/classes/[id]'
+      views:
+        | never
+    }
+    'src/pages/content/classes/new.vue': {
+      routes:
+        | '/content/classes/new'
+      views:
+        | never
+    }
+    'src/pages/content/feats/index.vue': {
+      routes:
+        | '/content/feats/'
+      views:
+        | never
+    }
+    'src/pages/content/items/index.vue': {
+      routes:
+        | '/content/items/'
+      views:
+        | never
+    }
+    'src/pages/content/items/[id].vue': {
+      routes:
+        | '/content/items/[id]'
+      views:
+        | never
+    }
+    'src/pages/content/items/new.vue': {
+      routes:
+        | '/content/items/new'
+      views:
+        | never
+    }
+    'src/pages/content/languages/index.vue': {
+      routes:
+        | '/content/languages/'
+      views:
+        | never
+    }
+    'src/pages/content/languages/[id].vue': {
+      routes:
+        | '/content/languages/[id]'
+      views:
+        | never
+    }
+    'src/pages/content/languages/new.vue': {
+      routes:
+        | '/content/languages/new'
+      views:
+        | never
+    }
+    'src/pages/content/races/index.vue': {
+      routes:
+        | '/content/races/'
+      views:
+        | never
+    }
+    'src/pages/content/races/[id].vue': {
+      routes:
+        | '/content/races/[id]'
+      views:
+        | never
+    }
+    'src/pages/content/races/new.vue': {
+      routes:
+        | '/content/races/new'
+      views:
+        | never
+    }
+    'src/pages/content/spells/index.vue': {
+      routes:
+        | '/content/spells/'
+      views:
+        | never
+    }
+    'src/pages/content/spells/[id].vue': {
+      routes:
+        | '/content/spells/[id]'
+      views:
+        | never
+    }
+    'src/pages/content/spells/new.vue': {
+      routes:
+        | '/content/spells/new'
       views:
         | never
     }

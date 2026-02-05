@@ -777,6 +777,8 @@ export interface Language {
   id?: string;
   /** @maxLength 100 */
   name: string;
+  /** @maxLength 4000 */
+  description?: string;
 }
 
 export interface LoginRequest {
@@ -999,7 +1001,7 @@ export interface UserResponse {
   username?: string;
   /** @nullable */
   avatarId?: string | null;
-  role?: string;
+  userRole?: UserRole;
 }
 
 export type GetBackgroundsParams = {

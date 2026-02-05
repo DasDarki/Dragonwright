@@ -1,17 +1,18 @@
 ﻿<script setup lang="ts">
+import UiFieldTip from '@/components/ui/UiFieldTip.vue'
+import type { FieldTip } from '@/components/ui/UiFieldTip.vue'
+
 const props = defineProps<{
-  modelValue: boolean
   label?: string
   disabled?: boolean
+  tip?: FieldTip
 }>()
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
-}>()
+const model = defineModel<boolean>({default: false})
 
 function toggle() {
   if (props.disabled) return
-  emit('update:modelValue', !props.modelValue)
+  model.value = !model.value
 }
 </script>
 
@@ -27,7 +28,7 @@ function toggle() {
     >
       <i v-if="modelValue" class="fas fa-check" />
     </span>
-    <span v-if="label" class="checkbox__label">{{ label }}</span>
+    <span v-if="label" class="checkbox__label">{{ label }}<UiFieldTip v-if="tip" v-bind="tip" /></span>
     <input
       type="checkbox"
       :checked="modelValue"
