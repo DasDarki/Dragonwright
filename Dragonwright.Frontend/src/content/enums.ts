@@ -232,3 +232,9 @@ export const armorTypeLabels: Record<number, string> = {
   4: 'Heavy Armor', 5: 'Shield',
 }
 export const armorTypeOptions = toOptions(armorTypeLabels)
+
+export const languageTypeLabels: Record<number, string> = {
+  0: 'Standard',
+  1: 'Exotic',
+}
+export const languageTypeOptions = toOptions(languageTypeLabels)

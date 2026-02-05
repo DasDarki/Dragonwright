@@ -1,8 +1,10 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragonwright.Database", "Dragonwright.Database\Dragonwright.Database.csproj", "{5677244F-6821-4209-B419-FE615F4477AB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragonwright", "Dragonwright\Dragonwright.csproj", "{B9D2099F-D218-4E52-9FA0-DD1596BB510A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragonwright.Seeder", "Dragonwright.Seeder\Dragonwright.Seeder.csproj", "{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D1D941C8-4294-4EF6-892E-131A922EBBE6}"
 	ProjectSection(SolutionItems) = preProject
@@ -23,5 +25,9 @@ Global
 		{B9D2099F-D218-4E52-9FA0-DD1596BB510A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9D2099F-D218-4E52-9FA0-DD1596BB510A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9D2099F-D218-4E52-9FA0-DD1596BB510A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
