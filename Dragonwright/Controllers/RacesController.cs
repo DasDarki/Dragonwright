@@ -13,8 +13,6 @@ namespace Dragonwright.Controllers;
 [Route("races")]
 public sealed class RacesController(AppDbContext dbContext) : ContentControllerBase
 {
-    // ───────────────────────── Race CRUD ─────────────────────────
-
     [HttpGet]
     public async Task<IActionResult> ListRaces(
         int page = 1, int pageSize = 20, string? search = null, SourceType? source = null)
@@ -100,8 +98,6 @@ public sealed class RacesController(AppDbContext dbContext) : ContentControllerB
         await dbContext.SaveChangesAsync();
         return NoContent();
     }
-
-    // ───────────────────────── RaceTrait CRUD ─────────────────────────
 
     [HttpGet("{raceId:guid}/traits")]
     public async Task<IActionResult> ListTraits(Guid raceId)
@@ -190,8 +186,6 @@ public sealed class RacesController(AppDbContext dbContext) : ContentControllerB
         return NoContent();
     }
 
-    // ───────────────────────── RaceTraitOption CRUD ─────────────────────────
-
     [HttpPost("{raceId:guid}/traits/{traitId:guid}/options")]
     public async Task<IActionResult> CreateTraitOption(Guid raceId, Guid traitId, [FromBody] RaceTraitOption option)
     {
@@ -244,8 +238,6 @@ public sealed class RacesController(AppDbContext dbContext) : ContentControllerB
         await dbContext.SaveChangesAsync();
         return NoContent();
     }
-
-    // ───────────────────────── RaceTraitAction CRUD ─────────────────────────
 
     [HttpPost("{raceId:guid}/traits/{traitId:guid}/actions")]
     public async Task<IActionResult> CreateTraitAction(Guid raceId, Guid traitId, [FromBody] RaceTraitAction action)
@@ -320,8 +312,6 @@ public sealed class RacesController(AppDbContext dbContext) : ContentControllerB
         return NoContent();
     }
 
-    // ───────────────────────── RaceTraitSpell CRUD ─────────────────────────
-
     [HttpPost("{raceId:guid}/traits/{traitId:guid}/spells")]
     public async Task<IActionResult> CreateTraitSpell(Guid raceId, Guid traitId, [FromBody] RaceTraitSpell spell)
     {
@@ -394,8 +384,6 @@ public sealed class RacesController(AppDbContext dbContext) : ContentControllerB
         return NoContent();
     }
 
-    // ───────────────────────── RaceTraitCreature CRUD ─────────────────────────
-
     [HttpPost("{raceId:guid}/traits/{traitId:guid}/creatures")]
     public async Task<IActionResult> CreateTraitCreature(Guid raceId, Guid traitId, [FromBody] RaceTraitCreature creature)
     {
@@ -450,8 +438,6 @@ public sealed class RacesController(AppDbContext dbContext) : ContentControllerB
         await dbContext.SaveChangesAsync();
         return NoContent();
     }
-
-    // ───────────────────────── Modifier CRUD ─────────────────────────
 
     [HttpPost("{raceId:guid}/traits/{traitId:guid}/modifiers")]
     public async Task<IActionResult> CreateTraitModifier(Guid raceId, Guid traitId, [FromBody] Modifier modifier)

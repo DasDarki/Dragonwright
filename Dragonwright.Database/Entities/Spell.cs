@@ -1,4 +1,5 @@
 ﻿using Dragonwright.Database.Entities.Models;
+using System.Text.Json.Serialization;
 
 namespace Dragonwright.Database.Entities;
 
@@ -76,6 +77,8 @@ public sealed class Spell : IEntity<Spell>
     /// Classes to which this spell belongs - it basically defines their spell table.
     /// </summary>
     public ICollection<Class> Classes { get; set; } = [];
+    
+    public ICollection<Guid> ClassIds => Classes.Select(c => c.Id).ToList();
     
     
     public void Configure(EntityTypeBuilder<Spell> builder)

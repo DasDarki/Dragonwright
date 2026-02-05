@@ -13,8 +13,6 @@ namespace Dragonwright.Controllers;
 [Route("feats")]
 public sealed class FeatsController(AppDbContext dbContext) : ContentControllerBase
 {
-    // ───────────────────────── Feat CRUD ─────────────────────────
-
     [HttpGet]
     public async Task<IActionResult> ListFeats(
         int page = 1, int pageSize = 20, string? search = null, SourceType? source = null)
@@ -23,7 +21,7 @@ public sealed class FeatsController(AppDbContext dbContext) : ContentControllerB
 
         var query = dbContext.Feats.AsQueryable();
         if (!string.IsNullOrWhiteSpace(search))
-            query = query.Where(f => f.Name.ToLower().Contains(search.ToLower()));
+            query = query.Where(f => f.Name.Contains(search, StringComparison.CurrentCultureIgnoreCase));
         if (source.HasValue)
             query = query.Where(f => f.Source == source.Value);
 
@@ -107,8 +105,6 @@ public sealed class FeatsController(AppDbContext dbContext) : ContentControllerB
         return NoContent();
     }
 
-    // ───────────────────────── FeatOption CRUD ─────────────────────────
-
     [HttpPost("{featId:guid}/options")]
     public async Task<IActionResult> CreateOption(Guid featId, [FromBody] FeatOption option)
     {
@@ -158,8 +154,6 @@ public sealed class FeatsController(AppDbContext dbContext) : ContentControllerB
         await dbContext.SaveChangesAsync();
         return NoContent();
     }
-
-    // ───────────────────────── FeatAction CRUD ─────────────────────────
 
     [HttpPost("{featId:guid}/actions")]
     public async Task<IActionResult> CreateAction(Guid featId, [FromBody] FeatAction action)
@@ -231,8 +225,6 @@ public sealed class FeatsController(AppDbContext dbContext) : ContentControllerB
         return NoContent();
     }
 
-    // ───────────────────────── FeatSpell CRUD ─────────────────────────
-
     [HttpPost("{featId:guid}/spells")]
     public async Task<IActionResult> CreateSpell(Guid featId, [FromBody] FeatSpell spell)
     {
@@ -301,8 +293,6 @@ public sealed class FeatsController(AppDbContext dbContext) : ContentControllerB
         await dbContext.SaveChangesAsync();
         return NoContent();
     }
-
-    // ───────────────────────── Modifier CRUD ─────────────────────────
 
     [HttpPost("{featId:guid}/modifiers")]
     public async Task<IActionResult> CreateModifier(Guid featId, [FromBody] Modifier modifier)

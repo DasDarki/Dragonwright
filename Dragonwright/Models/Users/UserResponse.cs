@@ -1,4 +1,5 @@
 using Dragonwright.Database.Entities;
+using Dragonwright.Database.Enums;
 
 namespace Dragonwright.Models.Users;
 
@@ -25,7 +26,7 @@ public sealed class UserResponse
     /// <summary>
     /// The role of the user.
     /// </summary>
-    public string Role { get; set; } = null!;
+    public UserRole UserRole { get; set; }
 
     /// <summary>
     /// Creates a <see cref="UserResponse"/> from a <see cref="User"/> entity.
@@ -37,6 +38,6 @@ public sealed class UserResponse
         Id = user.Id,
         Username = user.Username,
         AvatarId = user.AvatarId,
-        Role = user.UserRole.ToString()
+        UserRole = user.UserRole
     };
 }

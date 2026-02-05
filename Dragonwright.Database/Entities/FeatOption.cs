@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Dragonwright.Database.Entities;
 
 public sealed class FeatOption : IEntity<FeatOption>
@@ -7,6 +9,7 @@ public sealed class FeatOption : IEntity<FeatOption>
 
     public Guid FeatId { get; set; }
 
+    [JsonIgnore]
     public Feat Feat { get; set; } = null!;
 
     [Required]

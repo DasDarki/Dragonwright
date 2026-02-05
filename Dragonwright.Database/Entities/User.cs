@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Dragonwright.Database.Entities;
 
 public sealed class User : IEntity<User>
@@ -18,6 +20,7 @@ public sealed class User : IEntity<User>
 
     public UserRole UserRole { get; set; } = UserRole.User;
     
+    [JsonIgnore]
     public ICollection<Character> Characters { get; } = new List<Character>();
 
     public void Configure(EntityTypeBuilder<User> builder)

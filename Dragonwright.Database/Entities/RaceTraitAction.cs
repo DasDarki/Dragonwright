@@ -1,4 +1,5 @@
-﻿using Dragonwright.Database.Entities.Models;
+using Dragonwright.Database.Entities.Models;
+using System.Text.Json.Serialization;
 
 namespace Dragonwright.Database.Entities;
 
@@ -9,6 +10,7 @@ public sealed class RaceTraitAction : IEntity<RaceTraitAction>
     
     public Guid RaceTraitId { get; set; }
     
+    [JsonIgnore]
     public RaceTrait RaceTrait { get; set; } = null!;
     
     public ActionType ActionType { get; set; }

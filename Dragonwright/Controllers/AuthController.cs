@@ -45,14 +45,14 @@ public sealed class AuthController(AuthService authService) : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        var result = await authService.LoginAsync(request);
+        var (resp, result) = await authService.LoginAsync(request);
 
-        if (result == null)
+        if (resp == null || result != LoginResult.Success)
         {
-            return Unauthorized(new { message = "Invalid credentials" });
+            return Unauthorized(new { message = "Authentication failed", reason = result.ToString() });
         }
 
-        return Ok(result);
+        return Ok(resp);
     }
 
     /// <summary>

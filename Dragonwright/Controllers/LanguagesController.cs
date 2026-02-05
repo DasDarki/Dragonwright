@@ -21,7 +21,7 @@ public sealed class LanguagesController(AppDbContext dbContext) : ContentControl
 
         var query = dbContext.Languages.AsQueryable();
         if (!string.IsNullOrWhiteSpace(search))
-            query = query.Where(l => l.Name.ToLower().Contains(search.ToLower()));
+            query = query.Where(l => l.Name.Contains(search, StringComparison.CurrentCultureIgnoreCase));
 
         var totalCount = await query.CountAsync();
         var items = await query
@@ -69,6 +69,7 @@ public sealed class LanguagesController(AppDbContext dbContext) : ContentControl
         if (language == null) return NotFound();
 
         language.Name = updated.Name;
+        language.Description = updated.Description;
 
         await dbContext.SaveChangesAsync();
         return Ok(language);

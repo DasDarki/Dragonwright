@@ -13,8 +13,6 @@ namespace Dragonwright.Controllers;
 [Route("classes")]
 public sealed class ClassesController(AppDbContext dbContext) : ContentControllerBase
 {
-    // ───────────────────────── Class CRUD ─────────────────────────
-
     [HttpGet]
     public async Task<IActionResult> ListClasses(
         int page = 1, int pageSize = 20, string? search = null, SourceType? source = null)
@@ -114,8 +112,6 @@ public sealed class ClassesController(AppDbContext dbContext) : ContentControlle
         return NoContent();
     }
 
-    // ───────────────────────── ClassFeature CRUD ─────────────────────────
-
     [HttpGet("{classId:guid}/features")]
     public async Task<IActionResult> ListFeatures(Guid classId)
     {
@@ -207,8 +203,6 @@ public sealed class ClassesController(AppDbContext dbContext) : ContentControlle
         return NoContent();
     }
 
-    // ───────────────────────── ClassFeatureOption CRUD ─────────────────────────
-
     [HttpPost("{classId:guid}/features/{featureId:guid}/options")]
     public async Task<IActionResult> CreateFeatureOption(Guid classId, Guid featureId, [FromBody] ClassFeatureOption option)
     {
@@ -261,8 +255,6 @@ public sealed class ClassesController(AppDbContext dbContext) : ContentControlle
         await dbContext.SaveChangesAsync();
         return NoContent();
     }
-
-    // ───────────────────────── ClassFeatureAction CRUD ─────────────────────────
 
     [HttpPost("{classId:guid}/features/{featureId:guid}/actions")]
     public async Task<IActionResult> CreateFeatureAction(Guid classId, Guid featureId, [FromBody] ClassFeatureAction action)
@@ -337,8 +329,6 @@ public sealed class ClassesController(AppDbContext dbContext) : ContentControlle
         return NoContent();
     }
 
-    // ───────────────────────── ClassFeatureSpell CRUD ─────────────────────────
-
     [HttpPost("{classId:guid}/features/{featureId:guid}/spells")]
     public async Task<IActionResult> CreateFeatureSpell(Guid classId, Guid featureId, [FromBody] ClassFeatureSpell spell)
     {
@@ -411,8 +401,6 @@ public sealed class ClassesController(AppDbContext dbContext) : ContentControlle
         return NoContent();
     }
 
-    // ───────────────────────── ClassFeatureCreature CRUD ─────────────────────────
-
     [HttpPost("{classId:guid}/features/{featureId:guid}/creatures")]
     public async Task<IActionResult> CreateFeatureCreature(Guid classId, Guid featureId, [FromBody] ClassFeatureCreature creature)
     {
@@ -468,8 +456,6 @@ public sealed class ClassesController(AppDbContext dbContext) : ContentControlle
         return NoContent();
     }
 
-    // ───────────────────────── ClassFeatureLevelScale CRUD ─────────────────────────
-
     [HttpPost("{classId:guid}/features/{featureId:guid}/level-scales")]
     public async Task<IActionResult> CreateFeatureLevelScale(Guid classId, Guid featureId, [FromBody] ClassFeatureLevelScale levelScale)
     {
@@ -521,8 +507,6 @@ public sealed class ClassesController(AppDbContext dbContext) : ContentControlle
         await dbContext.SaveChangesAsync();
         return NoContent();
     }
-
-    // ───────────────────────── Modifier CRUD (on features) ─────────────────────────
 
     [HttpPost("{classId:guid}/features/{featureId:guid}/modifiers")]
     public async Task<IActionResult> CreateFeatureModifier(Guid classId, Guid featureId, [FromBody] Modifier modifier)
@@ -577,8 +561,6 @@ public sealed class ClassesController(AppDbContext dbContext) : ContentControlle
         await dbContext.SaveChangesAsync();
         return NoContent();
     }
-
-    // ───────────────────────── Subclass CRUD ─────────────────────────
 
     [HttpGet("{classId:guid}/subclasses")]
     public async Task<IActionResult> ListSubclasses(Guid classId)
@@ -662,8 +644,6 @@ public sealed class ClassesController(AppDbContext dbContext) : ContentControlle
         await dbContext.SaveChangesAsync();
         return NoContent();
     }
-
-    // ───────────────────────── Subclass Feature CRUD ─────────────────────────
 
     [HttpGet("{classId:guid}/subclasses/{subclassId:guid}/features")]
     public async Task<IActionResult> ListSubclassFeatures(Guid classId, Guid subclassId)

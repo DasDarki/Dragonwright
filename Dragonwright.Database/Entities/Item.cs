@@ -1,4 +1,4 @@
-﻿using Dragonwright.Database.Entities.Models;
+using Dragonwright.Database.Entities.Models;
 
 namespace Dragonwright.Database.Entities;
 

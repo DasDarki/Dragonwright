@@ -13,8 +13,6 @@ namespace Dragonwright.Controllers;
 [Route("backgrounds")]
 public sealed class BackgroundsController(AppDbContext dbContext) : ContentControllerBase
 {
-    // ───────────────────────── Background CRUD ─────────────────────────
-
     [HttpGet]
     public async Task<IActionResult> ListBackgrounds(
         int page = 1, int pageSize = 20, string? search = null, SourceType? source = null)
@@ -103,8 +101,6 @@ public sealed class BackgroundsController(AppDbContext dbContext) : ContentContr
         return NoContent();
     }
 
-    // ───────────────────────── Characteristics CRUD ─────────────────────────
-
     [HttpPost("{backgroundId:guid}/characteristics")]
     public async Task<IActionResult> CreateCharacteristic(Guid backgroundId, [FromBody] Characteristics characteristic)
     {
@@ -149,8 +145,6 @@ public sealed class BackgroundsController(AppDbContext dbContext) : ContentContr
         await dbContext.SaveChangesAsync();
         return NoContent();
     }
-
-    // ───────────────────────── StartingItems CRUD ─────────────────────────
 
     [HttpPost("{backgroundId:guid}/starting-items")]
     public async Task<IActionResult> CreateStartingItem(Guid backgroundId, [FromBody] StartItemChoice choice)

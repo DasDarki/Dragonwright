@@ -1,4 +1,5 @@
-﻿using Dragonwright.Database.Entities.Models;
+using Dragonwright.Database.Entities.Models;
+using System.Text.Json.Serialization;
 
 namespace Dragonwright.Database.Entities;
 
@@ -9,6 +10,7 @@ public sealed class ClassFeatureSpell : IEntity<ClassFeatureSpell>
     
     public Guid ClassFeatureId { get; set; }
     
+    [JsonIgnore]
     public ClassFeature ClassFeature { get; set; } = null!;
     
     public Guid? SpellId { get; set; }

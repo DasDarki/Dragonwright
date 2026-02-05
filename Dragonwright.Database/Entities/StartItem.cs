@@ -1,4 +1,6 @@
-﻿namespace Dragonwright.Database.Entities;
+﻿using System.Text.Json.Serialization;
+
+namespace Dragonwright.Database.Entities;
 
 public sealed class StartItem : IEntity<StartItem>
 {
@@ -7,6 +9,7 @@ public sealed class StartItem : IEntity<StartItem>
     
     public Guid ChoiceId { get; set; }
     
+    [JsonIgnore]
     public StartItemChoice Choice { get; set; } = null!;
     
     public StartItemType Type { get; set; }

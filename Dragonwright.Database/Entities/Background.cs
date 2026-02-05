@@ -1,4 +1,4 @@
-﻿namespace Dragonwright.Database.Entities;
+namespace Dragonwright.Database.Entities;
 
 public sealed class Background : IEntity<Background>
 {

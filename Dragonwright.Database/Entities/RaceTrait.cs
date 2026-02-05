@@ -1,4 +1,6 @@
-﻿namespace Dragonwright.Database.Entities;
+﻿using System.Text.Json.Serialization;
+
+namespace Dragonwright.Database.Entities;
 
 public sealed class RaceTrait : IEntity<RaceTrait>
 {

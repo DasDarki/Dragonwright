@@ -1,4 +1,6 @@
-﻿namespace Dragonwright.Database.Entities;
+﻿using System.Text.Json.Serialization;
+
+namespace Dragonwright.Database.Entities;
 
 public sealed class ClassFeatureCreature : IEntity<ClassFeatureCreature>
 {
@@ -7,6 +9,7 @@ public sealed class ClassFeatureCreature : IEntity<ClassFeatureCreature>
     
     public Guid ClassFeatureId { get; set; }
     
+    [JsonIgnore]
     public ClassFeature ClassFeature { get; set; } = null!;
 
     /// <summary>

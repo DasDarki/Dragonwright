@@ -63,24 +63,28 @@ public sealed class AuthService(
     /// </summary>
     /// <param name="request">The login request containing username, password, and device ID.</param>
     /// <returns>Authentication tokens if successful, null if credentials are invalid.</returns>
-    public async Task<AuthResponse?> LoginAsync(LoginRequest request)
+    public async Task<(AuthResponse?, LoginResult)> LoginAsync(LoginRequest request)
     {
         await using var dbContext = CreateDbContext();
 
-        var user = await dbContext.Users
-            .FirstOrDefaultAsync(u => u.Username == request.Username);
+        var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
+        if (user == null)
+        {
+            logger.Warning("Login failed: User {Username} not found", request.Username);
+            return (null, LoginResult.UserNotFound);
+        }
 
-        if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+        if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
         {
             logger.Warning("Login failed: Invalid credentials for username {Username}", request.Username);
-            return null;
+            return (null, LoginResult.InvalidCredentials);
         }
 
         await RevokeDeviceTokensAsync(dbContext, user.Id, request.DeviceId);
 
         logger.Information("User {Username} logged in from device {DeviceId}", request.Username, request.DeviceId);
 
-        return await GenerateTokensAsync(dbContext, user, request.DeviceId, request.DeviceName, null);
+        return (await GenerateTokensAsync(dbContext, user, request.DeviceId, request.DeviceName, null), LoginResult.Success);
     }
 
     /// <summary>
@@ -367,4 +371,11 @@ public sealed class AuthService(
         var scope = serviceScopeFactory.CreateScope();
         return scope.ServiceProvider.GetRequiredService<AppDbContext>();
     }
+}
+
+public enum LoginResult
+{
+    Success,
+    InvalidCredentials,
+    UserNotFound
 }

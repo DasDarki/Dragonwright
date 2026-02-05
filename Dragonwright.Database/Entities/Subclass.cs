@@ -1,4 +1,6 @@
-﻿namespace Dragonwright.Database.Entities;
+﻿using System.Text.Json.Serialization;
+
+namespace Dragonwright.Database.Entities;
 
 public sealed class Subclass : IEntity<Subclass>
 {
@@ -16,6 +18,7 @@ public sealed class Subclass : IEntity<Subclass>
     
     public Guid ClassId { get; set; }
     
+    [JsonIgnore]
     public Class Class { get; set; } = null!;
     
     [Required]

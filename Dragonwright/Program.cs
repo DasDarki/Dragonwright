@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using Dragonwright.Configuration;
 using Dragonwright.Database;
 using Dragonwright.Attributes;
@@ -19,6 +20,19 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.Configure<AuthConfiguration>(builder.Configuration.GetSection(AuthConfiguration.SectionName));
 builder.Services.Configure<FileStorageConfiguration>(builder.Configuration.GetSection(FileStorageConfiguration.SectionName));
+
+const string CorsPolicyName = "DWCorsPolicy";
+builder.Services.AddCors(options =>
+{
+    var config = builder.Configuration.GetSection("Cors").Get<CorsConfiguration>()
+                 ?? throw new InvalidOperationException("Cors config missing");
+
+    options.AddPolicy(CorsPolicyName, policyBuilder => policyBuilder
+        .WithOrigins(config.AllowedOrigins)
+        .WithMethods(config.AllowedMethods)
+        .AllowAnyHeader()
+    );
+});
 
 var tokenValidationParameters = new TokenValidationParameters
 {
@@ -53,6 +67,9 @@ builder.Services.AddServices();
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<EntityValidationFilter>();
+}).AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
 var app = builder.Build();
@@ -62,8 +79,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
 app.UseRouting();
+app.UseCors(CorsPolicyName);
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSerilogRequestLogging();
