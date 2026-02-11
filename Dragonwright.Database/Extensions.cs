@@ -127,4 +127,46 @@ internal static class Extensions
             d => d.ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
         );
     }
+
+    /// <summary>
+    /// Configures a PropertyBuilder to store dictionaries with enum keys as JSON.
+    /// The enum keys are serialized as their string names.
+    /// </summary>
+    /// <param name="property">The PropertyBuilder to configure.</param>
+    /// <typeparam name="TKey">The enum type of the dictionary keys.</typeparam>
+    /// <typeparam name="TValue">The type of the dictionary values.</typeparam>
+    /// <returns>The configured PropertyBuilder.</returns>
+    public static PropertyBuilder<IDictionary<TKey, TValue>> EnumKeyDictionary<TKey, TValue>(this PropertyBuilder<IDictionary<TKey, TValue>> property) where TKey : struct, Enum
+    {
+        property
+            .HasConversion(
+                v => JsonSerializer.Serialize(v.ToDictionary(kvp => kvp.Key.ToString(), kvp => kvp.Value)),
+                v => DeserializeEnumKeyDictionary<TKey, TValue>(v)
+            )
+            .Metadata
+            .SetValueComparer(GetEnumKeyDictionaryComparer<TKey, TValue>());
+        return property;
+    }
+
+    private static IDictionary<TKey, TValue> DeserializeEnumKeyDictionary<TKey, TValue>(string json) where TKey : struct, Enum
+    {
+        var stringDict = JsonSerializer.Deserialize<Dictionary<string, TValue>>(json);
+        if (stringDict == null) return new Dictionary<TKey, TValue>();
+        return stringDict.ToDictionary(kvp => Enum.Parse<TKey>(kvp.Key), kvp => kvp.Value);
+    }
+
+    /// <summary>
+    /// Returns a ValueComparer for dictionaries with enum keys.
+    /// </summary>
+    /// <typeparam name="TKey">The enum type of the dictionary keys.</typeparam>
+    /// <typeparam name="TValue">The type of the dictionary values.</typeparam>
+    /// <returns>A ValueComparer for IDictionary of TKey and TValue.</returns>
+    public static ValueComparer<IDictionary<TKey, TValue>> GetEnumKeyDictionaryComparer<TKey, TValue>() where TKey : struct, Enum
+    {
+        return new ValueComparer<IDictionary<TKey, TValue>>(
+            (d1, d2) => d1 != null && d2 != null && d1.Count == d2.Count && !d1.Except(d2).Any(),
+            d => d.Aggregate(0, (a, kvp) => kvp.Value == null ? a : HashCode.Combine(a, kvp.Key.GetHashCode(), kvp.Value.GetHashCode())),
+            d => d.ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
+        );
+    }
 }

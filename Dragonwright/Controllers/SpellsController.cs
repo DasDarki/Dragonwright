@@ -34,7 +34,9 @@ public sealed class SpellsController(AppDbContext dbContext) : ContentController
 
         var totalCount = await query.CountAsync();
         var items = await query
-            .OrderBy(s => s.Name)
+            .OrderBy(s => s.Level)
+            .ThenBy(s => s.Name)
+            .ThenBy(s => s.Source)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();

@@ -30,6 +30,74 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/characters/': RouteRecordInfo<
+      '/characters/',
+      '/characters',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/characters/[id]/': RouteRecordInfo<
+      '/characters/[id]/',
+      '/characters/:id',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
+    '/characters/[id]/edit': RouteRecordInfo<
+      '/characters/[id]/edit',
+      '/characters/:id/edit',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | '/characters/[id]/edit/abilities'
+      | '/characters/[id]/edit/background'
+      | '/characters/[id]/edit/class'
+      | '/characters/[id]/edit/configuration'
+      | '/characters/[id]/edit/details'
+      | '/characters/[id]/edit/race'
+    >,
+    '/characters/[id]/edit/abilities': RouteRecordInfo<
+      '/characters/[id]/edit/abilities',
+      '/characters/:id/edit/abilities',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
+    '/characters/[id]/edit/background': RouteRecordInfo<
+      '/characters/[id]/edit/background',
+      '/characters/:id/edit/background',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
+    '/characters/[id]/edit/class': RouteRecordInfo<
+      '/characters/[id]/edit/class',
+      '/characters/:id/edit/class',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
+    '/characters/[id]/edit/configuration': RouteRecordInfo<
+      '/characters/[id]/edit/configuration',
+      '/characters/:id/edit/configuration',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
+    '/characters/[id]/edit/details': RouteRecordInfo<
+      '/characters/[id]/edit/details',
+      '/characters/:id/edit/details',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
+    '/characters/[id]/edit/race': RouteRecordInfo<
+      '/characters/[id]/edit/race',
+      '/characters/:id/edit/race',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
     '/content/': RouteRecordInfo<
       '/content/',
       '/content',
@@ -207,6 +275,66 @@ declare module 'vue-router/auto-routes' {
     'src/pages/index.vue': {
       routes:
         | '/'
+      views:
+        | never
+    }
+    'src/pages/characters/index.vue': {
+      routes:
+        | '/characters/'
+      views:
+        | never
+    }
+    'src/pages/characters/[id]/index.vue': {
+      routes:
+        | '/characters/[id]/'
+      views:
+        | never
+    }
+    'src/pages/characters/[id]/edit.vue': {
+      routes:
+        | '/characters/[id]/edit'
+        | '/characters/[id]/edit/abilities'
+        | '/characters/[id]/edit/background'
+        | '/characters/[id]/edit/class'
+        | '/characters/[id]/edit/configuration'
+        | '/characters/[id]/edit/details'
+        | '/characters/[id]/edit/race'
+      views:
+        | 'default'
+    }
+    'src/pages/characters/[id]/edit/abilities.vue': {
+      routes:
+        | '/characters/[id]/edit/abilities'
+      views:
+        | never
+    }
+    'src/pages/characters/[id]/edit/background.vue': {
+      routes:
+        | '/characters/[id]/edit/background'
+      views:
+        | never
+    }
+    'src/pages/characters/[id]/edit/class.vue': {
+      routes:
+        | '/characters/[id]/edit/class'
+      views:
+        | never
+    }
+    'src/pages/characters/[id]/edit/configuration.vue': {
+      routes:
+        | '/characters/[id]/edit/configuration'
+      views:
+        | never
+    }
+    'src/pages/characters/[id]/edit/details.vue': {
+      routes:
+        | '/characters/[id]/edit/details'
+      views:
+        | never
+    }
+    'src/pages/characters/[id]/edit/race.vue': {
+      routes:
+        | '/characters/[id]/edit/race'
       views:
         | never
     }

@@ -21,7 +21,7 @@ import UiModal from '@/components/ui/UiModal.vue'
 import UiButton from '@/components/ui/UiButton.vue'
 import UiEntitySelect from '@/components/ui/UiEntitySelect.vue'
 import {
-  sourceOptions, abilityScoreOptions, skillOptions, toolOptions,
+  sourceOptions, abilityScoreOptions, abilityScoreLabels, skillOptions, toolOptions,
   itemTypeOptions, weaponTypeOptions, featureTypeOptions, featureTypeLabels,
   spellPrepareTypeOptions, spellLearnTypeOptions,
 } from '@/content/enums'
@@ -55,12 +55,15 @@ const { form, loading, saving, isEdit, entityId, save, cancel } = useContentForm
     weaponProficiencies: [],
     features: [],
     subclasses: [],
+    subclassSelectionLevel: 3,
+    standardArray: [15, 14, 13, 12, 10, 8],
+    multiclassingRequirements: {},
+    multiclassingRequirementsAlt: {},
   }),
   getFn: getClassesId,
   createFn: postClasses,
   updateFn: putClassesId,
   onAfterSave: async (classId) => {
-    // Save pending sub-entities after parent creation
     for (const feature of pendingFeatures.value) {
       const { id: _id, ...payload } = feature
       await postClassesClassIdFeatures(classId, payload as ClassFeature)
@@ -73,8 +76,6 @@ const { form, loading, saving, isEdit, entityId, save, cancel } = useContentForm
     pendingSubclasses.value = []
   },
 })
-
-// ─── Features ───────────────────────────────────────────────
 
 const featureModalOpen = ref(false)
 const featureEditIndex = ref<number | null>(null)
@@ -98,7 +99,6 @@ function defaultFeature(): ClassFeature {
   }
 }
 
-// For "Feature to Replace" entity select - returns other features excluding the one being edited
 function fetchOtherFeatures() {
   const currentId = featureForm.value.id
   const allFeatures = form.value.features ?? []
@@ -218,8 +218,6 @@ async function removeFeature(index: number) {
   form.value.features?.splice(index, 1)
 }
 
-// ─── Subclasses ─────────────────────────────────────────────
-
 const subclassModalOpen = ref(false)
 const subclassEditIndex = ref<number | null>(null)
 const subclassForm = ref<Subclass>(defaultSubclass())
@@ -308,6 +306,56 @@ async function removeSubclass(index: number) {
   }
   form.value.subclasses?.splice(index, 1)
 }
+
+function getMulticlassingRequirement(ability: string): number {
+  const reqs = form.value.multiclassingRequirements as Record<string, number> | undefined
+  return reqs?.[ability] ?? 0
+}
+
+function setMulticlassingRequirement(ability: string, value: number) {
+  if (!form.value.multiclassingRequirements) {
+    form.value.multiclassingRequirements = {}
+  }
+  const reqs = form.value.multiclassingRequirements as Record<string, number>
+  if (value > 0) {
+    reqs[ability] = value
+  } else {
+    delete reqs[ability]
+  }
+  form.value.multiclassingRequirements = { ...reqs }
+}
+
+function getMulticlassingRequirementAlt(ability: string): number {
+  const reqs = form.value.multiclassingRequirementsAlt as Record<string, number> | undefined
+  return reqs?.[ability] ?? 0
+}
+
+function setMulticlassingRequirementAlt(ability: string, value: number) {
+  if (!form.value.multiclassingRequirementsAlt) {
+    form.value.multiclassingRequirementsAlt = {}
+  }
+  const reqs = form.value.multiclassingRequirementsAlt as Record<string, number>
+  if (value > 0) {
+    reqs[ability] = value
+  } else {
+    delete reqs[ability]
+  }
+  form.value.multiclassingRequirementsAlt = { ...reqs }
+}
+
+function getStandardArrayValue(index: number): number {
+  const arr = form.value.standardArray as number[] | undefined
+  return arr?.[index] ?? 0
+}
+
+function setStandardArrayValue(index: number, value: number) {
+  if (!form.value.standardArray) {
+    form.value.standardArray = [15, 14, 13, 12, 10, 8]
+  }
+  const arr = [...(form.value.standardArray as number[])]
+  arr[index] = value
+  form.value.standardArray = arr
+}
 </script>
 
 <template>
@@ -353,6 +401,55 @@ async function removeSubclass(index: number) {
       <UiCheckboxGroup v-model="form.toolProficiencies" label="Tool Proficiencies" :options="toolOptions" :tip="classTips.toolProficiencies" />
       <UiCheckboxGroup v-model="form.armorProficiencies" label="Armor Proficiencies" :options="itemTypeOptions" :tip="classTips.armorProficiencies" />
       <UiCheckboxGroup v-model="form.weaponProficiencies" label="Weapon Proficiencies" :options="weaponTypeOptions" :tip="classTips.weaponProficiencies" />
+    </div>
+
+    <!-- Multiclassing & Advancement -->
+    <div class="content-form__section">
+      <h3 class="content-form__section-title">Multiclassing & Advancement</h3>
+      <div class="content-form__row">
+        <UiInput v-model="form.subclassSelectionLevel" label="Subclass Selection Level" type="number" placeholder="3" :tip="classTips.subclassSelectionLevel" />
+      </div>
+      <div class="content-form__subsection">
+        <label class="content-form__label">Standard Array <span class="content-form__label-tip" :title="classTips.standardArray.body">(i)</span></label>
+        <div class="content-form__array-grid">
+          <UiInput
+            v-for="i in 6"
+            :key="i"
+            :model-value="getStandardArrayValue(i - 1)"
+            type="number"
+            :placeholder="String([15, 14, 13, 12, 10, 8][i - 1])"
+            @update:model-value="setStandardArrayValue(i - 1, Number($event))"
+          />
+        </div>
+      </div>
+      <div class="content-form__subsection">
+        <label class="content-form__label">Multiclassing Requirements (AND) <span class="content-form__label-tip" :title="classTips.multiclassingRequirements.body">(i)</span></label>
+        <div class="content-form__ability-grid">
+          <div v-for="(label, ability) in abilityScoreLabels" :key="ability" class="content-form__ability-req">
+            <span class="content-form__ability-label">{{ label.slice(0, 3).toUpperCase() }}</span>
+            <UiInput
+              :model-value="getMulticlassingRequirement(label)"
+              type="number"
+              placeholder="0"
+              @update:model-value="setMulticlassingRequirement(label, Number($event))"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="content-form__subsection">
+        <label class="content-form__label">Alternative Requirements (OR) <span class="content-form__label-tip" :title="classTips.multiclassingRequirements.body">(i)</span></label>
+        <div class="content-form__ability-grid">
+          <div v-for="(label, ability) in abilityScoreLabels" :key="ability" class="content-form__ability-req">
+            <span class="content-form__ability-label">{{ label.slice(0, 3).toUpperCase() }}</span>
+            <UiInput
+              :model-value="getMulticlassingRequirementAlt(label)"
+              type="number"
+              placeholder="0"
+              @update:model-value="setMulticlassingRequirementAlt(label, Number($event))"
+            />
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Features -->

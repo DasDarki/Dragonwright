@@ -7,7 +7,44 @@
 import { customFetch } from './http';
 export type AbilityScore = number;
 
+export type AbilityScoreGenerationMethod = number;
+
 export type ActionType = number;
+
+export interface AddCharacterItemRequest {
+  itemId?: string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  quantity?: number | string;
+  notes?: string;
+  attuned?: boolean;
+  equipped?: boolean;
+}
+
+export type SpellSource = number;
+
+export type SpellLevel = number;
+
+export type ResetType = number;
+
+export interface AddCharacterSpellRequest {
+  spellId?: string;
+  spellSource?: SpellSource;
+  /** @nullable */
+  sourceClassId?: string | null;
+  isPrepared?: boolean;
+  alwaysPrepared?: boolean;
+  castAtLevelOverride?: null | SpellLevel;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  maxUses?: number | string | null;
+  resetType?: null | ResetType;
+}
+
+export type AdvancementType = number;
+
+export type AdvantageState = number;
 
 export type Alignment = number;
 
@@ -176,8 +213,6 @@ export interface Time {
   unit?: TimeUnit;
 }
 
-export type ResetType = number;
-
 export interface FeatAction {
   id?: string;
   featId?: string;
@@ -226,8 +261,6 @@ export interface FeatAction {
   resetType?: null | ResetType;
   description?: string;
 }
-
-export type SpellLevel = number;
 
 export type SpellSchool = number;
 
@@ -502,6 +535,680 @@ export interface ClassFeatureSpell {
   isInfinite?: boolean;
 }
 
+export type ModifierType = number;
+
+export type ModifierSubtypeBonusSubtypeType = typeof ModifierSubtypeBonusSubtypeType[keyof typeof ModifierSubtypeBonusSubtypeType];
+
+
+export const ModifierSubtypeBonusSubtypeType = {
+  Bonus: 'Bonus',
+} as const;
+
+export type BonusTarget = number;
+
+export interface ModifierSubtypeBonusSubtype {
+  $type: ModifierSubtypeBonusSubtypeType;
+  target?: BonusTarget;
+  abilityScore?: null | AbilityScore;
+  skill?: null | Skill;
+  movementType?: null | MovementType;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  spellLevel?: number | string | null;
+}
+
+export type ModifierSubtypeDamageSubtypeType = typeof ModifierSubtypeDamageSubtypeType[keyof typeof ModifierSubtypeDamageSubtypeType];
+
+
+export const ModifierSubtypeDamageSubtypeType = {
+  Damage: 'Damage',
+} as const;
+
+export interface ModifierSubtypeDamageSubtype {
+  $type: ModifierSubtypeDamageSubtypeType;
+  damageType?: DamageType;
+  onCriticalOnly?: boolean;
+  meleeOnly?: boolean;
+  rangedOnly?: boolean;
+  spellOnly?: boolean;
+  oncePerTurn?: boolean;
+  /** @nullable */
+  restrictToWeaponId?: string | null;
+}
+
+export type ModifierSubtypeAdvantageSubtypeType = typeof ModifierSubtypeAdvantageSubtypeType[keyof typeof ModifierSubtypeAdvantageSubtypeType];
+
+
+export const ModifierSubtypeAdvantageSubtypeType = {
+  Advantage: 'Advantage',
+} as const;
+
+export type RollTarget = number;
+
+export interface ModifierSubtypeAdvantageSubtype {
+  $type: ModifierSubtypeAdvantageSubtypeType;
+  target?: RollTarget;
+  abilityScore?: null | AbilityScore;
+  skill?: null | Skill;
+  againstCreatureType?: null | CreatureType;
+  whenAfflictedByCondition?: null | Condition;
+  whenHidden?: boolean;
+  onFirstAttackPerTurn?: boolean;
+}
+
+export type ModifierSubtypeDisadvantageSubtypeType = typeof ModifierSubtypeDisadvantageSubtypeType[keyof typeof ModifierSubtypeDisadvantageSubtypeType];
+
+
+export const ModifierSubtypeDisadvantageSubtypeType = {
+  Disadvantage: 'Disadvantage',
+} as const;
+
+export interface ModifierSubtypeDisadvantageSubtype {
+  $type: ModifierSubtypeDisadvantageSubtypeType;
+  target?: RollTarget;
+  abilityScore?: null | AbilityScore;
+  skill?: null | Skill;
+  whenWithinMeleeRange?: boolean;
+  whenInSunlight?: boolean;
+}
+
+export type ModifierSubtypeResistanceSubtypeType = typeof ModifierSubtypeResistanceSubtypeType[keyof typeof ModifierSubtypeResistanceSubtypeType];
+
+
+export const ModifierSubtypeResistanceSubtypeType = {
+  Resistance: 'Resistance',
+} as const;
+
+export interface ModifierSubtypeResistanceSubtype {
+  $type: ModifierSubtypeResistanceSubtypeType;
+  damageTypes?: DamageType[];
+  allDamage?: boolean;
+  nonMagicalBludgeoningPiercingSlashing?: boolean;
+}
+
+export type ModifierSubtypeImmunitySubtypeType = typeof ModifierSubtypeImmunitySubtypeType[keyof typeof ModifierSubtypeImmunitySubtypeType];
+
+
+export const ModifierSubtypeImmunitySubtypeType = {
+  Immunity: 'Immunity',
+} as const;
+
+export interface ModifierSubtypeImmunitySubtype {
+  $type: ModifierSubtypeImmunitySubtypeType;
+  damageTypes?: DamageType[];
+  conditions?: Condition[];
+  disease?: boolean;
+  poison?: boolean;
+  magicalSleep?: boolean;
+}
+
+export type ModifierSubtypeVulnerabilitySubtypeType = typeof ModifierSubtypeVulnerabilitySubtypeType[keyof typeof ModifierSubtypeVulnerabilitySubtypeType];
+
+
+export const ModifierSubtypeVulnerabilitySubtypeType = {
+  Vulnerability: 'Vulnerability',
+} as const;
+
+export interface ModifierSubtypeVulnerabilitySubtype {
+  $type: ModifierSubtypeVulnerabilitySubtypeType;
+  damageTypes?: DamageType[];
+}
+
+export type ModifierSubtypeSenseSubtypeType = typeof ModifierSubtypeSenseSubtypeType[keyof typeof ModifierSubtypeSenseSubtypeType];
+
+
+export const ModifierSubtypeSenseSubtypeType = {
+  Sense: 'Sense',
+} as const;
+
+export type SenseType = number;
+
+export interface ModifierSubtypeSenseSubtype {
+  $type: ModifierSubtypeSenseSubtypeType;
+  senseType?: SenseType;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  rangeInFeet?: number | string;
+}
+
+export type ModifierSubtypeSetSubtypeType = typeof ModifierSubtypeSetSubtypeType[keyof typeof ModifierSubtypeSetSubtypeType];
+
+
+export const ModifierSubtypeSetSubtypeType = {
+  Set: 'Set',
+} as const;
+
+export interface ModifierSubtypeSetSubtype {
+  $type: ModifierSubtypeSetSubtypeType;
+  target?: BonusTarget;
+  abilityScore?: null | AbilityScore;
+  movementType?: null | MovementType;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  value?: number | string;
+}
+
+export type ModifierSubtypeHalfProficiencySubtypeType = typeof ModifierSubtypeHalfProficiencySubtypeType[keyof typeof ModifierSubtypeHalfProficiencySubtypeType];
+
+
+export const ModifierSubtypeHalfProficiencySubtypeType = {
+  HalfProficiency: 'HalfProficiency',
+} as const;
+
+export type ProficiencyTarget = number;
+
+export interface ModifierSubtypeHalfProficiencySubtype {
+  $type: ModifierSubtypeHalfProficiencySubtypeType;
+  target?: ProficiencyTarget;
+  abilityScore?: null | AbilityScore;
+  skill?: null | Skill;
+  tool?: null | Tool;
+  allSkills?: boolean;
+  allAbilityChecks?: boolean;
+}
+
+export type ModifierSubtypeProficiencySubtypeType = typeof ModifierSubtypeProficiencySubtypeType[keyof typeof ModifierSubtypeProficiencySubtypeType];
+
+
+export const ModifierSubtypeProficiencySubtypeType = {
+  Proficiency: 'Proficiency',
+} as const;
+
+export interface ModifierSubtypeProficiencySubtype {
+  $type: ModifierSubtypeProficiencySubtypeType;
+  target?: ProficiencyTarget;
+  skill?: null | Skill;
+  tool?: null | Tool;
+  savingThrow?: null | AbilityScore;
+  weaponType?: null | WeaponType;
+  /** @nullable */
+  specificWeaponId?: string | null;
+  armorType?: null | ItemType;
+}
+
+export type ModifierSubtypeExpertiseSubtypeType = typeof ModifierSubtypeExpertiseSubtypeType[keyof typeof ModifierSubtypeExpertiseSubtypeType];
+
+
+export const ModifierSubtypeExpertiseSubtypeType = {
+  Expertise: 'Expertise',
+} as const;
+
+export interface ModifierSubtypeExpertiseSubtype {
+  $type: ModifierSubtypeExpertiseSubtypeType;
+  target?: ProficiencyTarget;
+  skill?: null | Skill;
+  tool?: null | Tool;
+  requiresProficiency?: boolean;
+}
+
+export type ModifierSubtypeLanguageSubtypeType = typeof ModifierSubtypeLanguageSubtypeType[keyof typeof ModifierSubtypeLanguageSubtypeType];
+
+
+export const ModifierSubtypeLanguageSubtypeType = {
+  Language: 'Language',
+} as const;
+
+export interface ModifierSubtypeLanguageSubtype {
+  $type: ModifierSubtypeLanguageSubtypeType;
+  /** @nullable */
+  languageId?: string | null;
+  anyLanguage?: boolean;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  languageCount?: number | string;
+}
+
+export type ModifierSubtypeFeatSubtypeType = typeof ModifierSubtypeFeatSubtypeType[keyof typeof ModifierSubtypeFeatSubtypeType];
+
+
+export const ModifierSubtypeFeatSubtypeType = {
+  Feat: 'Feat',
+} as const;
+
+export interface ModifierSubtypeFeatSubtype {
+  $type: ModifierSubtypeFeatSubtypeType;
+  /** @nullable */
+  featId?: string | null;
+  anyFeat?: boolean;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  maxFeatLevel?: number | string | null;
+}
+
+export type ModifierSubtypeCarryingCapacitySubtypeType = typeof ModifierSubtypeCarryingCapacitySubtypeType[keyof typeof ModifierSubtypeCarryingCapacitySubtypeType];
+
+
+export const ModifierSubtypeCarryingCapacitySubtypeType = {
+  CarryingCapacity: 'CarryingCapacity',
+} as const;
+
+export interface ModifierSubtypeCarryingCapacitySubtype {
+  $type: ModifierSubtypeCarryingCapacitySubtypeType;
+  /** @pattern ^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$ */
+  multiplier?: number | string;
+  countAsSizeLarger?: boolean;
+  countAsSizeSmaller?: boolean;
+}
+
+export type ModifierSubtypeNaturalWeaponSubtypeType = typeof ModifierSubtypeNaturalWeaponSubtypeType[keyof typeof ModifierSubtypeNaturalWeaponSubtypeType];
+
+
+export const ModifierSubtypeNaturalWeaponSubtypeType = {
+  NaturalWeapon: 'NaturalWeapon',
+} as const;
+
+export interface ModifierSubtypeNaturalWeaponSubtype {
+  $type: ModifierSubtypeNaturalWeaponSubtypeType;
+  weaponName?: string;
+  damageType?: DamageType;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  damageDiceCount?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  damageDiceValue?: number | string;
+  abilityScoreOverride?: null | AbilityScore;
+  useStrengthOrDexterity?: boolean;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  reachInFeet?: number | string;
+}
+
+export type ModifierSubtypeStealthDisadvantageSubtypeType = typeof ModifierSubtypeStealthDisadvantageSubtypeType[keyof typeof ModifierSubtypeStealthDisadvantageSubtypeType];
+
+
+export const ModifierSubtypeStealthDisadvantageSubtypeType = {
+  StealthDisadvantage: 'StealthDisadvantage',
+} as const;
+
+export interface ModifierSubtypeStealthDisadvantageSubtype {
+  $type: ModifierSubtypeStealthDisadvantageSubtypeType;
+  fromArmor?: boolean;
+}
+
+export type ModifierSubtypeSpeedReductionSubtypeType = typeof ModifierSubtypeSpeedReductionSubtypeType[keyof typeof ModifierSubtypeSpeedReductionSubtypeType];
+
+
+export const ModifierSubtypeSpeedReductionSubtypeType = {
+  SpeedReduction: 'SpeedReduction',
+} as const;
+
+export interface ModifierSubtypeSpeedReductionSubtype {
+  $type: ModifierSubtypeSpeedReductionSubtypeType;
+  movementType?: null | MovementType;
+  allMovementTypes?: boolean;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  reductionInFeet?: number | string;
+  setToZero?: boolean;
+}
+
+export type ModifierSubtypeSpeedIncreaseSubtypeType = typeof ModifierSubtypeSpeedIncreaseSubtypeType[keyof typeof ModifierSubtypeSpeedIncreaseSubtypeType];
+
+
+export const ModifierSubtypeSpeedIncreaseSubtypeType = {
+  SpeedIncrease: 'SpeedIncrease',
+} as const;
+
+export interface ModifierSubtypeSpeedIncreaseSubtype {
+  $type: ModifierSubtypeSpeedIncreaseSubtypeType;
+  movementType?: null | MovementType;
+  allMovementTypes?: boolean;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  increaseInFeet?: number | string;
+  equalToWalkingSpeed?: boolean;
+}
+
+export type ModifierSubtypeMeleeWeaponAttackSubtypeType = typeof ModifierSubtypeMeleeWeaponAttackSubtypeType[keyof typeof ModifierSubtypeMeleeWeaponAttackSubtypeType];
+
+
+export const ModifierSubtypeMeleeWeaponAttackSubtypeType = {
+  MeleeWeaponAttack: 'MeleeWeaponAttack',
+} as const;
+
+export interface ModifierSubtypeMeleeWeaponAttackSubtype {
+  $type: ModifierSubtypeMeleeWeaponAttackSubtypeType;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  attackBonus?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  damageBonus?: number | string;
+  additionalDamageType?: null | DamageType;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  additionalDamageDiceCount?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  additionalDamageDiceValue?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  additionalDamageFixed?: number | string;
+  requiresWeaponProperty?: null | WeaponProperty;
+  /** @nullable */
+  restrictToWeaponId?: string | null;
+}
+
+export type ModifierSubtypeRangedWeaponAttackSubtypeType = typeof ModifierSubtypeRangedWeaponAttackSubtypeType[keyof typeof ModifierSubtypeRangedWeaponAttackSubtypeType];
+
+
+export const ModifierSubtypeRangedWeaponAttackSubtypeType = {
+  RangedWeaponAttack: 'RangedWeaponAttack',
+} as const;
+
+export interface ModifierSubtypeRangedWeaponAttackSubtype {
+  $type: ModifierSubtypeRangedWeaponAttackSubtypeType;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  attackBonus?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  damageBonus?: number | string;
+  additionalDamageType?: null | DamageType;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  additionalDamageDiceCount?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  additionalDamageDiceValue?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  additionalDamageFixed?: number | string;
+  requiresWeaponProperty?: null | WeaponProperty;
+  /** @nullable */
+  restrictToWeaponId?: string | null;
+  ignoreLongRangeDisadvantage?: boolean;
+}
+
+export type ModifierSubtypeWeaponPropertySubtypeType = typeof ModifierSubtypeWeaponPropertySubtypeType[keyof typeof ModifierSubtypeWeaponPropertySubtypeType];
+
+
+export const ModifierSubtypeWeaponPropertySubtypeType = {
+  WeaponProperty: 'WeaponProperty',
+} as const;
+
+export interface ModifierSubtypeWeaponPropertySubtype {
+  $type: ModifierSubtypeWeaponPropertySubtypeType;
+  property?: WeaponProperty;
+  /** @nullable */
+  restrictToWeaponId?: string | null;
+  restrictToWeaponType?: null | WeaponType;
+}
+
+export type ModifierSubtypeHalfProficiencyRoundUpSubtypeType = typeof ModifierSubtypeHalfProficiencyRoundUpSubtypeType[keyof typeof ModifierSubtypeHalfProficiencyRoundUpSubtypeType];
+
+
+export const ModifierSubtypeHalfProficiencyRoundUpSubtypeType = {
+  HalfProficiencyRoundUp: 'HalfProficiencyRoundUp',
+} as const;
+
+export interface ModifierSubtypeHalfProficiencyRoundUpSubtype {
+  $type: ModifierSubtypeHalfProficiencyRoundUpSubtypeType;
+  target?: ProficiencyTarget;
+  abilityScore?: null | AbilityScore;
+  skill?: null | Skill;
+  tool?: null | Tool;
+  allSkills?: boolean;
+  allAbilityChecks?: boolean;
+}
+
+export type ModifierSubtypeFavoredEnemySubtypeType = typeof ModifierSubtypeFavoredEnemySubtypeType[keyof typeof ModifierSubtypeFavoredEnemySubtypeType];
+
+
+export const ModifierSubtypeFavoredEnemySubtypeType = {
+  FavoredEnemy: 'FavoredEnemy',
+} as const;
+
+export interface ModifierSubtypeFavoredEnemySubtype {
+  $type: ModifierSubtypeFavoredEnemySubtypeType;
+  creatureTypes?: CreatureType[];
+  advantageOnSurvivalToTrack?: boolean;
+  advantageOnIntelligenceToRecall?: boolean;
+  /** @nullable */
+  languageId?: string | null;
+}
+
+export type ModifierSubtypeIgnoreSubtypeType = typeof ModifierSubtypeIgnoreSubtypeType[keyof typeof ModifierSubtypeIgnoreSubtypeType];
+
+
+export const ModifierSubtypeIgnoreSubtypeType = {
+  Ignore: 'Ignore',
+} as const;
+
+export interface ModifierSubtypeIgnoreSubtype {
+  $type: ModifierSubtypeIgnoreSubtypeType;
+  conditions?: Condition[];
+  damageTypes?: DamageType[];
+  difficultTerrain?: boolean;
+  heavyArmorStealthDisadvantage?: boolean;
+  heavyArmorStrengthRequirement?: boolean;
+  loadingProperty?: boolean;
+  coverBonus?: boolean;
+  halfCover?: boolean;
+  threeQuartersCover?: boolean;
+}
+
+export type ModifierSubtypeEldritchBlastSubtypeType = typeof ModifierSubtypeEldritchBlastSubtypeType[keyof typeof ModifierSubtypeEldritchBlastSubtypeType];
+
+
+export const ModifierSubtypeEldritchBlastSubtypeType = {
+  EldrichBlast: 'EldrichBlast',
+} as const;
+
+export interface ModifierSubtypeEldritchBlastSubtype {
+  $type: ModifierSubtypeEldritchBlastSubtypeType;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  additionalDamageFixed?: number | string;
+  additionalDamageAbilityModifier?: null | AbilityScore;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  pushDistanceInFeet?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  pullDistanceInFeet?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  additionalRangeInFeet?: number | string;
+  reduceSpeedByTen?: boolean;
+}
+
+export type ModifierSubtypeReplaceDamageTypeSubtypeType = typeof ModifierSubtypeReplaceDamageTypeSubtypeType[keyof typeof ModifierSubtypeReplaceDamageTypeSubtypeType];
+
+
+export const ModifierSubtypeReplaceDamageTypeSubtypeType = {
+  ReplaceDamageType: 'ReplaceDamageType',
+} as const;
+
+export interface ModifierSubtypeReplaceDamageTypeSubtype {
+  $type: ModifierSubtypeReplaceDamageTypeSubtypeType;
+  originalDamageType?: null | DamageType;
+  newDamageType?: DamageType;
+  allDamageTypes?: boolean;
+  spellsOnly?: boolean;
+  weaponsOnly?: boolean;
+}
+
+export type ModifierSubtypeTwiceProficiencySubtypeType = typeof ModifierSubtypeTwiceProficiencySubtypeType[keyof typeof ModifierSubtypeTwiceProficiencySubtypeType];
+
+
+export const ModifierSubtypeTwiceProficiencySubtypeType = {
+  TwiceProficiency: 'TwiceProficiency',
+} as const;
+
+export interface ModifierSubtypeTwiceProficiencySubtype {
+  $type: ModifierSubtypeTwiceProficiencySubtypeType;
+  target?: ProficiencyTarget;
+  skill?: null | Skill;
+  tool?: null | Tool;
+  abilityScore?: null | AbilityScore;
+  requiresProficiency?: boolean;
+}
+
+export type ModifierSubtypeMonkWeaponSubtypeType = typeof ModifierSubtypeMonkWeaponSubtypeType[keyof typeof ModifierSubtypeMonkWeaponSubtypeType];
+
+
+export const ModifierSubtypeMonkWeaponSubtypeType = {
+  MonkWeapon: 'MonkWeapon',
+} as const;
+
+export interface ModifierSubtypeMonkWeaponSubtype {
+  $type: ModifierSubtypeMonkWeaponSubtypeType;
+  /** @nullable */
+  weaponId?: string | null;
+  weaponType?: null | WeaponType;
+  requiresProperty?: null | WeaponProperty;
+  allSimpleMeleeWeapons?: boolean;
+  shortswords?: boolean;
+}
+
+export type ModifierSubtypeProtectionSubtypeType = typeof ModifierSubtypeProtectionSubtypeType[keyof typeof ModifierSubtypeProtectionSubtypeType];
+
+
+export const ModifierSubtypeProtectionSubtypeType = {
+  Protection: 'Protection',
+} as const;
+
+export interface ModifierSubtypeProtectionSubtype {
+  $type: ModifierSubtypeProtectionSubtypeType;
+  damageTypes?: DamageType[];
+  allMagicalDamage?: boolean;
+  allNonMagicalDamage?: boolean;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  damageReductionFixed?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  damageReductionPerCharacterLevel?: number | string;
+  damageReductionAbilityModifier?: null | AbilityScore;
+}
+
+export type ModifierSubtypeStackingBonusSubtypeType = typeof ModifierSubtypeStackingBonusSubtypeType[keyof typeof ModifierSubtypeStackingBonusSubtypeType];
+
+
+export const ModifierSubtypeStackingBonusSubtypeType = {
+  StackingBonus: 'StackingBonus',
+} as const;
+
+export interface ModifierSubtypeStackingBonusSubtype {
+  $type: ModifierSubtypeStackingBonusSubtypeType;
+  target?: BonusTarget;
+  abilityScore?: null | AbilityScore;
+  skill?: null | Skill;
+  movementType?: null | MovementType;
+  stackGroup?: string;
+}
+
+export type ModifierSubtypeSetBaseSubtypeType = typeof ModifierSubtypeSetBaseSubtypeType[keyof typeof ModifierSubtypeSetBaseSubtypeType];
+
+
+export const ModifierSubtypeSetBaseSubtypeType = {
+  SetBase: 'SetBase',
+} as const;
+
+export interface ModifierSubtypeSetBaseSubtype {
+  $type: ModifierSubtypeSetBaseSubtypeType;
+  target?: BonusTarget;
+  abilityScore?: null | AbilityScore;
+  movementType?: null | MovementType;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  baseValue?: number | string;
+  addAbilityModifier?: null | AbilityScore;
+  addDexterityModifierCapped?: boolean;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  dexterityModifierCap?: number | string;
+}
+
+export type ModifierSubtypeIgnoreWeaponPropertySubtypeType = typeof ModifierSubtypeIgnoreWeaponPropertySubtypeType[keyof typeof ModifierSubtypeIgnoreWeaponPropertySubtypeType];
+
+
+export const ModifierSubtypeIgnoreWeaponPropertySubtypeType = {
+  IgnoreWeaponProperty: 'IgnoreWeaponProperty',
+} as const;
+
+export interface ModifierSubtypeIgnoreWeaponPropertySubtype {
+  $type: ModifierSubtypeIgnoreWeaponPropertySubtypeType;
+  property?: WeaponProperty;
+  /** @nullable */
+  restrictToWeaponId?: string | null;
+  restrictToWeaponType?: null | WeaponType;
+}
+
+export type ModifierSubtypeSizeSubtypeType = typeof ModifierSubtypeSizeSubtypeType[keyof typeof ModifierSubtypeSizeSubtypeType];
+
+
+export const ModifierSubtypeSizeSubtypeType = {
+  Size: 'Size',
+} as const;
+
+export interface ModifierSubtypeSizeSubtype {
+  $type: ModifierSubtypeSizeSubtypeType;
+  size?: Size;
+  isIncrease?: boolean;
+  isDecrease?: boolean;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  sizeSteps?: number | string;
+}
+
+export type ModifierSubtypeWeaponMasterySubtypeType = typeof ModifierSubtypeWeaponMasterySubtypeType[keyof typeof ModifierSubtypeWeaponMasterySubtypeType];
+
+
+export const ModifierSubtypeWeaponMasterySubtypeType = {
+  WeaponMastery: 'WeaponMastery',
+} as const;
+
+export interface ModifierSubtypeWeaponMasterySubtype {
+  $type: ModifierSubtypeWeaponMasterySubtypeType;
+  mastery?: Mastery;
+  /** @nullable */
+  restrictToWeaponId?: string | null;
+  restrictToWeaponType?: null | WeaponType;
+  anyWeaponWithMasteryProperty?: boolean;
+}
+
+export type ModifierSubtypeEnableFeatureSubtypeType = typeof ModifierSubtypeEnableFeatureSubtypeType[keyof typeof ModifierSubtypeEnableFeatureSubtypeType];
+
+
+export const ModifierSubtypeEnableFeatureSubtypeType = {
+  EnableFeature: 'EnableFeature',
+} as const;
+
+export interface ModifierSubtypeEnableFeatureSubtype {
+  $type: ModifierSubtypeEnableFeatureSubtypeType;
+  featureKey?: string;
+  twoWeaponFighting?: boolean;
+  unarmoredDefense?: boolean;
+  jackOfAllTrades?: boolean;
+  remarkableAthlete?: boolean;
+  sneakAttack?: boolean;
+  rageDamageBonus?: boolean;
+  martialArtsDie?: boolean;
+  wildShape?: boolean;
+  channelDivinity?: boolean;
+  extraAttack?: boolean;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  extraAttackCount?: number | string;
+}
+
+export type ModifierSubtypeReplaceWeaponAbilitySubtypeType = typeof ModifierSubtypeReplaceWeaponAbilitySubtypeType[keyof typeof ModifierSubtypeReplaceWeaponAbilitySubtypeType];
+
+
+export const ModifierSubtypeReplaceWeaponAbilitySubtypeType = {
+  ReplaceWeaponAbility: 'ReplaceWeaponAbility',
+} as const;
+
+export interface ModifierSubtypeReplaceWeaponAbilitySubtype {
+  $type: ModifierSubtypeReplaceWeaponAbilitySubtypeType;
+  newAbilityScore?: AbilityScore;
+  meleeOnly?: boolean;
+  rangedOnly?: boolean;
+  /** @nullable */
+  restrictToWeaponId?: string | null;
+  restrictToWeaponType?: null | WeaponType;
+  requiresProperty?: null | WeaponProperty;
+  useHigherOfStrengthOrDexterity?: boolean;
+}
+
+export type ModifierSubtype = ModifierSubtypeBonusSubtype | ModifierSubtypeDamageSubtype | ModifierSubtypeAdvantageSubtype | ModifierSubtypeDisadvantageSubtype | ModifierSubtypeResistanceSubtype | ModifierSubtypeImmunitySubtype | ModifierSubtypeVulnerabilitySubtype | ModifierSubtypeSenseSubtype | ModifierSubtypeSetSubtype | ModifierSubtypeHalfProficiencySubtype | ModifierSubtypeProficiencySubtype | ModifierSubtypeExpertiseSubtype | ModifierSubtypeLanguageSubtype | ModifierSubtypeFeatSubtype | ModifierSubtypeCarryingCapacitySubtype | ModifierSubtypeNaturalWeaponSubtype | ModifierSubtypeStealthDisadvantageSubtype | ModifierSubtypeSpeedReductionSubtype | ModifierSubtypeSpeedIncreaseSubtype | ModifierSubtypeMeleeWeaponAttackSubtype | ModifierSubtypeRangedWeaponAttackSubtype | ModifierSubtypeWeaponPropertySubtype | ModifierSubtypeHalfProficiencyRoundUpSubtype | ModifierSubtypeFavoredEnemySubtype | ModifierSubtypeIgnoreSubtype | ModifierSubtypeEldritchBlastSubtype | ModifierSubtypeReplaceDamageTypeSubtype | ModifierSubtypeTwiceProficiencySubtype | ModifierSubtypeMonkWeaponSubtype | ModifierSubtypeProtectionSubtype | ModifierSubtypeStackingBonusSubtype | ModifierSubtypeSetBaseSubtype | ModifierSubtypeIgnoreWeaponPropertySubtype | ModifierSubtypeSizeSubtype | ModifierSubtypeWeaponMasterySubtype | ModifierSubtypeEnableFeatureSubtype | ModifierSubtypeReplaceWeaponAbilitySubtype;
+
+export interface Modifier {
+  id?: string;
+  type?: ModifierType;
+  subtype?: null | ModifierSubtype;
+  abilityScore?: null | AbilityScore;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  diceCount?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  diceValue?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  fixedValue?: number | string;
+  /** @maxLength 4000 */
+  details?: string;
+  duration?: null | Time;
+  applyOnMulticlass?: boolean;
+}
+
 export interface ClassFeatureLevelScale {
   id?: string;
   classFeatureId?: string;
@@ -540,7 +1247,7 @@ export interface ClassFeature {
   actions?: ClassFeatureAction[];
   creatures?: ClassFeatureCreature[];
   spells?: ClassFeatureSpell[];
-  modifiers?: unknown[];
+  modifiers?: Modifier[];
   levelScales?: ClassFeatureLevelScale[];
   spellList?: Spell[];
 }
@@ -574,6 +1281,10 @@ export interface Subclass {
   classFeatures?: ClassFeature[];
 }
 
+export type ClassMulticlassingRequirements = {[key: string]: number | string};
+
+export type ClassMulticlassingRequirementsAlt = {[key: string]: number | string};
+
 export interface Class {
   id?: string;
   source?: SourceType;
@@ -605,6 +1316,11 @@ export interface Class {
   /** @nullable */
   imageId?: string | null;
   image?: null | StoredFile;
+  standardArray?: (number | string)[];
+  multiclassingRequirements?: ClassMulticlassingRequirements;
+  multiclassingRequirementsAlt?: ClassMulticlassingRequirementsAlt;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  subclassSelectionLevel?: number | string;
 }
 
 export interface Spell {
@@ -715,7 +1431,7 @@ export interface Feat {
   options?: FeatOption[];
   actions?: FeatAction[];
   spells?: FeatSpell[];
-  modifiers?: unknown[];
+  modifiers?: Modifier[];
   spellList?: Spell[];
 }
 
@@ -751,7 +1467,84 @@ export interface Background {
   characteristics?: Characteristics[];
 }
 
+export type Proficiency = number;
+
+export interface CharacterAbilityData {
+  ability?: AbilityScore;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  rawScore?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  scoreBonus?: number | string;
+  rawSavingThrowProficiency?: Proficiency;
+  overrideSavingThrowProficiency?: null | Proficiency;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  savingThrowBonus?: number | string;
+}
+
+export type CharacterClassDataClassFeatureUsages = {[key: string]: number | string};
+
+export type CharacterClassDataChosenFeatureOptions = {[key: string]: string[]};
+
+export type CharacterClassDataChosenSpells = {[key: string]: string[]};
+
+export type CharacterClassDataSpellSlotsUsed = {[key: string]: number | string};
+
+export interface CharacterClassData {
+  /** @nullable */
+  id?: string | null;
+  classId?: string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  level?: number | string;
+  /** @nullable */
+  subclassId?: string | null;
+  isStartingClass?: boolean;
+  classFeatureUsages?: CharacterClassDataClassFeatureUsages;
+  chosenSkillProficiencies?: Skill[];
+  chosenFeatureOptions?: CharacterClassDataChosenFeatureOptions;
+  chosenSpells?: CharacterClassDataChosenSpells;
+  spellSlotsUsed?: CharacterClassDataSpellSlotsUsed;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  pactSlotsUsed?: number | string;
+}
+
+export type CharacterFeatRequestChosenOptions = {[key: string]: string[]};
+
+export type CharacterFeatRequestChosenSpells = {[key: string]: string[]};
+
+export type FeatSource = number;
+
+export interface CharacterFeatRequest {
+  featId?: string;
+  source?: FeatSource;
+  /** @nullable */
+  sourceId?: string | null;
+  chosenAbilityScoreIncrease?: null | AbilityScore;
+  chosenOptions?: CharacterFeatRequestChosenOptions;
+  chosenSpells?: CharacterFeatRequestChosenSpells;
+}
+
+export interface CharacterSkillData {
+  skill?: Skill;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  bonus?: number | string;
+  rawProficiency?: Proficiency;
+  overrideProficiency?: null | Proficiency;
+  advantageState?: AdvantageState;
+}
+
+export interface CreateCharacterRequest {
+  name: string;
+}
+
+export type DefenseState = number;
+
+export type Gender = number;
+
+export type HitPointType = number;
+
 export type IFormFile = Blob;
+
+export type LanguageType = number;
 
 export interface Language {
   id?: string;
@@ -759,7 +1552,16 @@ export interface Language {
   name: string;
   /** @maxLength 4000 */
   description?: string;
+  type?: LanguageType;
+  /**
+   * @maxLength 100
+   * @nullable
+   */
+  script?: string | null;
+  typicalSpeakers?: string[];
 }
+
+export type Lifestyle = number;
 
 export interface LoginRequest {
   username: string;
@@ -772,8 +1574,6 @@ export interface LoginRequest {
 export interface LogoutRequest {
   refreshToken: string;
 }
-
-export interface Modifier {}
 
 export interface ProblemDetails {
   /** @nullable */
@@ -941,7 +1741,7 @@ export interface RaceTrait {
   actions?: RaceTraitAction[];
   creatures?: RaceTraitCreature[];
   spells?: RaceTraitSpell[];
-  modifiers?: unknown[];
+  modifiers?: Modifier[];
   spellList?: Spell[];
 }
 
@@ -978,6 +1778,183 @@ export interface RegisterRequest {
   deviceName?: string | null;
 }
 
+export interface SetCharacterAbilitiesRequest {
+  abilities?: CharacterAbilityData[];
+}
+
+export type SetCharacterBackgroundRequestChosenAbilityScoreIncreases = {[key: string]: number | string};
+
+export type SetCharacterBackgroundRequestChosenCharacteristics = {[key: string]: string};
+
+export interface SetCharacterBackgroundRequest {
+  /** @nullable */
+  backgroundId?: string | null;
+  chosenAbilityScoreIncreases?: SetCharacterBackgroundRequestChosenAbilityScoreIncreases;
+  chosenLanguages?: string[];
+  chosenCharacteristics?: SetCharacterBackgroundRequestChosenCharacteristics;
+}
+
+export interface SetCharacterClassesRequest {
+  classes?: CharacterClassData[];
+}
+
+export type SetCharacterRaceRequestRaceTraitUsages = {[key: string]: number | string};
+
+export type SetCharacterRaceRequestChosenTraitOptions = {[key: string]: string[]};
+
+export type SetCharacterRaceRequestChosenSpells = {[key: string]: string[]};
+
+export interface SetCharacterRaceRequest {
+  /** @nullable */
+  raceId?: string | null;
+  raceTraitUsages?: SetCharacterRaceRequestRaceTraitUsages;
+  chosenTraitOptions?: SetCharacterRaceRequestChosenTraitOptions;
+  chosenSpells?: SetCharacterRaceRequestChosenSpells;
+}
+
+export interface SetCharacterSkillsRequest {
+  skills?: CharacterSkillData[];
+}
+
+export interface UpdateCharacterItemRequest {
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  quantity?: number | string;
+  notes?: string;
+  attuned?: boolean;
+  equipped?: boolean;
+}
+
+export type UpdateCharacterRequestDamageDefenses = {[key: string]: DefenseState[]};
+
+export type UpdateCharacterRequestConditionDefenses = {[key: string]: DefenseState[]};
+
+export interface UpdateCharacterRequest {
+  name: string;
+  /** @nullable */
+  avatarId?: string | null;
+  sources?: SourceType[];
+  advancementType?: AdvancementType;
+  hitPointType?: HitPointType;
+  abilityScoreGenerationMethod?: AbilityScoreGenerationMethod;
+  optionalClassFeatures?: boolean;
+  customizeOrigin?: boolean;
+  exceedLevelCap?: boolean;
+  allowMulticlassing?: boolean;
+  checkMulticlassingPrerequisites?: boolean;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  movementSpeed?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  swimmingSpeed?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  flyingSpeed?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  inspirationPoints?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  maxHitDie?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  currentHitDie?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  temporaryHitPoints?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  currentHitPoints?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  rawMaximumHitPoints?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  hitPointBonus?: number | string;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  overriddenMaximumHitPoints?: number | string | null;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  initiativeBonus?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  baseArmorClass?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  armorClassBonus?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  passivePerceptionBonus?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  passiveInvestigationBonus?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  passiveInsightBonus?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  xp?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  deathSaveSuccesses?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  deathSaveFailures?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  exhaustionLevel?: number | string;
+  conditions?: Condition[];
+  damageDefenses?: UpdateCharacterRequestDamageDefenses;
+  conditionDefenses?: UpdateCharacterRequestConditionDefenses;
+  savingThrowAdvantages?: string[];
+  savingThrowDisadvantages?: string[];
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  blindsightRange?: number | string;
+  blindsightNote?: string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  darkvisionRange?: number | string;
+  darkvisionNote?: string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  tremorsenseRange?: number | string;
+  tremorsenseNote?: string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  truesightRange?: number | string;
+  truesightNote?: string;
+  languages?: string[];
+  armorProficiencies?: ItemType[];
+  weaponProficiencies?: WeaponType[];
+  toolProficiencies?: Tool[];
+  countMoneyWeight?: boolean;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  gold?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  electrum?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  silver?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  copper?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  arrowQuiver?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  boltQuiver?: number | string;
+  lifestyle?: Lifestyle;
+  alignment?: Alignment;
+  gender?: Gender;
+  size?: Size;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  age?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  heightInInches?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
+  weightInPounds?: number | string;
+  skin?: string;
+  hair?: string;
+  eyes?: string;
+  appearance?: string;
+  faith?: string;
+  personalityTraits?: string[];
+  ideals?: string[];
+  bonds?: string[];
+  flaws?: string[];
+  organizations?: string[];
+  allies?: string[];
+  enemies?: string[];
+  backstory?: string;
+  notes?: string;
+}
+
+export interface UpdateCharacterSpellRequest {
+  isPrepared?: boolean;
+  /**
+   * @nullable
+   * @pattern ^-?(?:0|[1-9]\d*)$
+   */
+  usesRemaining?: number | string | null;
+}
+
 export interface UserResponse {
   id?: string;
   username?: string;
@@ -997,6 +1974,22 @@ page?: number | string;
 pageSize?: number | string;
 search?: string;
 source?: SourceType;
+};
+
+export type GetCharactersParams = {
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)$
+ */
+page?: number | string;
+/**
+ * @pattern ^-?(?:0|[1-9]\d*)$
+ */
+pageSize?: number | string;
+search?: string;
+};
+
+export type PutCharactersIdAvatarBody = {
+  file?: IFormFile;
 };
 
 export type GetClassesParams = {
@@ -1709,6 +2702,728 @@ export const deleteBackgroundsBackgroundIdStartingItemsId = async (backgroundId:
     id: string, options?: RequestInit): Promise<deleteBackgroundsBackgroundIdStartingItemsIdResponse> => {
   
   return customFetch<deleteBackgroundsBackgroundIdStartingItemsIdResponse>(getDeleteBackgroundsBackgroundIdStartingItemsIdUrl(backgroundId,id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type getCharactersResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getCharactersResponseSuccess = (getCharactersResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCharactersResponse = (getCharactersResponseSuccess)
+
+export const getGetCharactersUrl = (params?: GetCharactersParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/characters?${stringifiedParams}` : `/characters`
+}
+
+export const getCharacters = async (params?: GetCharactersParams, options?: RequestInit): Promise<getCharactersResponse> => {
+  
+  return customFetch<getCharactersResponse>(getGetCharactersUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type postCharactersResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postCharactersResponseSuccess = (postCharactersResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCharactersResponse = (postCharactersResponseSuccess)
+
+export const getPostCharactersUrl = () => {
+
+
+  
+
+  return `/characters`
+}
+
+export const postCharacters = async (createCharacterRequest: CreateCharacterRequest, options?: RequestInit): Promise<postCharactersResponse> => {
+  
+  return customFetch<postCharactersResponse>(getPostCharactersUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      createCharacterRequest,)
+  }
+);}
+
+
+
+export type getCharactersIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type getCharactersIdResponseSuccess = (getCharactersIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCharactersIdResponse = (getCharactersIdResponseSuccess)
+
+export const getGetCharactersIdUrl = (id: string,) => {
+
+
+  
+
+  return `/characters/${id}`
+}
+
+export const getCharactersId = async (id: string, options?: RequestInit): Promise<getCharactersIdResponse> => {
+  
+  return customFetch<getCharactersIdResponse>(getGetCharactersIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type putCharactersIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putCharactersIdResponseSuccess = (putCharactersIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putCharactersIdResponse = (putCharactersIdResponseSuccess)
+
+export const getPutCharactersIdUrl = (id: string,) => {
+
+
+  
+
+  return `/characters/${id}`
+}
+
+export const putCharactersId = async (id: string,
+    updateCharacterRequest: UpdateCharacterRequest, options?: RequestInit): Promise<putCharactersIdResponse> => {
+  
+  return customFetch<putCharactersIdResponse>(getPutCharactersIdUrl(id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      updateCharacterRequest,)
+  }
+);}
+
+
+
+export type deleteCharactersIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteCharactersIdResponseSuccess = (deleteCharactersIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteCharactersIdResponse = (deleteCharactersIdResponseSuccess)
+
+export const getDeleteCharactersIdUrl = (id: string,) => {
+
+
+  
+
+  return `/characters/${id}`
+}
+
+export const deleteCharactersId = async (id: string, options?: RequestInit): Promise<deleteCharactersIdResponse> => {
+  
+  return customFetch<deleteCharactersIdResponse>(getDeleteCharactersIdUrl(id),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type putCharactersIdAvatarResponse200 = {
+  data: StoredFile
+  status: 200
+}
+
+export type putCharactersIdAvatarResponse400 = {
+  data: ProblemDetails
+  status: 400
+}
+
+export type putCharactersIdAvatarResponse401 = {
+  data: ProblemDetails
+  status: 401
+}
+    
+export type putCharactersIdAvatarResponseSuccess = (putCharactersIdAvatarResponse200) & {
+  headers: Headers;
+};
+export type putCharactersIdAvatarResponseError = (putCharactersIdAvatarResponse400 | putCharactersIdAvatarResponse401) & {
+  headers: Headers;
+};
+
+export type putCharactersIdAvatarResponse = (putCharactersIdAvatarResponseSuccess | putCharactersIdAvatarResponseError)
+
+export const getPutCharactersIdAvatarUrl = (id: string,) => {
+
+
+  
+
+  return `/characters/${id}/avatar`
+}
+
+export const putCharactersIdAvatar = async (id: string,
+    putCharactersIdAvatarBody: PutCharactersIdAvatarBody, options?: RequestInit): Promise<putCharactersIdAvatarResponse> => {
+    const formData = new FormData();
+if(putCharactersIdAvatarBody.file !== undefined) {
+ formData.append(`file`, putCharactersIdAvatarBody.file);
+ }
+
+  return customFetch<putCharactersIdAvatarResponse>(getPutCharactersIdAvatarUrl(id),
+  {      
+    ...options,
+    method: 'PUT'
+    ,
+    body: 
+      formData,
+  }
+);}
+
+
+
+export type putCharactersIdRaceResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putCharactersIdRaceResponseSuccess = (putCharactersIdRaceResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putCharactersIdRaceResponse = (putCharactersIdRaceResponseSuccess)
+
+export const getPutCharactersIdRaceUrl = (id: string,) => {
+
+
+  
+
+  return `/characters/${id}/race`
+}
+
+export const putCharactersIdRace = async (id: string,
+    setCharacterRaceRequest: SetCharacterRaceRequest, options?: RequestInit): Promise<putCharactersIdRaceResponse> => {
+  
+  return customFetch<putCharactersIdRaceResponse>(getPutCharactersIdRaceUrl(id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      setCharacterRaceRequest,)
+  }
+);}
+
+
+
+export type putCharactersIdBackgroundResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putCharactersIdBackgroundResponseSuccess = (putCharactersIdBackgroundResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putCharactersIdBackgroundResponse = (putCharactersIdBackgroundResponseSuccess)
+
+export const getPutCharactersIdBackgroundUrl = (id: string,) => {
+
+
+  
+
+  return `/characters/${id}/background`
+}
+
+export const putCharactersIdBackground = async (id: string,
+    setCharacterBackgroundRequest: SetCharacterBackgroundRequest, options?: RequestInit): Promise<putCharactersIdBackgroundResponse> => {
+  
+  return customFetch<putCharactersIdBackgroundResponse>(getPutCharactersIdBackgroundUrl(id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      setCharacterBackgroundRequest,)
+  }
+);}
+
+
+
+export type putCharactersIdClassesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putCharactersIdClassesResponseSuccess = (putCharactersIdClassesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putCharactersIdClassesResponse = (putCharactersIdClassesResponseSuccess)
+
+export const getPutCharactersIdClassesUrl = (id: string,) => {
+
+
+  
+
+  return `/characters/${id}/classes`
+}
+
+export const putCharactersIdClasses = async (id: string,
+    setCharacterClassesRequest: SetCharacterClassesRequest, options?: RequestInit): Promise<putCharactersIdClassesResponse> => {
+  
+  return customFetch<putCharactersIdClassesResponse>(getPutCharactersIdClassesUrl(id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      setCharacterClassesRequest,)
+  }
+);}
+
+
+
+export type putCharactersIdAbilitiesResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putCharactersIdAbilitiesResponseSuccess = (putCharactersIdAbilitiesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putCharactersIdAbilitiesResponse = (putCharactersIdAbilitiesResponseSuccess)
+
+export const getPutCharactersIdAbilitiesUrl = (id: string,) => {
+
+
+  
+
+  return `/characters/${id}/abilities`
+}
+
+export const putCharactersIdAbilities = async (id: string,
+    setCharacterAbilitiesRequest: SetCharacterAbilitiesRequest, options?: RequestInit): Promise<putCharactersIdAbilitiesResponse> => {
+  
+  return customFetch<putCharactersIdAbilitiesResponse>(getPutCharactersIdAbilitiesUrl(id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      setCharacterAbilitiesRequest,)
+  }
+);}
+
+
+
+export type putCharactersIdSkillsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putCharactersIdSkillsResponseSuccess = (putCharactersIdSkillsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putCharactersIdSkillsResponse = (putCharactersIdSkillsResponseSuccess)
+
+export const getPutCharactersIdSkillsUrl = (id: string,) => {
+
+
+  
+
+  return `/characters/${id}/skills`
+}
+
+export const putCharactersIdSkills = async (id: string,
+    setCharacterSkillsRequest: SetCharacterSkillsRequest, options?: RequestInit): Promise<putCharactersIdSkillsResponse> => {
+  
+  return customFetch<putCharactersIdSkillsResponse>(getPutCharactersIdSkillsUrl(id),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      setCharacterSkillsRequest,)
+  }
+);}
+
+
+
+export type postCharactersIdFeatsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postCharactersIdFeatsResponseSuccess = (postCharactersIdFeatsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCharactersIdFeatsResponse = (postCharactersIdFeatsResponseSuccess)
+
+export const getPostCharactersIdFeatsUrl = (id: string,) => {
+
+
+  
+
+  return `/characters/${id}/feats`
+}
+
+export const postCharactersIdFeats = async (id: string,
+    characterFeatRequest: CharacterFeatRequest, options?: RequestInit): Promise<postCharactersIdFeatsResponse> => {
+  
+  return customFetch<postCharactersIdFeatsResponse>(getPostCharactersIdFeatsUrl(id),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      characterFeatRequest,)
+  }
+);}
+
+
+
+export type putCharactersIdFeatsFeatIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putCharactersIdFeatsFeatIdResponseSuccess = (putCharactersIdFeatsFeatIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putCharactersIdFeatsFeatIdResponse = (putCharactersIdFeatsFeatIdResponseSuccess)
+
+export const getPutCharactersIdFeatsFeatIdUrl = (id: string,
+    featId: string,) => {
+
+
+  
+
+  return `/characters/${id}/feats/${featId}`
+}
+
+export const putCharactersIdFeatsFeatId = async (id: string,
+    featId: string,
+    characterFeatRequest: CharacterFeatRequest, options?: RequestInit): Promise<putCharactersIdFeatsFeatIdResponse> => {
+  
+  return customFetch<putCharactersIdFeatsFeatIdResponse>(getPutCharactersIdFeatsFeatIdUrl(id,featId),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      characterFeatRequest,)
+  }
+);}
+
+
+
+export type deleteCharactersIdFeatsFeatIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteCharactersIdFeatsFeatIdResponseSuccess = (deleteCharactersIdFeatsFeatIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteCharactersIdFeatsFeatIdResponse = (deleteCharactersIdFeatsFeatIdResponseSuccess)
+
+export const getDeleteCharactersIdFeatsFeatIdUrl = (id: string,
+    featId: string,) => {
+
+
+  
+
+  return `/characters/${id}/feats/${featId}`
+}
+
+export const deleteCharactersIdFeatsFeatId = async (id: string,
+    featId: string, options?: RequestInit): Promise<deleteCharactersIdFeatsFeatIdResponse> => {
+  
+  return customFetch<deleteCharactersIdFeatsFeatIdResponse>(getDeleteCharactersIdFeatsFeatIdUrl(id,featId),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postCharactersIdSpellsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postCharactersIdSpellsResponseSuccess = (postCharactersIdSpellsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCharactersIdSpellsResponse = (postCharactersIdSpellsResponseSuccess)
+
+export const getPostCharactersIdSpellsUrl = (id: string,) => {
+
+
+  
+
+  return `/characters/${id}/spells`
+}
+
+export const postCharactersIdSpells = async (id: string,
+    addCharacterSpellRequest: AddCharacterSpellRequest, options?: RequestInit): Promise<postCharactersIdSpellsResponse> => {
+  
+  return customFetch<postCharactersIdSpellsResponse>(getPostCharactersIdSpellsUrl(id),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      addCharacterSpellRequest,)
+  }
+);}
+
+
+
+export type putCharactersIdSpellsSpellIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putCharactersIdSpellsSpellIdResponseSuccess = (putCharactersIdSpellsSpellIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putCharactersIdSpellsSpellIdResponse = (putCharactersIdSpellsSpellIdResponseSuccess)
+
+export const getPutCharactersIdSpellsSpellIdUrl = (id: string,
+    spellId: string,) => {
+
+
+  
+
+  return `/characters/${id}/spells/${spellId}`
+}
+
+export const putCharactersIdSpellsSpellId = async (id: string,
+    spellId: string,
+    updateCharacterSpellRequest: UpdateCharacterSpellRequest, options?: RequestInit): Promise<putCharactersIdSpellsSpellIdResponse> => {
+  
+  return customFetch<putCharactersIdSpellsSpellIdResponse>(getPutCharactersIdSpellsSpellIdUrl(id,spellId),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      updateCharacterSpellRequest,)
+  }
+);}
+
+
+
+export type deleteCharactersIdSpellsSpellIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteCharactersIdSpellsSpellIdResponseSuccess = (deleteCharactersIdSpellsSpellIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteCharactersIdSpellsSpellIdResponse = (deleteCharactersIdSpellsSpellIdResponseSuccess)
+
+export const getDeleteCharactersIdSpellsSpellIdUrl = (id: string,
+    spellId: string,) => {
+
+
+  
+
+  return `/characters/${id}/spells/${spellId}`
+}
+
+export const deleteCharactersIdSpellsSpellId = async (id: string,
+    spellId: string, options?: RequestInit): Promise<deleteCharactersIdSpellsSpellIdResponse> => {
+  
+  return customFetch<deleteCharactersIdSpellsSpellIdResponse>(getDeleteCharactersIdSpellsSpellIdUrl(id,spellId),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type postCharactersIdItemsResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type postCharactersIdItemsResponseSuccess = (postCharactersIdItemsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCharactersIdItemsResponse = (postCharactersIdItemsResponseSuccess)
+
+export const getPostCharactersIdItemsUrl = (id: string,) => {
+
+
+  
+
+  return `/characters/${id}/items`
+}
+
+export const postCharactersIdItems = async (id: string,
+    addCharacterItemRequest: AddCharacterItemRequest, options?: RequestInit): Promise<postCharactersIdItemsResponse> => {
+  
+  return customFetch<postCharactersIdItemsResponse>(getPostCharactersIdItemsUrl(id),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      addCharacterItemRequest,)
+  }
+);}
+
+
+
+export type putCharactersIdItemsItemIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type putCharactersIdItemsItemIdResponseSuccess = (putCharactersIdItemsItemIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type putCharactersIdItemsItemIdResponse = (putCharactersIdItemsItemIdResponseSuccess)
+
+export const getPutCharactersIdItemsItemIdUrl = (id: string,
+    itemId: string,) => {
+
+
+  
+
+  return `/characters/${id}/items/${itemId}`
+}
+
+export const putCharactersIdItemsItemId = async (id: string,
+    itemId: string,
+    updateCharacterItemRequest: UpdateCharacterItemRequest, options?: RequestInit): Promise<putCharactersIdItemsItemIdResponse> => {
+  
+  return customFetch<putCharactersIdItemsItemIdResponse>(getPutCharactersIdItemsItemIdUrl(id,itemId),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      updateCharacterItemRequest,)
+  }
+);}
+
+
+
+export type deleteCharactersIdItemsItemIdResponse200 = {
+  data: void
+  status: 200
+}
+    
+export type deleteCharactersIdItemsItemIdResponseSuccess = (deleteCharactersIdItemsItemIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type deleteCharactersIdItemsItemIdResponse = (deleteCharactersIdItemsItemIdResponseSuccess)
+
+export const getDeleteCharactersIdItemsItemIdUrl = (id: string,
+    itemId: string,) => {
+
+
+  
+
+  return `/characters/${id}/items/${itemId}`
+}
+
+export const deleteCharactersIdItemsItemId = async (id: string,
+    itemId: string, options?: RequestInit): Promise<deleteCharactersIdItemsItemIdResponse> => {
+  
+  return customFetch<deleteCharactersIdItemsItemIdResponse>(getDeleteCharactersIdItemsItemIdUrl(id,itemId),
   {      
     ...options,
     method: 'DELETE'

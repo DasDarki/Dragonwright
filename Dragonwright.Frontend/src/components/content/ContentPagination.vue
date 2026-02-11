@@ -29,6 +29,12 @@ const visiblePages = computed(() => {
       Page {{ page }} of {{ totalPages }} ({{ totalCount }} total)
     </span>
     <div class="content-pagination__controls">
+      <button class="content-pagination__btn"
+        :disabled="!hasPrev"
+        @click="emit('update:page', 1)"
+      >
+        <i class="fas fa-angle-double-left" />
+      </button>
       <button
         class="content-pagination__btn"
         :disabled="!hasPrev"
@@ -51,6 +57,12 @@ const visiblePages = computed(() => {
         @click="emit('update:page', page + 1)"
       >
         <i class="fas fa-chevron-right" />
+      </button>
+      <button class="content-pagination__btn"
+        :disabled="!hasNext"
+        @click="emit('update:page', totalPages)"
+      >
+        <i class="fas fa-angle-double-right" />
       </button>
     </div>
   </div>

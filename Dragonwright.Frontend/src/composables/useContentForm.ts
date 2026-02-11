@@ -33,7 +33,7 @@ export function useContentForm<T>(options: ContentFormOptions<T>) {
       form.value = { ...options.defaultData(), ...data }
     } catch {
       showToast({ variant: 'danger', message: `Failed to load ${options.typeLabel.toLowerCase()}.` })
-      router.push(options.listRoute)
+      await router.push(options.listRoute)
     } finally {
       loading.value = false
     }
@@ -53,7 +53,7 @@ export function useContentForm<T>(options: ContentFormOptions<T>) {
         entityId.value = newId
         if (options.onAfterSave) await options.onAfterSave(newId)
         showToast({ variant: 'success', message: `${options.typeLabel} created.` })
-        router.replace(`${options.editRoute}/${newId}`)
+        await router.replace(`${options.editRoute}/${newId}`)
       }
     } catch {
       showToast({ variant: 'danger', message: `Failed to save ${options.typeLabel.toLowerCase()}.` })

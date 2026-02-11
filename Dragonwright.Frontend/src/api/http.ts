@@ -5,7 +5,7 @@ let accessToken: string | null = null;
 let refreshHandler: RefreshFn | null = null;
 let logoutHandler: LogoutFn | null = null;
 
-const apiUrl = import.meta.env.VITE_API_URL as string ?? window.location.origin;
+export const apiUrl = import.meta.env.VITE_API_URL as string ?? window.location.origin;
 
 export function setAuthAccessToken(token: string | null) {
   accessToken = token;

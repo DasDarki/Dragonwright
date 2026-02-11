@@ -39,6 +39,8 @@ const sourceOptions: SelectOption[] = [
         placeholder="All Sources"
         size="sm"
       />
+
+      <slot name="filters"></slot>
     </div>
     <UiButton
       v-if="showNewButton"

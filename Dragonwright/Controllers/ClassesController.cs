@@ -69,7 +69,6 @@ public sealed class ClassesController(AppDbContext dbContext) : ContentControlle
         cls.Id = Guid.NewGuid();
         cls.SourceCreatorId = userId.Value;
 
-        // Assign new GUIDs to all nested entities to prevent DbUpdateConcurrencyException
         foreach (var feature in cls.Features)
         {
             feature.Id = Guid.NewGuid();
@@ -133,6 +132,9 @@ public sealed class ClassesController(AppDbContext dbContext) : ContentControlle
         cls.ToolProficiencies = updated.ToolProficiencies;
         cls.ArmorProficiencies = updated.ArmorProficiencies;
         cls.WeaponProficiencies = updated.WeaponProficiencies;
+        cls.SubclassSelectionLevel = updated.SubclassSelectionLevel;
+        cls.MulticlassingRequirements = updated.MulticlassingRequirements;
+        cls.MulticlassingRequirementsAlt = updated.MulticlassingRequirementsAlt;
         cls.ImageId = updated.ImageId;
 
         await dbContext.SaveChangesAsync();

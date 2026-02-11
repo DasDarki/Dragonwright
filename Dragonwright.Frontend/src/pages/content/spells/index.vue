@@ -60,7 +60,11 @@ function onEdit(item: Spell) {
       :show-source-filter="true"
       :show-new-button="true"
       @new="onNew"
-    />
+    >
+      <template #filters>
+
+      </template>
+    </ContentListHeader>
 
     <ContentListTable
       :items="items"

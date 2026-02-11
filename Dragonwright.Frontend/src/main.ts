@@ -6,11 +6,14 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router.ts'
 import {useAuthStore} from "@/stores/auth.ts";
+import {rollDirective} from "@/directives/roll.ts";
 
 const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
+
+app.directive('roll', rollDirective)
 
 const authStore = useAuthStore()
 authStore.initialize()

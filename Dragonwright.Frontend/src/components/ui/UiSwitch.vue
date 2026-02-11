@@ -1,17 +1,13 @@
-﻿<script setup lang="ts">
-const props = defineProps<{
-  modelValue: boolean
+<script setup lang="ts">
+defineProps<{
   label?: string
   disabled?: boolean
 }>()
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
-}>()
+const model = defineModel<boolean>({ default: false })
 
 function toggle() {
-  if (props.disabled) return
-  emit('update:modelValue', !props.modelValue)
+  model.value = !model.value;
 }
 </script>
 
@@ -19,9 +15,10 @@ function toggle() {
   <button
     type="button"
     class="switch"
-    :class="[{ 'switch--on': modelValue, 'switch--disabled': disabled }]"
+    :class="[{ 'switch--on': model, 'switch--disabled': disabled }]"
     role="switch"
-    :aria-checked="modelValue"
+    :aria-checked="model"
+    :disabled="disabled"
     @click="toggle"
   >
     <div class="switch__track">

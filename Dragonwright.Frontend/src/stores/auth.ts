@@ -11,10 +11,10 @@ import {
   postAuthLogoutAll,
   postAuthRefresh,
   postAuthRegister,
-  type ProblemDetails,
+  type ProblemDetails, putUsersMeAvatar,
   type RefreshRequest,
   type RegisterRequest,
-  type User,
+  type User, type UserResponse,
 } from "@/api";
 import {isHttpError, unwrapOrThrow} from "@/api/result";
 import {setAuthAccessToken, setAuthLogoutHandler, setAuthRefreshHandler} from "@/api/http";
@@ -175,6 +175,20 @@ export const useAuthStore = defineStore("auth", {
         if (res.status < 200 || res.status >= 300) {}
       } catch {}
       this.clearAuth();
+    },
+
+    async setAvatar(file: Blob): Promise<boolean> {
+      if (!file) return false;
+      if (!this.loggedInUser) return false;
+
+      try {
+        const res = unwrapOrThrow<UserResponse>(await putUsersMeAvatar({file}) as any);
+        this.loggedInUser.avatar = {id: res.avatarId!};
+        return true;
+      } catch (e) {
+        console.error(e)
+        return false;
+      }
     },
 
     initialize() {

@@ -397,6 +397,24 @@ export const classTips = {
     title: 'Spell Learn Type',
     body: 'How the subclass acquires new spells.\n\nKnown: Learns a fixed number of spells as they level up. Can swap one spell when leveling.\nSpellbook: Starts with spells in a book and can copy new ones found during adventures (Wizard-specific).',
   } satisfies FieldTip,
+
+  subclassSelectionLevel: {
+    title: 'Subclass Selection Level',
+    body: 'The class level at which a character must choose their subclass.\n\nMost classes choose at level 3. Some exceptions:\n• Cleric, Sorcerer, Warlock: Level 1\n• Wizard: Level 2\n• Set to 0 if the class has no subclasses.',
+    examples: ['0 (no subclass)', '1 (Cleric, Warlock)', '2 (Wizard)', '3 (most classes)'],
+  } satisfies FieldTip,
+
+  standardArray: {
+    title: 'Standard Array',
+    body: 'The standard array is a set of six ability score values that players can assign to their abilities during character creation.\n\nThe default D&D 5e standard array is [15, 14, 13, 12, 10, 8]. This field allows classes to define a custom standard array if desired.',
+    examples: ['15, 14, 13, 12, 10, 8 (default)', '16, 14, 14, 12, 10, 8 (custom)'],
+  } satisfies FieldTip,
+
+  multiclassingRequirements: {
+    title: 'Multiclassing Requirements',
+    body: 'Minimum ability scores required to multiclass INTO this class. Players must meet all requirements (AND logic).\n\nTypically requires 13 in the class\'s primary ability score(s). Some classes have alternative requirements (OR logic) for flexibility.',
+    examples: ['Fighter: STR 13 OR DEX 13', 'Paladin: STR 13 AND CHA 13', 'Monk: DEX 13 AND WIS 13'],
+  } satisfies FieldTip,
 }
 
 export const raceTips = {

@@ -54,9 +54,36 @@ public sealed class Class : IEntity<Class>
     public ICollection<StartItemChoice> StartingItems { get; set; } = [];
     
     public Guid? ImageId { get; set; }
-    
+
     public StoredFile? Image { get; set; }
-    
+
+    /// <summary>
+    /// The standard array values for ability score generation.
+    /// Typically [15, 14, 13, 12, 10, 8] for most classes.
+    /// </summary>
+    public ICollection<int> StandardArray { get; set; } = [15, 14, 13, 12, 10, 8];
+
+    /// <summary>
+    /// Minimum ability scores required to multiclass INTO this class.
+    /// Maps AbilityScore enum to minimum value (typically 13).
+    /// All requirements must be met (AND logic).
+    /// Example: Paladin requires {Strength: 13, Charisma: 13}
+    /// </summary>
+    public IDictionary<AbilityScore, int> MulticlassingRequirements { get; set; } = new Dictionary<AbilityScore, int>();
+
+    /// <summary>
+    /// Alternative multiclassing requirements (OR logic with primary requirements).
+    /// If EITHER MulticlassingRequirements OR MulticlassingRequirementsAlt is satisfied, allow multiclass.
+    /// Example: Fighter can use {Strength: 13} OR {Dexterity: 13}
+    /// </summary>
+    public IDictionary<AbilityScore, int> MulticlassingRequirementsAlt { get; set; } = new Dictionary<AbilityScore, int>();
+
+    /// <summary>
+    /// The class level at which a subclass must be chosen.
+    /// 0 = no subclass, 1 = Cleric/Warlock, 2 = Wizard, 3 = most classes.
+    /// </summary>
+    public int SubclassSelectionLevel { get; set; } = 3;
+
     public void Configure(EntityTypeBuilder<Class> builder)
     {
         builder.Property(c => c.Source).HasConversion<string>();
@@ -89,5 +116,9 @@ public sealed class Class : IEntity<Class>
             .WithMany()
             .HasForeignKey(u => u.ImageId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Property(c => c.StandardArray).JsonCollection();
+        builder.Property(c => c.MulticlassingRequirements).EnumKeyDictionary();
+        builder.Property(c => c.MulticlassingRequirementsAlt).EnumKeyDictionary();
     }
 }

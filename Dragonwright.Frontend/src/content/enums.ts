@@ -11,6 +11,8 @@ export const sourceLabels: Record<number, string> = {
 }
 export const sourceOptions = toOptions(sourceLabels)
 
+export const sourceSortOrder: Record<number, number> = { 1: 0, 2: 1, 0: 2 }
+
 export const sourceBadge: Record<number, { label: string; variant: 'accent' | 'info' | 'muted' }> = {
   0: { label: 'Legacy', variant: 'muted' },
   1: { label: 'Official', variant: 'accent' },
@@ -238,3 +240,58 @@ export const languageTypeLabels: Record<number, string> = {
   1: 'Exotic',
 }
 export const languageTypeOptions = toOptions(languageTypeLabels)
+
+export const advancementTypeLabels: Record<number, string> = {
+  0: 'Experience Points',
+  1: 'Milestone',
+}
+export const advancementTypeOptions = toOptions(advancementTypeLabels)
+
+export const hitPointTypeLabels: Record<number, string> = {
+  0: 'Fixed',
+  1: 'Roll',
+}
+export const hitPointTypeOptions = toOptions(hitPointTypeLabels)
+
+export const abilityScoreGenerationLabels: Record<number, string> = {
+  0: 'Standard Array',
+  1: 'Point Buy',
+  2: 'Roll',
+  3: 'Manual',
+}
+export const abilityScoreGenerationOptions = toOptions(abilityScoreGenerationLabels)
+
+export const alignmentLabels: Record<number, string> = {
+  0: 'Lawful Good', 1: 'Neutral Good', 2: 'Chaotic Good',
+  3: 'Lawful Neutral', 4: 'True Neutral', 5: 'Chaotic Neutral',
+  6: 'Lawful Evil', 7: 'Neutral Evil', 8: 'Chaotic Evil',
+}
+export const alignmentOptions = toOptions(alignmentLabels)
+
+export const genderLabels: Record<number, string> = {
+  0: 'Unspecified', 1: 'Male', 2: 'Female', 3: 'Non-Binary', 4: 'Other',
+}
+export const genderOptions = toOptions(genderLabels)
+
+export const lifestyleLabels: Record<number, string> = {
+  0: 'Wretched', 1: 'Squalid', 2: 'Poor', 3: 'Modest',
+  4: 'Comfortable', 5: 'Wealthy', 6: 'Aristocratic',
+}
+export const lifestyleOptions = toOptions(lifestyleLabels)
+
+export const proficiencyLabels: Record<number, string> = {
+  0: 'Not Proficient', 1: 'Half Proficient', 2: 'Proficient', 3: 'Expertise',
+}
+export const proficiencyOptions = toOptions(proficiencyLabels)
+
+export const startItemTypeLabels: Record<number, string> = {
+  0: 'Specific Item', 1: 'Of Weapon Type', 2: 'With Weapon Property',
+}
+
+export const startItemChoiceOperatorLabels: Record<number, string> = {
+  0: 'And', 1: 'Or',
+}
+
+export const currencyLabels: Record<number, string> = {
+  0: 'Copper', 1: 'Silver', 2: 'Electrum', 3: 'Gold', 4: 'Platinum',
+}

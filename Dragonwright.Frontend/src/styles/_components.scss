@@ -210,6 +210,12 @@
   gap: $space-2;
   cursor: pointer;
   font-size: 0.9rem;
+  background: transparent;
+  color: $color-text-muted;
+  border: none;
+  &:hover {
+    color: $color-text;
+  }
 }
 
 .switch__track {
