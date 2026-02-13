@@ -66,13 +66,16 @@ public sealed class CharactersController(AppDbContext dbContext, FileStorageServ
         var character = await DbContext.Characters
             .Include(c => c.Avatar)
             .Include(c => c.Race).ThenInclude(r => r!.Race).ThenInclude(r => r.Traits)
-            .Include(c => c.Background).ThenInclude(b => b!.Background)
-            .Include(c => c.Classes).ThenInclude(cc => cc.Class)
-            .Include(c => c.Classes).ThenInclude(cc => cc.Subclass)
+            .Include(c => c.Background).ThenInclude(b => b!.Background).ThenInclude(bg => bg.GrantedFeats)
+            .Include(c => c.Classes).ThenInclude(cc => cc.Class).ThenInclude(cl => cl.Features)
+            .Include(c => c.Classes).ThenInclude(cc => cc.Subclass!).ThenInclude(sc => sc.ClassFeatures)
             .Include(c => c.Abilities)
             .Include(c => c.Skills)
             .Include(c => c.Feats).ThenInclude(f => f.Feat)
             .Include(c => c.Spells).ThenInclude(s => s.Spell)
+            .Include(c => c.Spells).ThenInclude(s => s.SourceClass)
+            .Include(c => c.Classes).ThenInclude(cc => cc.Subclass!).ThenInclude(sc => sc.AdditionalSpellLists)
+            .Include(c => c.Classes).ThenInclude(cc => cc.Subclass!).ThenInclude(sc => sc.AdditionalSpells)
             .Include(c => c.Items).ThenInclude(i => i.Item)
             .FirstOrDefaultAsync(c => c.Id == id);
 
@@ -580,7 +583,8 @@ public sealed class CharactersController(AppDbContext dbContext, FileStorageServ
             SourceId = request.SourceId,
             ChosenAbilityScoreIncrease = request.ChosenAbilityScoreIncrease,
             ChosenOptions = request.ChosenOptions,
-            ChosenSpells = request.ChosenSpells
+            ChosenSpells = request.ChosenSpells,
+            FeatActionUsages = request.FeatActionUsages,
         };
 
         DbContext.CharacterFeats.Add(characterFeat);
@@ -612,6 +616,7 @@ public sealed class CharactersController(AppDbContext dbContext, FileStorageServ
         characterFeat.ChosenAbilityScoreIncrease = request.ChosenAbilityScoreIncrease;
         characterFeat.ChosenOptions = request.ChosenOptions;
         characterFeat.ChosenSpells = request.ChosenSpells;
+        characterFeat.FeatActionUsages = request.FeatActionUsages;
 
         await DbContext.SaveChangesAsync();
 
@@ -754,7 +759,9 @@ public sealed class CharactersController(AppDbContext dbContext, FileStorageServ
             Quantity = request.Quantity,
             Notes = request.Notes,
             Attuned = request.Attuned,
-            Equipped = request.Equipped
+            Equipped = request.Equipped,
+            MaxCharges = request.MaxCharges,
+            ChargesUsed = request.ChargesUsed,
         };
 
         DbContext.CharacterItems.Add(characterItem);
@@ -784,6 +791,8 @@ public sealed class CharactersController(AppDbContext dbContext, FileStorageServ
         characterItem.Notes = request.Notes;
         characterItem.Attuned = request.Attuned;
         characterItem.Equipped = request.Equipped;
+        characterItem.MaxCharges = request.MaxCharges;
+        characterItem.ChargesUsed = request.ChargesUsed;
 
         await DbContext.SaveChangesAsync();
 

@@ -170,6 +170,10 @@ export const spellLearnTypeLabels: Record<number, string> = {
 }
 export const spellLearnTypeOptions = toOptions(spellLearnTypeLabels)
 
+export const spellSourceLabels: Record<number, string> = {
+  0: 'Class', 1: 'Subclass', 2: 'Race', 3: 'Background', 4: 'Feat', 5: 'Item',
+}
+
 export const modifierTypeLabels: Record<number, string> = {
   0: 'Bonus', 1: 'Damage', 2: 'Advantage', 3: 'Disadvantage',
   4: 'Resistance', 5: 'Immunity', 6: 'Vulnerability', 7: 'Sense',
@@ -291,6 +295,16 @@ export const startItemTypeLabels: Record<number, string> = {
 export const startItemChoiceOperatorLabels: Record<number, string> = {
   0: 'And', 1: 'Or',
 }
+
+export const defenseStateLabels: Record<number, string> = {
+  0: 'None', 1: 'Resistance', 2: 'Immunity', 3: 'Vulnerability',
+}
+export const defenseStateOptions = toOptions(defenseStateLabels)
+
+export const advantageStateLabels: Record<number, string> = {
+  0: 'None', 1: 'Advantage', 2: 'Disadvantage',
+}
+export const advantageStateOptions = toOptions(advantageStateLabels)
 
 export const currencyLabels: Record<number, string> = {
   0: 'Copper', 1: 'Silver', 2: 'Electrum', 3: 'Gold', 4: 'Platinum',

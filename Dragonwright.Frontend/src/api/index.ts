@@ -18,6 +18,8 @@ export interface AddCharacterItemRequest {
   notes?: string;
   attuned?: boolean;
   equipped?: boolean;
+  maxCharges?: number | string;
+  chargesUsed?: number | string;
 }
 
 export type SpellSource = number;
@@ -1521,6 +1523,7 @@ export interface CharacterFeatRequest {
   chosenAbilityScoreIncrease?: null | AbilityScore;
   chosenOptions?: CharacterFeatRequestChosenOptions;
   chosenSpells?: CharacterFeatRequestChosenSpells;
+  featActionUsages?: {[key: string]: number | string};
 }
 
 export interface CharacterSkillData {
@@ -1822,6 +1825,8 @@ export interface UpdateCharacterItemRequest {
   notes?: string;
   attuned?: boolean;
   equipped?: boolean;
+  maxCharges?: number | string;
+  chargesUsed?: number | string;
 }
 
 export type UpdateCharacterRequestDamageDefenses = {[key: string]: DefenseState[]};

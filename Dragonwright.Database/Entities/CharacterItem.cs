@@ -21,6 +21,9 @@ public sealed class CharacterItem : IEntity<CharacterItem>
     
     public bool Equipped { get; set; }
 
+    public int MaxCharges { get; set; }
+    public int ChargesUsed { get; set; }
+
     public void Configure(EntityTypeBuilder<CharacterItem> builder)
     {
         builder.HasOne(ci => ci.Character)

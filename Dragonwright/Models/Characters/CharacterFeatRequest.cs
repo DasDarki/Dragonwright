@@ -36,4 +36,6 @@ public sealed class CharacterFeatRequest
     /// The spells chosen from this feat's spell options.
     /// </summary>
     public IDictionary<Guid, List<Guid>> ChosenSpells { get; init; } = new Dictionary<Guid, List<Guid>>();
+
+    public IDictionary<Guid, int> FeatActionUsages { get; init; } = new Dictionary<Guid, int>();
 }

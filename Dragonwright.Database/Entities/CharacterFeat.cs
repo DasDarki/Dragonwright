@@ -41,6 +41,8 @@ public sealed class CharacterFeat : IEntity<CharacterFeat>
     /// </summary>
     public IDictionary<Guid, List<Guid>> ChosenSpells { get; set; } = new Dictionary<Guid, List<Guid>>();
 
+    public IDictionary<Guid, int> FeatActionUsages { get; set; } = new Dictionary<Guid, int>();
+
     public void Configure(EntityTypeBuilder<CharacterFeat> builder)
     {
         builder.HasOne(cf => cf.Character)
@@ -77,5 +79,7 @@ public sealed class CharacterFeat : IEntity<CharacterFeat>
                 c => c == null ? 0 : JsonSerializer.Serialize(c).GetHashCode(),
                 c => JsonSerializer.Deserialize<IDictionary<Guid, List<Guid>>>(JsonSerializer.Serialize(c)) ?? new Dictionary<Guid, List<Guid>>()
             ));
+
+        builder.Property(cf => cf.FeatActionUsages).JsonDictionary();
     }
 }

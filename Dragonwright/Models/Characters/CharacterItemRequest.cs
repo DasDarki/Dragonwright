@@ -29,6 +29,9 @@ public sealed class AddCharacterItemRequest
     /// Whether the item is equipped.
     /// </summary>
     public bool Equipped { get; init; }
+
+    public int MaxCharges { get; init; }
+    public int ChargesUsed { get; init; }
 }
 
 /// <summary>
@@ -55,4 +58,7 @@ public sealed class UpdateCharacterItemRequest
     /// Whether the item is equipped.
     /// </summary>
     public bool Equipped { get; init; }
+
+    public int MaxCharges { get; init; }
+    public int ChargesUsed { get; init; }
 }
