@@ -29,7 +29,6 @@ const { form, loading, saving, isEdit, save, cancel } = useContentForm<Language>
   updateFn: putLanguagesId,
 })
 
-// For managing typical speakers as comma-separated input
 const speakersInput = ref('')
 
 watch(() => form.value.typicalSpeakers, (val) => {

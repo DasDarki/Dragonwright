@@ -92,10 +92,8 @@ export function useContentList<T extends { id?: string; name: string }>(
     page.value = p
   }
 
-  // Re-fetch when page, search, or source changes
   watch([page, source], () => fetchItems())
 
-  // Reset to page 1 when search or source changes
   let searchTimeout: ReturnType<typeof setTimeout> | null = null
   watch(search, () => {
     if (searchTimeout) clearTimeout(searchTimeout)
@@ -105,7 +103,6 @@ export function useContentList<T extends { id?: string; name: string }>(
     }, 300)
   })
 
-  // Initial fetch
   fetchItems()
 
   return {

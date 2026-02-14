@@ -23,7 +23,6 @@ import { commonTips, raceTips } from '@/content/tips'
 const props = defineProps<{ id?: string }>()
 const { showToast } = useToast()
 
-// Pending traits for create mode
 const pendingTraits = ref<RaceTrait[]>([])
 
 const { form, loading, saving, isEdit, entityId, save, cancel } = useContentForm<Race>({
@@ -41,7 +40,6 @@ const { form, loading, saving, isEdit, entityId, save, cancel } = useContentForm
   createFn: postRaces,
   updateFn: putRacesId,
   onAfterSave: async (raceId) => {
-    // Save pending traits after parent creation
     for (const trait of pendingTraits.value) {
       const { id: _id, ...payload } = trait
       await postRacesRaceIdTraits(raceId, payload as RaceTrait)
@@ -49,8 +47,6 @@ const { form, loading, saving, isEdit, entityId, save, cancel } = useContentForm
     pendingTraits.value = []
   },
 })
-
-// ─── Traits ─────────────────────────────────────────────────
 
 const traitModalOpen = ref(false)
 const traitEditIndex = ref<number | null>(null)
@@ -61,7 +57,6 @@ function defaultTrait(): RaceTrait {
   return { name: '', description: '', displayOrder: 0, requiredCharacterLevel: 1, featureType: 0, modifiers: [], traitToReplaceId: null }
 }
 
-// For "Trait to Replace" entity select - returns other traits excluding the one being edited
 function fetchOtherTraits() {
   const currentId = traitForm.value.id
   const allTraits = form.value.traits ?? []
@@ -129,7 +124,6 @@ async function saveTrait() {
   if (!form.value.traits) form.value.traits = []
 
   if (isEdit.value) {
-    // Edit mode: save to backend immediately
     traitSaving.value = true
     try {
       if (traitEditIndex.value !== null) {
@@ -139,7 +133,6 @@ async function saveTrait() {
         }
         form.value.traits[traitEditIndex.value] = { ...traitForm.value }
       } else {
-        // Strip id when creating new - backend assigns it
         const { id: _id, ...payload } = traitForm.value
         const res = await postRacesRaceIdTraits(entityId.value!, payload as RaceTrait)
         const data = (res as any).data ?? res
@@ -152,7 +145,6 @@ async function saveTrait() {
       traitSaving.value = false
     }
   } else {
-    // Create mode: store locally until parent is saved
     if (traitEditIndex.value !== null) {
       pendingTraits.value[traitEditIndex.value] = { ...traitForm.value }
       form.value.traits[traitEditIndex.value] = { ...traitForm.value }

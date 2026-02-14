@@ -143,7 +143,6 @@ function removeDamage(index: number) {
     @save="save"
     @cancel="cancel"
   >
-    <!-- Basic Info -->
     <div class="content-form__section">
       <h3 class="content-form__section-title">Basic Info</h3>
       <div class="content-form__row">
@@ -157,7 +156,6 @@ function removeDamage(index: number) {
       <UiTextarea v-model="form.description" label="Description" placeholder="Spell description..." :rows="5" :tip="commonTips.description" />
     </div>
 
-    <!-- Components -->
     <div class="content-form__section">
       <h3 class="content-form__section-title">Components</h3>
       <div class="content-form__row">
@@ -174,7 +172,6 @@ function removeDamage(index: number) {
       />
     </div>
 
-    <!-- Casting Properties -->
     <div class="content-form__section">
       <h3 class="content-form__section-title">Casting Properties</h3>
       <div class="content-form__row">
@@ -192,7 +189,6 @@ function removeDamage(index: number) {
       </div>
     </div>
 
-    <!-- Casting Times -->
     <div class="content-form__section">
       <div class="content-form__section-header">
         <h3 class="content-form__section-title">Casting Times</h3>
@@ -208,7 +204,6 @@ function removeDamage(index: number) {
       <p v-else class="content-form__empty-hint">No casting times added.</p>
     </div>
 
-    <!-- Durations -->
     <div class="content-form__section">
       <div class="content-form__section-header">
         <h3 class="content-form__section-title">Durations</h3>
@@ -224,7 +219,6 @@ function removeDamage(index: number) {
       <p v-else class="content-form__empty-hint">No durations added.</p>
     </div>
 
-    <!-- Damage & Conditions -->
     <div class="content-form__section">
       <h3 class="content-form__section-title">Damage & Conditions</h3>
       <UiCheckboxGroup v-model="form.damageTypes" label="Damage Types" :options="damageTypeOptions" :tip="spellTips.damageTypes" />
@@ -258,7 +252,6 @@ function removeDamage(index: number) {
       <p v-else class="content-form__empty-hint">No damage rolls added.</p>
     </div>
 
-    <!-- Tags -->
     <div class="content-form__section">
       <h3 class="content-form__section-title">Tags</h3>
       <UiInput
@@ -271,7 +264,6 @@ function removeDamage(index: number) {
       />
     </div>
 
-    <!-- Time Modal -->
     <UiModal v-model="timeModalOpen" :title="timeEditIndex !== null ? 'Edit Time' : 'Add Time'" close-on-backdrop close-on-esc>
       <div class="content-form__modal-body">
         <UiInput v-model="timeForm.value" label="Value" type="number" placeholder="1" :tip="timeValueTip" />
@@ -283,7 +275,6 @@ function removeDamage(index: number) {
       </template>
     </UiModal>
 
-    <!-- Damage Modal -->
     <UiModal v-model="dmgModalOpen" :title="dmgEditIndex !== null ? 'Edit Damage' : 'Add Damage'" close-on-backdrop close-on-esc>
       <div class="content-form__modal-body">
         <div class="content-form__row">

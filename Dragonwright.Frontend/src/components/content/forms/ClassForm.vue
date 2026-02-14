@@ -30,7 +30,6 @@ import { commonTips, classTips } from '@/content/tips'
 const props = defineProps<{ id?: string }>()
 const { showToast } = useToast()
 
-// Pending sub-entities for create mode (saved when parent is created)
 const pendingFeatures = ref<ClassFeature[]>([])
 const pendingSubclasses = ref<Subclass[]>([])
 
@@ -165,7 +164,6 @@ async function saveFeature() {
   if (!form.value.features) form.value.features = []
 
   if (isEdit.value) {
-    // Edit mode: save to backend immediately
     featureSaving.value = true
     try {
       if (featureEditIndex.value !== null) {
@@ -175,7 +173,6 @@ async function saveFeature() {
         }
         form.value.features[featureEditIndex.value] = { ...featureForm.value }
       } else {
-        // Strip id when creating new - backend assigns it
         const { id: _id, ...payload } = featureForm.value
         const res = await postClassesClassIdFeatures(entityId.value!, payload as ClassFeature)
         const data = (res as any).data ?? res
@@ -188,7 +185,6 @@ async function saveFeature() {
       featureSaving.value = false
     }
   } else {
-    // Create mode: store locally until parent is saved
     if (featureEditIndex.value !== null) {
       pendingFeatures.value[featureEditIndex.value] = { ...featureForm.value }
       form.value.features[featureEditIndex.value] = { ...featureForm.value }
@@ -252,7 +248,6 @@ async function saveSubclass() {
   if (!form.value.subclasses) form.value.subclasses = []
 
   if (isEdit.value) {
-    // Edit mode: save to backend immediately
     subclassSaving.value = true
     try {
       if (subclassEditIndex.value !== null) {
@@ -263,7 +258,6 @@ async function saveSubclass() {
         }
         form.value.subclasses[subclassEditIndex.value] = { ...subclassForm.value }
       } else {
-        // Strip id when creating new - backend assigns it
         const { id: _id, ...rest } = subclassForm.value
         const payload = { ...rest, classId: entityId.value }
         const res = await postClassesClassIdSubclasses(entityId.value!, payload as Subclass)
@@ -277,7 +271,6 @@ async function saveSubclass() {
       subclassSaving.value = false
     }
   } else {
-    // Create mode: store locally until parent is saved
     if (subclassEditIndex.value !== null) {
       pendingSubclasses.value[subclassEditIndex.value] = { ...subclassForm.value }
       form.value.subclasses[subclassEditIndex.value] = { ...subclassForm.value }
@@ -367,7 +360,6 @@ function setStandardArrayValue(index: number, value: number) {
     @save="save"
     @cancel="cancel"
   >
-    <!-- Basic Info -->
     <div class="content-form__section">
       <h3 class="content-form__section-title">Basic Info</h3>
       <div class="content-form__row">
@@ -376,7 +368,6 @@ function setStandardArrayValue(index: number, value: number) {
       </div>
     </div>
 
-    <!-- Hit Points -->
     <div class="content-form__section">
       <h3 class="content-form__section-title">Hit Points</h3>
       <div class="content-form__row">
@@ -389,7 +380,6 @@ function setStandardArrayValue(index: number, value: number) {
       </div>
     </div>
 
-    <!-- Proficiencies -->
     <div class="content-form__section">
       <h3 class="content-form__section-title">Ability Scores & Proficiencies</h3>
       <UiCheckboxGroup v-model="form.primaryAbilityScores" label="Primary Ability Scores" :options="abilityScoreOptions" :tip="classTips.primaryAbilityScores" />
@@ -403,7 +393,6 @@ function setStandardArrayValue(index: number, value: number) {
       <UiCheckboxGroup v-model="form.weaponProficiencies" label="Weapon Proficiencies" :options="weaponTypeOptions" :tip="classTips.weaponProficiencies" />
     </div>
 
-    <!-- Multiclassing & Advancement -->
     <div class="content-form__section">
       <h3 class="content-form__section-title">Multiclassing & Advancement</h3>
       <div class="content-form__row">
@@ -452,7 +441,6 @@ function setStandardArrayValue(index: number, value: number) {
       </div>
     </div>
 
-    <!-- Features -->
     <div class="content-form__section">
       <div class="content-form__section-header">
         <h3 class="content-form__section-title">Features</h3>
@@ -482,7 +470,6 @@ function setStandardArrayValue(index: number, value: number) {
       <p v-else class="content-form__empty-hint">No features added yet.</p>
     </div>
 
-    <!-- Subclasses -->
     <div class="content-form__section">
       <div class="content-form__section-header">
         <h3 class="content-form__section-title">Subclasses</h3>
@@ -510,7 +497,6 @@ function setStandardArrayValue(index: number, value: number) {
       <p v-else class="content-form__empty-hint">No subclasses added yet.</p>
     </div>
 
-    <!-- Feature Modal -->
     <UiModal v-model="featureModalOpen" :title="featureEditIndex !== null ? 'Edit Feature' : 'Add Feature'" close-on-backdrop close-on-esc>
       <div class="content-form__modal-body">
         <UiInput v-model="featureForm.name" label="Name" placeholder="Feature name" :tip="commonTips.name" />
@@ -553,7 +539,6 @@ function setStandardArrayValue(index: number, value: number) {
       </template>
     </UiModal>
 
-    <!-- Subclass Modal -->
     <UiModal v-model="subclassModalOpen" :title="subclassEditIndex !== null ? 'Edit Subclass' : 'Add Subclass'" close-on-backdrop close-on-esc>
       <div class="content-form__modal-body">
         <UiInput v-model="subclassForm.name" label="Name" placeholder="Subclass name" :tip="commonTips.name" />

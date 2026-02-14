@@ -381,7 +381,6 @@ onMounted(loadClasses)
       </div>
     </div>
 
-    <!-- Selected Classes -->
     <div v-if="selectedClasses.length > 0" class="class-stage__selected">
       <div
         v-for="(classState, index) in selectedClasses"
@@ -391,7 +390,7 @@ onMounted(loadClasses)
       >
         <div class="class-selected-card__header">
           <div class="class-selected-card__title-row">
-            <img v-if="useImageUrl(classState.class.image)" :src="useImageUrl(classState.class.image)!" class="class-selected-card__img" alt="" />
+            <img v-if="useImageUrl(classState.class.image!)" :src="useImageUrl(classState.class.image!)!" class="class-selected-card__img" alt="" />
             <h3 class="class-selected-card__name">{{ classState.class.name }}</h3>
             <span v-if="classState.isStartingClass" class="class-selected-card__starting-badge">
               Starting Class
@@ -400,7 +399,6 @@ onMounted(loadClasses)
           <span class="class-selected-card__source">{{ sourceLabels[classState.class.source ?? 0] }}</span>
         </div>
 
-        <!-- Level Controls -->
         <div class="class-selected-card__level-section">
           <span class="class-selected-card__level-label">Level</span>
           <div class="class-selected-card__level-controls">
@@ -421,7 +419,6 @@ onMounted(loadClasses)
           </div>
         </div>
 
-        <!-- Subclass Selection -->
         <div v-if="canSelectSubclass(classState)" class="class-selected-card__subclass-section">
           <label class="class-selected-card__section-label">
             Subclass
@@ -433,13 +430,12 @@ onMounted(loadClasses)
             placeholder="Choose a subclass..."
             @update:model-value="selectSubclass(index, $event as string)"
           />
-          <div v-if="classState.subclass && useImageUrl(classState.subclass.image)" class="class-selected-card__subclass-img-row">
-            <img :src="useImageUrl(classState.subclass.image)!" class="class-selected-card__subclass-img" alt="" />
+          <div v-if="classState.subclass && useImageUrl(classState.subclass.image!)" class="class-selected-card__subclass-img-row">
+            <img :src="useImageUrl(classState.subclass.image!)!" class="class-selected-card__subclass-img" alt="" />
             <span class="class-selected-card__subclass-name">{{ classState.subclass.name }}</span>
           </div>
         </div>
 
-        <!-- Skill Proficiencies (Starting Class Only) -->
         <div v-if="classState.isStartingClass && classState.class.skillProficienciesOptions?.length" class="class-selected-card__skills-section">
           <label class="class-selected-card__section-label">
             Skill Proficiencies
@@ -464,7 +460,6 @@ onMounted(loadClasses)
           </div>
         </div>
 
-        <!-- Unlocked Features (Collapsed View) -->
         <div v-if="getVisibleFeatures(classState).length > 0" class="class-selected-card__features-section">
           <label class="class-selected-card__section-label">Unlocked Features</label>
           <div class="class-selected-card__features-list">
@@ -485,7 +480,6 @@ onMounted(loadClasses)
       </div>
     </div>
 
-    <!-- Add Class Section -->
     <div v-if="canAddClass" class="class-stage__add-section">
       <h3 class="class-stage__add-title">
         {{ selectedClasses.length === 0 ? 'Choose Your Class' : 'Add Another Class' }}
@@ -513,7 +507,7 @@ onMounted(loadClasses)
           :disabled="isClassAlreadySelected(cls.id!)"
           @click="openPreview(cls)"
         >
-          <img v-if="useImageUrl(cls.image)" :src="useImageUrl(cls.image)!" class="class-card__img" alt="" />
+          <img v-if="useImageUrl(cls.image!)" :src="useImageUrl(cls.image!)!" class="class-card__img" alt="" />
           <div class="class-card__name">{{ cls.name }}</div>
           <div class="class-card__info">
             <span class="class-card__source">{{ sourceLabels[cls.source ?? 0] }}</span>
@@ -548,7 +542,6 @@ onMounted(loadClasses)
       </p>
     </div>
 
-    <!-- Preview Modal -->
     <UiModal
       v-model="showPreviewModal"
       :title="previewClass?.name ?? 'Class Preview'"
@@ -561,12 +554,11 @@ onMounted(loadClasses)
       </div>
 
       <div v-else-if="previewClass" class="preview-content">
-        <img v-if="useImageUrl(previewClass.image)" :src="useImageUrl(previewClass.image)!" class="preview-img" alt="" />
+        <img v-if="useImageUrl(previewClass.image!)" :src="useImageUrl(previewClass.image!)!" class="preview-img" alt="" />
         <div class="preview-header">
           <span class="preview-source">{{ sourceLabels[previewClass.source ?? 0] }}</span>
         </div>
 
-        <!-- Basic Stats -->
         <div class="preview-section">
           <div class="preview-stats">
             <div class="preview-stat">
@@ -588,7 +580,6 @@ onMounted(loadClasses)
           </div>
         </div>
 
-        <!-- Multiclassing Prerequisites -->
         <div v-if="selectedClasses.length > 0" class="preview-section">
           <h4 class="preview-section__title">Multiclassing Prerequisites</h4>
           <div
@@ -609,7 +600,6 @@ onMounted(loadClasses)
           </div>
         </div>
 
-        <!-- Proficiencies -->
         <div class="preview-section">
           <h4 class="preview-section__title">Proficiencies</h4>
           <ul class="preview-gains">
@@ -625,7 +615,6 @@ onMounted(loadClasses)
           </ul>
         </div>
 
-        <!-- Subclasses -->
         <div v-if="previewClass.subclasses?.length" class="preview-section">
           <h4 class="preview-section__title">
             Subclasses

@@ -68,7 +68,6 @@ async function login() {
       return;
     }
 
-    // only error now: UserNotFound
     console.log("User not found, asking to register");
     askRegister.value = true;
   } finally {

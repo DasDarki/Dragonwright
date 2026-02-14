@@ -20,7 +20,6 @@ import { commonTips, backgroundTips } from '@/content/tips'
 const props = defineProps<{ id?: string }>()
 const { showToast } = useToast()
 
-// Pending characteristics for create mode
 const pendingCharacteristics = ref<Characteristics[]>([])
 
 const { form, loading, saving, isEdit, entityId, save, cancel } = useContentForm<Background>({
@@ -43,7 +42,6 @@ const { form, loading, saving, isEdit, entityId, save, cancel } = useContentForm
   createFn: postBackgrounds,
   updateFn: putBackgroundsId,
   onAfterSave: async (bgId) => {
-    // Save pending characteristics after parent creation
     for (const char of pendingCharacteristics.value) {
       const { id: _id, ...payload } = char
       await postBackgroundsBackgroundIdCharacteristics(bgId, payload as Characteristics)
@@ -51,8 +49,6 @@ const { form, loading, saving, isEdit, entityId, save, cancel } = useContentForm
     pendingCharacteristics.value = []
   },
 })
-
-// ─── Characteristics ────────────────────────────────────────
 
 const charModalOpen = ref(false)
 const charEditIndex = ref<number | null>(null)
@@ -76,7 +72,6 @@ async function saveCharacteristic() {
   if (!form.value.characteristics) form.value.characteristics = []
 
   if (isEdit.value) {
-    // Edit mode: save to backend immediately
     charSaving.value = true
     try {
       if (charEditIndex.value !== null) {
@@ -86,7 +81,6 @@ async function saveCharacteristic() {
         }
         form.value.characteristics[charEditIndex.value] = { ...charForm.value }
       } else {
-        // Strip id when creating new - backend assigns it
         const { id: _id, ...payload } = charForm.value
         const res = await postBackgroundsBackgroundIdCharacteristics(entityId.value!, payload as Characteristics)
         const data = (res as any).data ?? res
@@ -99,7 +93,6 @@ async function saveCharacteristic() {
       charSaving.value = false
     }
   } else {
-    // Create mode: store locally until parent is saved
     if (charEditIndex.value !== null) {
       pendingCharacteristics.value[charEditIndex.value] = { ...charForm.value }
       form.value.characteristics[charEditIndex.value] = { ...charForm.value }

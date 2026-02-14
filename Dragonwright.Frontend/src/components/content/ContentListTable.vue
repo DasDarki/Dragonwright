@@ -75,7 +75,6 @@ defineEmits<{
       </tbody>
     </table>
 
-    <!-- Mobile card list -->
     <div class="content-cards-mobile">
       <div
         v-for="item in items"

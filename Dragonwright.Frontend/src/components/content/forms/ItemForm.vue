@@ -101,7 +101,6 @@ function removeDamage(index: number) {
     @save="save"
     @cancel="cancel"
   >
-    <!-- Basic Info -->
     <div class="content-form__section">
       <h3 class="content-form__section-title">Basic Info</h3>
       <div class="content-form__row">
@@ -125,7 +124,6 @@ function removeDamage(index: number) {
       </div>
     </div>
 
-    <!-- Weapon Fields -->
     <div v-if="isWeapon" class="content-form__section">
       <h3 class="content-form__section-title">Weapon Properties</h3>
       <div class="content-form__row">
@@ -169,7 +167,6 @@ function removeDamage(index: number) {
       <p v-else class="content-form__empty-hint">No damage rolls added.</p>
     </div>
 
-    <!-- Armor Fields -->
     <div v-if="isArmor" class="content-form__section">
       <h3 class="content-form__section-title">Armor Properties</h3>
       <div class="content-form__row">
@@ -189,13 +186,11 @@ function removeDamage(index: number) {
       </div>
     </div>
 
-    <!-- Tool Fields -->
     <div v-if="isTool" class="content-form__section">
       <h3 class="content-form__section-title">Tool Properties</h3>
       <UiSelect v-model="form.toolType" label="Tool Type" :options="toolOptions" placeholder="None" :tip="itemTips.toolType" />
     </div>
 
-    <!-- Damage Modal -->
     <UiModal v-model="dmgModalOpen" :title="dmgEditIndex !== null ? 'Edit Damage' : 'Add Damage'" close-on-backdrop close-on-esc>
       <div class="content-form__modal-body">
         <div class="content-form__row">
