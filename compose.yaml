@@ -23,9 +23,6 @@
       dockerfile: Dragonwright.Backend/Dockerfile
     env_file:
       - .env
-    # Optional: falls du im Container via env eine ConnectionString setzen willst:
-    # environment:
-    #   ConnectionStrings__Default: "Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
     depends_on:
       - postgres
     ports:
