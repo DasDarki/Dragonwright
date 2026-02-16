@@ -5,7 +5,14 @@ let accessToken: string | null = null;
 let refreshHandler: RefreshFn | null = null;
 let logoutHandler: LogoutFn | null = null;
 
-export const apiUrl = import.meta.env.VITE_API_URL as string ?? window.location.origin;
+export const apiUrl = getUrl();
+
+function getUrl() {
+  if (import.meta.env.PROD) {
+    return "https://api.dragonwright.de";
+  }
+  return import.meta.env.VITE_API_URL as string ?? window.location.origin;
+}
 
 export function setAuthAccessToken(token: string | null) {
   accessToken = token;
