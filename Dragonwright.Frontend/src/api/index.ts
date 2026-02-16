@@ -18,7 +18,9 @@ export interface AddCharacterItemRequest {
   notes?: string;
   attuned?: boolean;
   equipped?: boolean;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
   maxCharges?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
   chargesUsed?: number | string;
 }
 
@@ -1513,6 +1515,8 @@ export type CharacterFeatRequestChosenOptions = {[key: string]: string[]};
 
 export type CharacterFeatRequestChosenSpells = {[key: string]: string[]};
 
+export type CharacterFeatRequestFeatActionUsages = {[key: string]: number | string};
+
 export type FeatSource = number;
 
 export interface CharacterFeatRequest {
@@ -1523,7 +1527,7 @@ export interface CharacterFeatRequest {
   chosenAbilityScoreIncrease?: null | AbilityScore;
   chosenOptions?: CharacterFeatRequestChosenOptions;
   chosenSpells?: CharacterFeatRequestChosenSpells;
-  featActionUsages?: {[key: string]: number | string};
+  featActionUsages?: CharacterFeatRequestFeatActionUsages;
 }
 
 export interface CharacterSkillData {
@@ -1825,7 +1829,9 @@ export interface UpdateCharacterItemRequest {
   notes?: string;
   attuned?: boolean;
   equipped?: boolean;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
   maxCharges?: number | string;
+  /** @pattern ^-?(?:0|[1-9]\d*)$ */
   chargesUsed?: number | string;
 }
 

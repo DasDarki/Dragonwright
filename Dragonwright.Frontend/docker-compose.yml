@@ -1,0 +1,15 @@
+﻿services:
+  frontend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: vael-tir-frontend
+    ports:
+      - "42380:80"
+    networks:
+      - shared-network
+    restart: unless-stopped
+
+networks:
+  shared-network:
+    external: true
