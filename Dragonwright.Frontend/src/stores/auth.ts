@@ -156,8 +156,13 @@ export const useAuthStore = defineStore("auth", {
         const data = unwrapOrThrow<AuthResponse, ProblemDetails>(res as any);
         this.applyAuth(data);
         return true;
-      } catch {
-        this._refreshFailed = true;
+      } catch (e: any) {
+        // Only permanently mark refresh as failed for real auth rejections (401/403).
+        // Network errors (server down, timeout) are transient and should be retryable.
+        const status = e?.status ?? e?.data?.status;
+        if (status === 401 || status === 403) {
+          this._refreshFailed = true;
+        }
         return false;
       }
     },

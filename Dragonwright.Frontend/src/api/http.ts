@@ -74,7 +74,13 @@ export async function customFetch<T>(url: string, options: RequestInit = {}): Pr
   const isAuthEndpoint = isAuthLogin || isAuthRegister || isAuthRefresh || isAuthLogout;
 
   if (!isAuthEndpoint) {
-    await ensureFreshToken();
+    // Pre-flight refresh — if server is down this may fail, but that's OK.
+    try {
+      await ensureFreshToken();
+    } catch {
+      // Network error during refresh — proceed with existing token and let the
+      // actual request surface the failure to the caller.
+    }
     if (accessToken) headers.set("Authorization", `Bearer ${accessToken}`);
   }
 
