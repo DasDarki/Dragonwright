@@ -18,6 +18,36 @@ namespace Dragonwright.Controllers;
 [Route("characters")]
 public sealed class CharactersController(AppDbContext dbContext, FileStorageService fileStorageService) : CharacterControllerBase(dbContext)
 {
+    protected override async Task<bool> CheckCampaignAccessAsync(Guid characterId, Guid userId)
+    {
+        // User can view a character if they are in the same campaign and visibility allows it
+        var membership = await DbContext.CampaignMembers
+            .Include(m => m.Campaign)
+            .Where(m => m.CharacterId == characterId)
+            .FirstOrDefaultAsync();
+
+        if (membership == null) return false;
+
+        var campaign = membership.Campaign;
+        var isGm = campaign.GameMasterId == userId;
+        var isMember = isGm || await DbContext.CampaignMembers.AnyAsync(m => m.CampaignId == campaign.Id && m.UserId == userId);
+        if (!isMember) return false;
+
+        return membership.CharacterVisibility switch
+        {
+            Database.Enums.CharacterVisibility.Public => true,
+            Database.Enums.CharacterVisibility.SemiPublic => true,
+            Database.Enums.CharacterVisibility.CampaignPrivate => isGm,
+            _ => false
+        };
+    }
+
+    protected override Task<bool> CheckCampaignModifyAccessAsync(Guid characterId, Guid userId)
+    {
+        // Only the character owner can modify — campaign membership never grants write access
+        return Task.FromResult(false);
+    }
+
     #region Base Character CRUD
 
     /// <summary>

@@ -27,6 +27,7 @@ export function setAuthLogoutHandler(fn: LogoutFn) {
 }
 
 let refreshPromise: Promise<boolean> | null = null;
+let loggingOut = false;
 
 async function ensureFreshToken(): Promise<boolean> {
   if (!refreshHandler) return true;
@@ -58,6 +59,7 @@ export async function customFetch<T>(url: string, options: RequestInit = {}): Pr
   const isAuthLogin = path.includes("/auth/login");
   const isAuthRegister = path.includes("/auth/register");
   const isAuthRefresh = path.includes("/auth/refresh");
+  const isAuthLogout = path.includes("/auth/logout");
 
   const headers = new Headers(options.headers ?? {});
   if (!headers.has("Accept")) headers.set("Accept", "application/json");
@@ -69,26 +71,30 @@ export async function customFetch<T>(url: string, options: RequestInit = {}): Pr
     return { status: res.status, data, headers: res.headers } as any;
   };
 
-  if (!isAuthLogin && !isAuthRegister && !isAuthRefresh) {
+  const isAuthEndpoint = isAuthLogin || isAuthRegister || isAuthRefresh || isAuthLogout;
+
+  if (!isAuthEndpoint) {
     await ensureFreshToken();
     if (accessToken) headers.set("Authorization", `Bearer ${accessToken}`);
   }
 
   const first = await requestOnce();
 
-  if (
-    first.status === 401 &&
-    !isAuthLogin &&
-    !isAuthRegister &&
-    !isAuthRefresh
-  ) {
+  if (first.status === 401 && !isAuthEndpoint) {
     const refreshed = await ensureFreshToken();
     if (refreshed && accessToken) {
       headers.set("Authorization", `Bearer ${accessToken}`);
       const retry = await requestOnce();
       if (retry.status !== 401) return retry as T;
     }
-    if (logoutHandler) await logoutHandler();
+    if (logoutHandler && !loggingOut) {
+      loggingOut = true;
+      try {
+        await logoutHandler();
+      } finally {
+        loggingOut = false;
+      }
+    }
   }
 
   return first as T;

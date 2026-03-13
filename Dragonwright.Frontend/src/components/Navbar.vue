@@ -110,12 +110,16 @@ onBeforeUnmount(() => {
       <nav class="navbar__nav">
         <RouterLink class="navbar__link" to="/characters" active-class="is-active">Characters</RouterLink>
         <RouterLink class="navbar__link" to="/campaigns" active-class="is-active">Campaigns</RouterLink>
+        <RouterLink class="navbar__link" to="/campaigns" active-class="is-active">Campaigns</RouterLink>
+        <RouterLink class="navbar__link" to="/wiki" active-class="is-active">Wiki</RouterLink>
         <RouterLink class="navbar__link" to="/content" active-class="is-active">Content</RouterLink>
       </nav>
 
       <div v-if="mobileNavOpen" class="navbar__menu navbar__menu--left">
         <RouterLink class="navbar__menu-link" to="/characters" @click="onNavClick">Characters</RouterLink>
         <RouterLink class="navbar__menu-link" to="/campaigns" @click="onNavClick">Campaigns</RouterLink>
+        <RouterLink class="navbar__menu-link" to="/campaigns" @click="onNavClick">Campaigns</RouterLink>
+        <RouterLink class="navbar__menu-link" to="/wiki" @click="onNavClick">Wiki</RouterLink>
         <RouterLink class="navbar__menu-link" to="/content" @click="onNavClick">Content</RouterLink>
       </div>
     </div>

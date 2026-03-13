@@ -41,6 +41,7 @@ export const useAuthStore = defineStore("auth", {
       accessTokenExpiration: (stored?.accessTokenExpiration ?? null) as string | null,
       lastAuthError: null as ProblemDetails | null,
       loggedInUser: null as User | null,
+      _refreshFailed: false,
     };
   },
 
@@ -54,6 +55,7 @@ export const useAuthStore = defineStore("auth", {
       this.accessToken = resp.accessToken ?? null;
       this.refreshToken = resp.refreshToken ?? null;
       this.accessTokenExpiration = resp.accessTokenExpiration ?? null;
+      this._refreshFailed = false;
 
       if (this.accessToken && this.refreshToken && this.accessTokenExpiration) {
         const snapshot: StoredAuth = {
@@ -142,6 +144,7 @@ export const useAuthStore = defineStore("auth", {
 
     async refresh(): Promise<boolean> {
       if (!this.accessToken || !this.refreshToken) return false;
+      if (this._refreshFailed) return false;
 
       const payload: RefreshRequest = {
         accessToken: this.accessToken,
@@ -154,6 +157,7 @@ export const useAuthStore = defineStore("auth", {
         this.applyAuth(data);
         return true;
       } catch {
+        this._refreshFailed = true;
         return false;
       }
     },
@@ -195,6 +199,7 @@ export const useAuthStore = defineStore("auth", {
       if (this.accessToken) setAuthAccessToken(this.accessToken);
 
       setAuthRefreshHandler(async () => {
+        if (this._refreshFailed) return false;
         if (!this.accessTokenExpiration) return false;
         if (!isExpiringSoon(this.accessTokenExpiration, 30_000)) return true;
         return await this.refresh();

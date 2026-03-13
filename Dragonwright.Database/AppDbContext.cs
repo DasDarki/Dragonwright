@@ -71,6 +71,14 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 
     #endregion
 
+    #region Campaign
+
+    public DbSet<Campaign> Campaigns => Set<Campaign>();
+
+    public DbSet<CampaignMember> CampaignMembers => Set<CampaignMember>();
+
+    #endregion
+
     #region Character
 
     public DbSet<Character> Characters => Set<Character>();
@@ -128,6 +136,8 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
         modelBuilder.RegisterEntity<Creature>();
         modelBuilder.RegisterEntity<Characteristics>();
         modelBuilder.RegisterEntity<Language>();
+        modelBuilder.RegisterEntity<Campaign>();
+        modelBuilder.RegisterEntity<CampaignMember>();
         modelBuilder.RegisterEntity<CharacterClass>();
         modelBuilder.RegisterEntity<CharacterAbility>();
         modelBuilder.RegisterEntity<CharacterSkill>();

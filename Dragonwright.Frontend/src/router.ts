@@ -21,14 +21,19 @@ router.beforeEach(async (to, _, next) => {
     return next('/login')
   }
 
-  if (!await authStore.loadUser()) {
-    authStore.clearAuth()
-    return next('/login')
-  }
-
   if (to.path === '/logout') {
     await authStore.logout()
     return next('/login')
+  }
+
+  // Only load user if we don't have one yet (avoid re-fetching on every navigation)
+  if (!authStore.loggedInUser) {
+    if (!await authStore.loadUser()) {
+      // Don't call logout() here — it would trigger another API call that may also 401.
+      // Just clear local auth state and redirect.
+      authStore.clearAuth()
+      return next('/login')
+    }
   }
 
   next()

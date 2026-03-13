@@ -30,6 +30,20 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/campaigns/': RouteRecordInfo<
+      '/campaigns/',
+      '/campaigns',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/campaigns/[id]/': RouteRecordInfo<
+      '/campaigns/[id]/',
+      '/campaigns/:id',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
     '/characters/': RouteRecordInfo<
       '/characters/',
       '/characters',
@@ -259,6 +273,27 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/wiki/': RouteRecordInfo<
+      '/wiki/',
+      '/wiki',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/wiki/[category]/': RouteRecordInfo<
+      '/wiki/[category]/',
+      '/wiki/:category',
+      { category: ParamValue<true> },
+      { category: ParamValue<false> },
+      | never
+    >,
+    '/wiki/[category]/[id]': RouteRecordInfo<
+      '/wiki/[category]/[id]',
+      '/wiki/:category/:id',
+      { category: ParamValue<true>, id: ParamValue<true> },
+      { category: ParamValue<false>, id: ParamValue<false> },
+      | never
+    >,
   }
 
   /**
@@ -275,6 +310,18 @@ declare module 'vue-router/auto-routes' {
     'src/pages/index.vue': {
       routes:
         | '/'
+      views:
+        | never
+    }
+    'src/pages/campaigns/index.vue': {
+      routes:
+        | '/campaigns/'
+      views:
+        | never
+    }
+    'src/pages/campaigns/[id]/index.vue': {
+      routes:
+        | '/campaigns/[id]/'
       views:
         | never
     }
@@ -473,6 +520,24 @@ declare module 'vue-router/auto-routes' {
     'src/pages/login.vue': {
       routes:
         | '/login'
+      views:
+        | never
+    }
+    'src/pages/wiki/index.vue': {
+      routes:
+        | '/wiki/'
+      views:
+        | never
+    }
+    'src/pages/wiki/[category]/index.vue': {
+      routes:
+        | '/wiki/[category]/'
+      views:
+        | never
+    }
+    'src/pages/wiki/[category]/[id].vue': {
+      routes:
+        | '/wiki/[category]/[id]'
       views:
         | never
     }
