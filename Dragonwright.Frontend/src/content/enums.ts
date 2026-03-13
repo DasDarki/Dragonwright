@@ -44,10 +44,9 @@ export const abilityScoreLabels: Record<number, string> = {
 export const abilityScoreOptions = toOptions(abilityScoreLabels)
 
 export const itemTypeLabels: Record<number, string> = {
-  0: 'Armor', 1: 'Weapon', 2: 'Potion', 3: 'Ring',
-  4: 'Rod', 5: 'Scroll', 6: 'Staff', 7: 'Wand',
-  8: 'Wondrous Item', 9: 'Adventuring Gear', 10: 'Tool',
-  11: 'Ammunition', 12: 'Shield',
+  0: 'Unspecified', 1: 'Weapon', 2: 'Light Armor', 3: 'Medium Armor', 4: 'Heavy Armor', 5: 'Shield', 6: 'Consumable',
+  7: 'Tool', 8: 'Container', 9: 'Magic Item', 10: 'Ammuniation', 11: 'Mount', 12: 'Vehicle', 13: 'Trade Good',
+  14: 'Treasure', 15: 'Other'
 }
 export const itemTypeOptions = toOptions(itemTypeLabels)
 
