@@ -110,7 +110,6 @@ onBeforeUnmount(() => {
       <nav class="navbar__nav">
         <RouterLink class="navbar__link" to="/characters" active-class="is-active">Characters</RouterLink>
         <RouterLink class="navbar__link" to="/campaigns" active-class="is-active">Campaigns</RouterLink>
-        <RouterLink class="navbar__link" to="/campaigns" active-class="is-active">Campaigns</RouterLink>
         <RouterLink class="navbar__link" to="/wiki" active-class="is-active">Wiki</RouterLink>
         <RouterLink class="navbar__link" to="/content" active-class="is-active">Content</RouterLink>
       </nav>
